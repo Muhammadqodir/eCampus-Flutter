@@ -18,10 +18,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        title: Text(widget.title, style: Theme.of(context).textTheme.titleSmall,),
       ),
-      body: const Center(
-        child: Text("test")
+      body: Center(
+        child: Text("test", style: Theme.of(context).textTheme.bodySmall,)
       ),
     );
   }
