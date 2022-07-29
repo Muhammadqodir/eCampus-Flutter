@@ -1,4 +1,8 @@
 import 'package:ecampus_ncfu/ecampus_icons.dart';
+import 'package:ecampus_ncfu/inc/bottom_nav.dart';
+import 'package:ecampus_ncfu/pages/contents/content_main.dart';
+import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
+import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,30 +16,157 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
+  int pageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
 
+    List<CustomBottomNavItem> bottomNavItems = [
+      CustomBottomNavItem(
+          "eCampus",
+          CupertinoButton(
+            child: const Icon(EcampusIcons.icons8_buy_upgrade),
+            onPressed: () {},
+          ),
+          [
+            CupertinoButton(
+                child: const Icon(EcampusIcons.icons8_notification),
+                onPressed: () {
+                  //do somemthig
+                })
+          ],
+          ContentMain(context: context),
+          EcampusIcons.icons8_student_male_1,
+          'Главная'),
+      CustomBottomNavItem(
+          "Рассписание",
+          CupertinoButton(
+            child: const Icon(EcampusIcons.icons8_teacher),
+            onPressed: () {},
+          ),
+          [
+            CupertinoButton(
+                child: const Icon(EcampusIcons.icons8_search),
+                onPressed: () {
+                  //do somemthig
+                })
+          ],
+          ContentSchedule(context: context),
+          EcampusIcons.icons8_schedule,
+          'Рассписание'),
+      CustomBottomNavItem(
+          "Предметы",
+          CupertinoButton(
+            child: const Icon(EcampusIcons.icons8_teacher),
+            onPressed: () {},
+          ),
+          [
+            CupertinoButton(
+                child: const Icon(EcampusIcons.icons8_doughnut_chart),
+                onPressed: () {
+                  //do somemthig
+                })
+          ],
+          ContentSchedule(context: context),
+          EcampusIcons.icons8_books,
+          'Предметы'),
+      CustomBottomNavItem(
+          "Сервисы",
+          CupertinoButton(
+            child: const Icon(EcampusIcons.icons8_buy_upgrade),
+            onPressed: () {},
+          ),
+          [
+            CupertinoButton(
+                child: const Icon(EcampusIcons.icons8_notification),
+                onPressed: () {
+                  //do somemthig
+                })
+          ],
+          ContentSchedule(context: context),
+          EcampusIcons.icons8_circled_menu,
+          'Сервисы'),
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        leading: CupertinoButton(
-          child: const Icon(EcampusIcons.icons8_buy_upgrade),
-          onPressed: () {},
-        ),
-        actions: [
-          CupertinoButton(
-              child: const Icon(EcampusIcons.icons8_notification),
-              onPressed: () {
-                //do somemthig
-              })
-        ],
+        leading: bottomNavItems[pageIndex].leading,
+        actions:  bottomNavItems[pageIndex].actions,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        title: Text(widget.title, style: Theme.of(context).textTheme.titleSmall,),
+        title: Text(
+           bottomNavItems[pageIndex].title,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
-      body: Center(
-        child: Text("test", style: Theme.of(context).textTheme.bodySmall,)
+      body: bottomNavItems[pageIndex].content,
+      bottomNavigationBar: SafeArea(
+        child: buildCustomBottomNavigaton(context, bottomNavItems),
+      ),
+    );
+  }
+
+  Container buildCustomBottomNavigaton(
+      BuildContext ctx, List<CustomBottomNavItem> items) {
+    return Container(
+      height: 61,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: lightGray, offset: Offset(0, -0.5)),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            for (var item in items)
+              Expanded(
+                  child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    pageIndex = items.indexOf(item);
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.fastOutSlowIn,
+                  decoration: BoxDecoration(
+                      color: pageIndex == items.indexOf(item)
+                          ? Theme.of(ctx).primaryColor
+                          : Theme.of(ctx).scaffoldBackgroundColor,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Opacity(
+                      opacity: pageIndex == items.indexOf(item) ? 1 : 0.6,
+                      child: Column(
+                        children: [
+                          Icon(
+                            size: 28,
+                            item.icon,
+                            color: pageIndex == items.indexOf(item)
+                                ? Colors.white
+                                : Theme.of(ctx).textTheme.titleSmall!.color,
+                          ),
+                          Text(
+                            item.label,
+                            maxLines: 1,
+                            softWrap: false,
+                            style: pageIndex == items.indexOf(item)
+                                ? Theme.of(ctx).textTheme.headlineSmall
+                                : Theme.of(ctx).textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )),
+          ],
+        ),
       ),
     );
   }
