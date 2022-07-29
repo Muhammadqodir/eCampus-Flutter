@@ -1,4 +1,5 @@
 import 'package:ecampus_ncfu/pages/main_page.dart';
+import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,9 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: lightTheme,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
