@@ -1,3 +1,4 @@
+import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: CupertinoButton(
+          child: const Icon(EcampusIcons.icons8_buy_upgrade),
+          onPressed: () {},
+        ),
+        actions: [
+          CupertinoButton(
+              child: const Icon(EcampusIcons.icons8_notification),
+              onPressed: () {
+                //do somemthig
+              })
+        ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         title: Text(widget.title, style: Theme.of(context).textTheme.titleSmall,),
