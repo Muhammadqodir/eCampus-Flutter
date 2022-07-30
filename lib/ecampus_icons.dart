@@ -43,4 +43,7 @@ class EcampusIcons {
   static const IconData icons8_info = IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_error = IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_student_male_1 = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_user = IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_password = IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_login = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

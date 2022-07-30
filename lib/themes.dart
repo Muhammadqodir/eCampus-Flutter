@@ -36,6 +36,16 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w400,
       fontSize: 12,
     ),
+    headlineMedium: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w400,
+      fontSize: 20,
+    ),
+    headlineLarge: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 24,
+    ),
   ),
   scaffoldBackgroundColor: Colors.white,
   appBarTheme: const AppBarTheme(

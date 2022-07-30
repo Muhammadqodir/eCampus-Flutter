@@ -1,5 +1,6 @@
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
+import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class ContentMain extends StatefulWidget {
 class _ContentMainState extends State<ContentMain> {
   @override
   Widget build(BuildContext context) {
+    
     return Center(
         child: CustomScrollView(
       slivers: [
@@ -41,7 +43,7 @@ class _ContentMainState extends State<ContentMain> {
                 child: const CircleAvatar(
                   radius: 45.0,
                   backgroundImage: NetworkImage(
-                      'https://www.exibartstreet.com/wp-content/uploads/avatars/2465/5e0de52aeee8b-bpfull.jpg'),
+                      'https://ksr-ugc.imgix.net/assets/036/003/499/1e266ea754bd27d6aefc0dbdf37e14d3_original.jpg?ixlib=rb-4.0.2&w=160&h=160&fit=crop&v=1641512664&auto=format&frame=1&q=92&s=3ef19ef586e0849a6cb12d803198a13b'),
                 ),
               ),
               Padding(
@@ -128,7 +130,9 @@ class _ContentMainState extends State<ContentMain> {
                       child: CupertinoButton(
                           color: Theme.of(context).primaryColor,
                           child: const Text("Электронный пропуск"),
-                          onPressed: () {}))),
+                          onPressed: () {
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                          }))),
               
             ],
           ),

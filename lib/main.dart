@@ -1,3 +1,4 @@
+import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  final bool isLogin = false;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: lightTheme,
-      home: const MyHomePage(title: 'eCampus'),
+      home: isLogin ? const MyHomePage(title: 'eCampus') : const LoginPage(),
     );
   }
 }
