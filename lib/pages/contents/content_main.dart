@@ -131,7 +131,7 @@ class _ContentMainState extends State<ContentMain> {
                           color: Theme.of(context).primaryColor,
                           child: const Text("Электронный пропуск"),
                           onPressed: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(context: context,)));
                           }))),
               
             ],

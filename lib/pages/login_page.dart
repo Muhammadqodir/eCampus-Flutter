@@ -1,10 +1,25 @@
+import 'dart:typed_data';
+
 import 'package:ecampus_ncfu/ecampus_icons.dart';
+import 'package:ecampus_ncfu/ecampus_master.dart/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key, required this.context}) : super(key: key);
+
+  final BuildContext context;
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+
+}
+
+class _LoginPageState extends State<LoginPage>{
+
+
+  eCampus ecampus = eCampus("tftuckkg", "y8f7QaC4");
+  Uint8List? captchaImage = null;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +81,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
+                captchaImage != null ? Image.memory(captchaImage!) : Text("Captcha is loading", style: Theme.of(context).textTheme.headlineSmall,),
                 CupertinoButton(
                     color: Colors.white,
                     child: Row(
@@ -80,7 +96,12 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage(title: "ecampus")));
+                      ecampus.getCaptcha().then((value) => {
+                        setState((){
+                          captchaImage = value;
+                        })
+                      });
+                      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage(title: "ecampus")));
                     })
               ],
             ),
@@ -88,5 +109,6 @@ class LoginPage extends StatelessWidget {
         ]),
       )),
     );
-  }
+  } 
+  
 }

@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: lightTheme,
-      home: isLogin ? const MyHomePage(title: 'eCampus') : const LoginPage(),
+      home: isLogin ? const MyHomePage(title: 'eCampus') : LoginPage(context: context,),
     );
   }
 }
