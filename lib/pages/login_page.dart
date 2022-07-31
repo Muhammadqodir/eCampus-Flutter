@@ -5,6 +5,7 @@ import 'package:ecampus_ncfu/ecampus_master.dart/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.context}) : super(key: key);
@@ -15,8 +16,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  eCampus ecampus = eCampus("tftuckkg", "y8f7QaC4");
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController captcha = TextEditingController();
+  eCampus ecampus = eCampus();
   Uint8List? captchaImage = null;
+
+  _LoginPageState() {
+    ecampus.getCaptcha().then((value) => {
+          setState(() {
+            captchaImage = value;
+            captcha.text = "";
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(10),
                   placeholder: "Имя пользователья",
                   textInputAction: TextInputAction.next,
+                  controller: username,
                   prefix: const Padding(
                     padding: EdgeInsets.only(left: 8.0),
                     child: Icon(
@@ -78,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                   placeholder: "Пароль",
                   obscureText: true,
                   enableSuggestions: false,
+                  controller: password,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
@@ -143,6 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                                     ecampus.getCaptcha().then((value) => {
                                           setState(() {
                                             captchaImage = value;
+                                            captcha.text = "";
+                                            print(ecampus.getCookies());
                                           })
                                         });
                                   })
@@ -159,6 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(12)),
                             placeholder: "Результат капчи",
                             obscureText: true,
+                            controller: captcha,
                             enableSuggestions: false,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
@@ -177,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 20,
                 ),
                 CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     child: Row(
@@ -197,11 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     onPressed: () {
-                      ecampus.getCaptcha().then((value) => {
-                            setState(() {
-                              captchaImage = value;
-                            })
-                          });
+                      // ecampus.authenticate(username.text, password.text, captcha.text);
                       //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage(title: "ecampus")));
                     })
               ],
