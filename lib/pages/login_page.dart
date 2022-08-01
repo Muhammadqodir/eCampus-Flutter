@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
-import 'package:ecampus_ncfu/ecampus_master.dart/ecampus.dart';
+import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.context}) : super(key: key);
@@ -19,16 +20,90 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController captcha = TextEditingController();
+
   eCampus ecampus = eCampus();
-  Uint8List? captchaImage = null;
+  Uint8List? captchaImage;
+  bool loading = false;
 
   _LoginPageState() {
     ecampus.getCaptcha().then((value) => {
           setState(() {
             captchaImage = value;
             captcha.text = "";
+            print(ecampus.getCookies());
           })
         });
+  }
+
+  void updateCapcha() {
+    setState(() {
+      captchaImage = null;
+    });
+    ecampus.getCaptcha().then((value) => {
+          setState(() {
+            captchaImage = value;
+            captcha.text = "";
+            print(ecampus.getCookies());
+          })
+        });
+  }
+
+  void _showAlertDialog(
+      BuildContext context, String title, String msg, String action) {
+    showCupertinoDialog<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates the action would perform
+            /// a destructive action such as deletion, and turns
+            /// the action's text color to red.
+            isDestructiveAction: false,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(action),
+          )
+        ],
+      ),
+    );
+  }
+
+  void login() {
+    setState(() {
+      loading = true;
+    });
+    ecampus
+        .authenticate(username.text, password.text, captcha.text)
+        .then((response) => {
+              if (response.isSuccess)
+                {
+                  SharedPreferences.getInstance().then(
+                    (value) => {
+                      value.setString("token", response.cookie),
+                      value.setString("userName", response.userName)
+                    },
+                  ),
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Hi ${response.userName}!\nIt's working :)"),
+                  )),
+                }
+              else
+                {
+                  _showAlertDialog(
+                      context, "eCampus", response.error, "Попробовать снова")
+                },
+              ecampus.client.clearCookies(),
+              updateCapcha(),
+              username.text = '',
+              password.text = '',
+              setState(() {
+                loading = false;
+              })
+            });
+    //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage(title: "ecampus")));
   }
 
   @override
@@ -151,18 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                                     size: 18,
                                     color: Colors.black,
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      captchaImage = null;
-                                    });
-                                    ecampus.getCaptcha().then((value) => {
-                                          setState(() {
-                                            captchaImage = value;
-                                            captcha.text = "";
-                                            print(ecampus.getCookies());
-                                          })
-                                        });
-                                  })
+                                  onPressed: () => updateCapcha())
                             ],
                           ),
                           const SizedBox(
@@ -194,30 +258,32 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                CupertinoButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Войти",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                !loading
+                    ? CupertinoButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Войти",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            const Icon(
+                              EcampusIcons.icons8_login,
+                              color: Colors.black87,
+                            )
+                          ],
                         ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        const Icon(
-                          EcampusIcons.icons8_login,
-                          color: Colors.black87,
-                        )
-                      ],
-                    ),
-                    onPressed: () {
-                      // ecampus.authenticate(username.text, password.text, captcha.text);
-                      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage(title: "ecampus")));
-                    })
+                        onPressed: () => login())
+                    : const CupertinoActivityIndicator(
+                        radius: 12,
+                        color: Colors.white,
+                      ),
               ],
             ),
           )
