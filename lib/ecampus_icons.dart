@@ -48,4 +48,5 @@ class EcampusIcons {
   static const IconData icons8_login = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_restart = IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_captcha = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_logout_rounded_left = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

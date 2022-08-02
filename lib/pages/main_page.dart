@@ -2,9 +2,12 @@ import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
 import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
+import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
+import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -20,13 +23,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     List<CustomBottomNavItem> bottomNavItems = [
       CustomBottomNavItem(
           "eCampus",
           CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_buy_upgrade),
-            onPressed: () {},
+            child: const Icon(EcampusIcons.icons8_logout_rounded_left),
+            onPressed: () {
+              showConfirmDialog(context, "Выход из профиля", "Подтвердите действие", (){
+                SharedPreferences.getInstance().then((value) => {
+                      value.setBool("isLogin", false),
+                      value.setString("ecampus", "undefined"),
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LoginPage(context: context,)),
+                      )
+                    });
+              });
+            },
           ),
           [
             CupertinoButton(
@@ -91,11 +105,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         leading: bottomNavItems[pageIndex].leading,
-        actions:  bottomNavItems[pageIndex].actions,
+        actions: bottomNavItems[pageIndex].actions,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         title: Text(
-           bottomNavItems[pageIndex].title,
+          bottomNavItems[pageIndex].title,
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),

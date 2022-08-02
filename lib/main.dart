@@ -16,9 +16,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'eCampus',
       theme: lightTheme,
-      home: isLogin ? const MyHomePage(title: 'eCampus') : LoginPage(context: context,),
+      home: LoginPage(context: context),
     );
   }
 }

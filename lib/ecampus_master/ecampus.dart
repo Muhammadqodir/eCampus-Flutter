@@ -18,8 +18,11 @@ class eCampus {
   NetworkService client = new NetworkService();
   String login = "";
   String password = "";
+  String ecampusToken = "undefined";
 
-  eCampus();
+  eCampus(this.ecampusToken){
+    client.addCookie("ecampus", ecampusToken);
+  }
 
   Future<String> getToken() async {
     http.Response response = await client.get('https://ecampus.ncfu.ru/account/login');
@@ -58,7 +61,7 @@ class eCampus {
 
       return AuthenticateResponse(true, "", userName, cookie) ;
     }else{
-      return AuthenticateResponse(false, "Неверный логин млм пароль");
+      return AuthenticateResponse(false, "Неверное имя пользователя или пароль или код проверки");
     }
   }
 
@@ -68,6 +71,16 @@ class eCampus {
     print(response.statusCode);
     log(response.body);
     return response;
+  }
+
+  Future<bool> isActualToken() async {
+    http.Response response = await client.get("https://ecampus.ncfu.ru/schedule/my/student");
+
+    if(response.statusCode == 200){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   Future<bool> isOnline() async {
