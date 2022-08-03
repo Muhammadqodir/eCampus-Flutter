@@ -2,6 +2,9 @@ import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/models/notification_model.dart';
+import 'package:ecampus_ncfu/utils/gui_utils.dart';
+import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -62,20 +65,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
               delegate: SliverChildListDelegate([
             Column(
               children: <Widget>[
-                ListView(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  children: [
-                    Container(
-                      child: Padding(
-                        padding: EdgeInsets.all(12),
-                        child: Row(children: [
-                          
-                        ]),
-                      ),
-                    )
-                  ],
-                )
+                NotificationModel(
+                  title: "title",
+                  message: "message",
+                  activityKindColor: "009AD1"
+                ).getView(context)
               ],
             ),
           ]))
