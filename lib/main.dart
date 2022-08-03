@@ -1,5 +1,4 @@
 import 'package:ecampus_ncfu/pages/login_page.dart';
-import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/material.dart';
 

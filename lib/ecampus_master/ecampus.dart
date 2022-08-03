@@ -1,18 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
-import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/NetworkService.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
-import 'package:html/dom.dart';
 
 class eCampus {
   final JsonEncoder _encoder = const JsonEncoder();

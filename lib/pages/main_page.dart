@@ -5,6 +5,7 @@ import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
 import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
+import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,14 +33,17 @@ class _MyHomePageState extends State<MyHomePage> {
           CupertinoButton(
             child: const Icon(EcampusIcons.icons8_logout_rounded_left),
             onPressed: () {
-              showConfirmDialog(context, "Выход из профиля", "Подтвердите действие", (){
+              showConfirmDialog(
+                  context, "Выход из профиля", "Подтвердите действие", () {
                 SharedPreferences.getInstance().then((value) => {
                       value.setBool("isLogin", false),
                       value.setString("ecampus", "undefined"),
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginPage(context: context,)),
+                            builder: (context) => LoginPage(
+                                  context: context,
+                                )),
                       )
                     });
               });
@@ -49,7 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
             CupertinoButton(
                 child: const Icon(EcampusIcons.icons8_notification),
                 onPressed: () {
-                  //do somemthig
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationsPage(
+                                context: context,
+                              )));
                 })
           ],
           ContentMain(context: context),

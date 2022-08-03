@@ -10,18 +10,21 @@ import '../ecampus_icons.dart';
 
 class MainInfoView {
   Widget getAvaterView(Uint8List userPic) {
-    return Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(blurRadius: 5, color: Colors.black26, spreadRadius: 0)
-          ],
-        ),
-        child: CircleAvatar(
-          radius: 45.0,
-          backgroundImage: Image.memory(userPic).image,
-        ));
+    return Padding(
+      padding: EdgeInsets.only(top: 8),
+      child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(blurRadius: 5, color: Colors.black26, spreadRadius: 0)
+            ],
+          ),
+          child: CircleAvatar(
+            radius: 45.0,
+            backgroundImage: Image.memory(userPic).image,
+          )),
+    );
   }
 
   Widget getAvaterViewSkeleton(BuildContext context) {
