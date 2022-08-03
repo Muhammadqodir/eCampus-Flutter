@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/dialogs.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.context}) : super(key: key);
 
@@ -27,17 +29,21 @@ class _LoginPageState extends State<LoginPage> {
   bool isLogined = true;
   bool loading = false;
 
-  void solveCapcha() {}
+  void solveCapcha() {
+    ecampus.getCaptcha().then((value) => {
+      showCapchaDialog(context, value, ecampus)
+    },);
+  }
 
   @override
   void initState() {
     super.initState();
     String cookie;
     SharedPreferences.getInstance().then((value) => {
-          cookie = value.getString("ecampus") ?? 'undefined',
+          cookie = value.getString("token") ?? 'undefined',
           if (value.getBool("isLogin") ?? false)
             {
-              ecampus = eCampus(value.getString("ecampus") ?? "undefined"),
+              ecampus = eCampus(value.getString("token") ?? "undefined"),
               ecampus.isActualToken().then((value) => {
                     if (value)
                       {
@@ -49,8 +55,10 @@ class _LoginPageState extends State<LoginPage> {
                                   )),
                         )
                       }
-                    else
-                      () => solveCapcha()
+                    else{
+                      print("solveCaptcha"),
+                      solveCapcha()
+                    }
                   })
             }
           else
@@ -134,13 +142,12 @@ class _LoginPageState extends State<LoginPage> {
                 }
               else
                 {
+                  password.text = "",
                   _showAlertDialog(
                       context, "eCampus", response.error, "Попробовать снова")
                 },
               ecampus.client.clearCookies(),
               updateCapcha(),
-              username.text = '',
-              password.text = '',
               setState(() {
                 loading = false;
               })

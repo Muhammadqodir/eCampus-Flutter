@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
@@ -20,6 +22,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
+  Uint8List? captchaImage;
 
   @override
   Widget build(BuildContext context) {
