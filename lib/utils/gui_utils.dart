@@ -100,49 +100,47 @@ class _CupertinoInkWellState extends State<CupertinoInkWell> {
 
 Widget getNotificationSkeleton(BuildContext context) {
   return Shimmer.fromColors(
+      baseColor: Colors.black26,
+      highlightColor: Colors.black87,
       child: Column(
         children: [
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(children: [
-                CircleSkeleton(radius: 24),
-                const SizedBox(
-                  width: 12,
-                ),
-                Flexible(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextSkeleton(
-                        width: getWidthPercent(context, 60), height: 18),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextSkeleton(
-                            width: getWidthPercent(context, 100), height: 12),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        TextSkeleton(
-                            width: getWidthPercent(context, 40), height: 12),
-                      ],
-                    )
-                  ],
-                )),
-              ]),
-            ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(children: [
+              CircleSkeleton(radius: 24),
+              const SizedBox(
+                width: 12,
+              ),
+              Flexible(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextSkeleton(
+                      width: getWidthPercent(context, 60), height: 18),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextSkeleton(
+                          width: getWidthPercent(context, 100), height: 12),
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      TextSkeleton(
+                          width: getWidthPercent(context, 40), height: 12),
+                    ],
+                  )
+                ],
+              )),
+            ]),
           ),
-          Divider(
+          const Divider(
             height: 1,
           )
         ],
-      ),
-      baseColor: Colors.black26,
-      highlightColor: Colors.black87);
+      ));
 }
