@@ -105,7 +105,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               .map((element) => element.getView(context))
                               .toList(),
                         )
-                      : Text("Loading..."),
+                      : Column(children: [
+                        getNotificationSkeleton(context),
+                        getNotificationSkeleton(context),
+                        getNotificationSkeleton(context),
+                        getNotificationSkeleton(context),
+                        getNotificationSkeleton(context),
+                      ],)
                 ],
               ),
             ]))
