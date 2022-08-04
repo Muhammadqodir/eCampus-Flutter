@@ -7,6 +7,7 @@ import 'package:ecampus_ncfu/utils/gui_utils.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({
@@ -21,13 +22,31 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> {
   eCampus? ecampus;
-  Uint8List? captchaImage;
-  bool isLogined = true;
-  bool loading = false;
+  List<NotificationModel>? notifications;
+  double elevation = 0;
 
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((sPref) => {
+          ecampus = eCampus(sPref.getString("token")!),
+          update(),
+        });
+  }
+
+  void update() {
+    setState(() {
+      notifications = null;
+    });
+    ecampus!.getNotifications().then((response) => {
+          if (response.isSuccess)
+            {
+              setState(
+                  (() => {notifications = response.unread! + response.read!}))
+            }
+          else
+            {print("error" + response.error)}
+        });
   }
 
   @override
@@ -42,39 +61,57 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ),
         actions: [
           CupertinoButton(
-            onPressed: () {},
+            onPressed: update,
             child: Icon(EcampusIcons.icons8_restart),
           )
         ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
+        elevation: elevation,
         title: Text(
           "Уведомления",
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
       body: Center(
-          child: CustomScrollView(
-        slivers: [
-          CupertinoSliverRefreshControl(
-            onRefresh: () async {
-              //
-            },
-          ),
-          SliverList(
-              delegate: SliverChildListDelegate([
-            Column(
-              children: <Widget>[
-                NotificationModel(
-                  title: "title",
-                  message: "message",
-                  activityKindColor: "009AD1"
-                ).getView(context)
-              ],
+        child: NotificationListener<ScrollUpdateNotification>(
+          onNotification: (notification) {
+            print(notification.metrics.pixels);
+            if(notification.metrics.pixels > 0 && elevation == 0){
+              setState(() {
+                elevation = 0.5;
+              });
+            }
+            if(notification.metrics.pixels < 0 && elevation != 0){
+              setState(() {
+                elevation = 0;
+              });
+            }
+            return true;
+          },
+            child: CustomScrollView(
+          slivers: [
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                update();
+              },
             ),
-          ]))
-        ],
-      )),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              Column(
+                children: <Widget>[
+                  notifications != null
+                      ? Column(
+                          children: notifications!
+                              .map((element) => element.getView(context))
+                              .toList(),
+                        )
+                      : Text("Loading..."),
+                ],
+              ),
+            ]))
+          ],
+        )),
+      ),
     );
   }
 }

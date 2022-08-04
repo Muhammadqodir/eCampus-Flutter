@@ -1,4 +1,6 @@
+import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:flutter/material.dart';
 
 class Response {
   bool isSuccess = false;
@@ -24,13 +26,23 @@ class RatingResponse extends Response {
   int studentsNumberInGroup = -1;
   int studentsNumberInInstitute = -1;
   List<RatingModel> items = [];
-  RatingResponse(bool isSuccess, String error,
-      [this.averageRating = -1,
-      this.groupRating = -1,
-      this.instituteRating = -1,
-      this.studentsNumberInGroup = -1,
-      this.studentsNumberInInstitute = -1,
-      this.items = const [],])
-      : super(isSuccess, error);
+  RatingResponse(
+    bool isSuccess,
+    String error, [
+    this.averageRating = -1,
+    this.groupRating = -1,
+    this.instituteRating = -1,
+    this.studentsNumberInGroup = -1,
+    this.studentsNumberInInstitute = -1,
+    this.items = const [],
+  ]) : super(isSuccess, error);
+}
 
+class NotificationsResponse extends Response {
+  List<NotificationModel>? unread = [];
+  List<NotificationModel>? read = [];
+
+  NotificationsResponse(bool isSuccess, String error,
+      {this.unread, this.read})
+      : super(isSuccess, error);
 }

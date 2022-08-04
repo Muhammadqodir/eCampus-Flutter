@@ -109,12 +109,14 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
               ecampus.authenticate(value.getString("login")??"", value.getString("password")??"", captcha.text).then((response) => {
                 if(response.isSuccess){
                   print(response.userName),
-                  Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyHomePage(
-                                    title: 'eCampus',
-                                  ))),
+                  value.setString("token", response.cookie).then((_value) => {
+                    Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyHomePage(
+                                      title: 'eCampus',
+                                    ))),
+                  }),
                 }else{
                   ecampus.getCaptcha().then((value) => {
                     Navigator.pop(context),

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/NetworkService.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
+import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
@@ -121,7 +122,7 @@ class eCampus {
   }
 
   Future<RatingResponse> getRating() async {
-    // try {
+    try {
       http.Response response =
           await client.post('https://ecampus.ncfu.ru/rating');
 
@@ -192,8 +193,62 @@ class eCampus {
       } else {
         return RatingResponse(false, "Response code${response.statusCode}");
       }
-    // } catch (e) {
-    //   return RatingResponse(false, e.toString());
+    } catch (e) {
+      return RatingResponse(false, e.toString());
+    }
+  }
+
+  Future<NotificationsResponse> getNotifications() async {
+    // try{
+      http.Response response =
+          await client.post('https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
+      if (response.statusCode == 200) {
+        Map<String, dynamic> json = jsonDecode(response.body);
+        if(json.containsKey("Messages")){
+          List<Map<String, dynamic>> messageList = List<Map<String, dynamic>>.from(json["Messages"]);
+          List<NotificationModel> unread = [];
+          List<NotificationModel> read = [];
+          messageList.forEach((element) {
+            print(element["DateOfReading"]);
+            if(element["DateOfReading"] == null){
+              unread.add(NotificationModel(
+                title: element["Title"]??"undefined",
+                message: element["Message"]??"undefined",
+                dateOfCreation: element["DateOfCreation"]??"",
+                dateOfReading: "unread",
+                actionData: element["ActionData"]??"",
+                actionType: element["ActionType"]??"",
+                activityKindColor: element["ActivityKindColor"]??"FFB40C",
+                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
+                activityKindName: element["ActivityKindName"]??"undefined",
+                categoryId: element["CategoryId"]??"",
+                notificationImportanceId: element["NotificationImportanceId"]??""
+              ));
+            }else{
+              read.add(NotificationModel(
+                title: element["Title"]??"undefined",
+                message: element["Message"]??"undefined",
+                dateOfCreation: element["DateOfCreation"]??"",
+                dateOfReading: element["DateOfReading"]??"",
+                actionData: element["ActionData"]??"",
+                actionType: element["ActionType"]??"",
+                activityKindColor: element["ActivityKindColor"]??"FFB40C",
+                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
+                activityKindName: element["ActivityKindName"]??"undefined",
+                categoryId: element["CategoryId"]??"",
+                notificationImportanceId: element["NotificationImportanceId"]??""
+              ));
+            }
+          });
+          return NotificationsResponse(true, "error_", unread: unread, read: read);
+        }else{
+          return NotificationsResponse(true, "error_asdf", unread: [], read: []);
+        }
+      }else{
+        return NotificationsResponse(false, "Status code ${response.statusCode}");
+      }
+    // }catch(e){
+    //   return NotificationsResponse(false, e.toString());
     // }
   }
 }
