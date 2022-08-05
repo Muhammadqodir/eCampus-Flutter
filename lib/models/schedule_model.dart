@@ -19,4 +19,8 @@ class ScheduleLessonsModel{
     required this.current
     });
 
+  Widget getView(){
+    return Text("data");
+  }
+
 }

@@ -39,7 +39,7 @@ ThemeData lightTheme = ThemeData(
     headlineMedium: TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.w400,
-      fontSize: 20,
+      fontSize: 16,
     ),
     headlineLarge: TextStyle(
       color: Colors.white,
