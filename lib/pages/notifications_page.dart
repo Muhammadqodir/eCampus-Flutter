@@ -114,6 +114,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       ],)
                 ],
               ),
+              SizedBox(height: 12,)
             ]))
           ],
         )),
