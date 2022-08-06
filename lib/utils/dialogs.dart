@@ -146,14 +146,13 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
 }
 
 void showLoadingDialog(BuildContext context) {
-  TextEditingController captcha = TextEditingController();
   showCupertinoDialog<void>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text("Загрузка..."),
+      title: const Text("Загрузка..."),
       content: Center(
-        child: Column(children: [
-          const SizedBox(
+        child: Column(children: const [
+          SizedBox(
             height: 12,
           ),
           CupertinoActivityIndicator(radius: 12,)
