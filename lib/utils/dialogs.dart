@@ -44,7 +44,7 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
   TextEditingController captcha = TextEditingController();
   showCupertinoDialog<void>(
     context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
+    builder: (BuildContext dialogContext) => CupertinoAlertDialog(
       title: Text("eCampus"),
       content: Center(
         child: Column(children: [
@@ -104,6 +104,8 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
           /// the action's text color to red.
           isDestructiveAction: false,
           onPressed: (){
+            Navigator.pop(dialogContext);
+            showLoadingDialog(context);
             print(captcha.text);
             SharedPreferences.getInstance().then((value) => {
               ecampus.authenticate(value.getString("login")??"", value.getString("password")??"", captcha.text).then((response) => {
@@ -139,6 +141,24 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
           child: Text("Отменить"),
         )
       ],
+    ),
+  );
+}
+
+void showLoadingDialog(BuildContext context) {
+  TextEditingController captcha = TextEditingController();
+  showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text("Загрузка..."),
+      content: Center(
+        child: Column(children: [
+          const SizedBox(
+            height: 12,
+          ),
+          CupertinoActivityIndicator(radius: 12,)
+        ]),
+      ),
     ),
   );
 }
