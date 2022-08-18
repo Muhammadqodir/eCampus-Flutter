@@ -8,7 +8,7 @@ class CrossButton extends StatelessWidget {
     this.text = "",
     required this.onPressed,
     this.backgroundColor = Colors.white,
-    this.disabledColor = Colors.grey,
+    this.disabledColor = const Color.fromARGB(255, 71, 71, 71),
     required this.child,
     this.height,
     this.wight,
@@ -44,17 +44,12 @@ class CrossButton extends StatelessWidget {
             )
           : ElevatedButton(
               onPressed: onPressed,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  backgroundColor,
-                ),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
-                  padding,
-                ),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: borderRadius,
-                  ),
+              style: ElevatedButton.styleFrom(
+                primary: backgroundColor,
+                onSurface: disabledColor,
+                padding: padding,
+                shape: RoundedRectangleBorder(
+                  borderRadius: borderRadius,
                 ),
               ),
               child: child,

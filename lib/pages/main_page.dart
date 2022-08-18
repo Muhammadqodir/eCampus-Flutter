@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'Главная',
       ),
       CustomBottomNavItem(
-        "Рассписание",
+        "Расписание",
         CupertinoButton(
           child: const Icon(
             EcampusIcons.icons8_teacher,
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         ContentSchedule(context: context),
         EcampusIcons.icons8_schedule,
-        'Рассписание',
+        'Расписание',
       ),
       CustomBottomNavItem(
         "Предметы",

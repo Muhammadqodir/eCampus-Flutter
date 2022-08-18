@@ -24,14 +24,14 @@ void showConfirmDialog(
         CrossDialogAction(
           isDestructiveAction: false,
           onPressed: confirmAction,
-          child: const Text("Подтверить"),
+          child: "Подтверить",
         ),
         CrossDialogAction(
           isDestructiveAction: true,
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text("Отменить"),
+          child: "Отменить",
         )
       ],
     ),

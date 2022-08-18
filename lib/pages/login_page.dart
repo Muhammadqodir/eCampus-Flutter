@@ -121,10 +121,8 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text(
-              action,
-            ),
-          )
+            child: action,
+          ),
         ],
       ),
     );

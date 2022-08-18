@@ -18,14 +18,23 @@ class CrossDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SystemInfo().isIos
         ? CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(content),
+            title: Text(
+              title,
+            ),
+            content: Text(
+              content,
+            ),
             actions: actions,
           )
         : AlertDialog(
-            actionsAlignment: MainAxisAlignment.center,
-            title: Text(title),
-            content: Text(content),
+            title: Text(
+              title,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            content: Text(
+              content,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             actions: actions,
           );
   }
@@ -41,7 +50,7 @@ class CrossDialogAction extends StatelessWidget {
 
   final bool isDestructiveAction;
   final void Function() onPressed;
-  final Widget child;
+  final String child;
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +58,19 @@ class CrossDialogAction extends StatelessWidget {
         ? CupertinoDialogAction(
             isDestructiveAction: isDestructiveAction,
             onPressed: onPressed,
-            child: child,
+            child: Text(
+              child,
+            ),
           )
-        : ElevatedButton(
+        : TextButton(
             onPressed: onPressed,
-            style: ButtonStyle(
-              alignment: Alignment.center,
-              backgroundColor: MaterialStateProperty.all<Color>(
-                isDestructiveAction ? Colors.red : Colors.blue,
+            child: Text(
+              child,
+              style: TextStyle(
+                color: isDestructiveAction ? Colors.red : Colors.blue,
+                fontSize: 18,
               ),
             ),
-            child: child,
           );
   }
 }
