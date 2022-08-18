@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Container buildCustomBottomNavigaton(
       BuildContext ctx, List<CustomBottomNavItem> items) {
     return Container(
-      height: 61,
+      height: 69,
       decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[

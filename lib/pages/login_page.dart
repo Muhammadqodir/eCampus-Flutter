@@ -27,9 +27,9 @@ class _LoginPageState extends State<LoginPage> {
   bool loading = false;
 
   void solveCapcha() {
-    ecampus.getCaptcha().then((value) => {
-      showCapchaDialog(context, value, ecampus)
-    },);
+    ecampus.getCaptcha().then(
+          (value) => {showCapchaDialog(context, value, ecampus)},
+        );
   }
 
   @override
@@ -52,10 +52,8 @@ class _LoginPageState extends State<LoginPage> {
                                   )),
                         )
                       }
-                    else{
-                      print("solveCaptcha"),
-                      solveCapcha()
-                    }
+                    else
+                      {print("solveCaptcha"), solveCapcha()}
                   })
             }
           else
@@ -158,193 +156,236 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: SafeArea(
         child: Text(
-          "Created by Muhammadqodir",
+          "Created by Focus",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
       body: Center(
-          child: SafeArea(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Icon(
-            EcampusIcons.icons8_student_male,
-            size: 100,
-            color: Colors.white,
-          ),
-          Text(
-            "eCampus",
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          !isLogined
-              ? Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: MediaQuery.of(context).size.width / 5),
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) => ListView(
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                    minWidth: constraints.maxWidth,
+                  ),
                   child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      CupertinoTextField(
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        padding: const EdgeInsets.all(10),
-                        placeholder: "Имя пользователья",
-                        textInputAction: TextInputAction.next,
-                        controller: username,
-                        prefix: const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Icon(
-                            EcampusIcons.icons8_user,
-                            color: Colors.black87,
-                          ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          EcampusIcons.icons8_student_male,
+                          size: 100,
+                          color: Colors.white,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      CupertinoTextField(
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        padding: const EdgeInsets.all(10),
-                        placeholder: "Пароль",
-                        obscureText: true,
-                        enableSuggestions: false,
-                        controller: password,
-                        autocorrect: false,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
-                        prefix: const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Icon(
-                            EcampusIcons.icons8_password,
-                            color: Colors.black87,
-                          ),
+                        Text(
+                          "eCampus",
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Введите результат выражения:",
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(
-                        height: 3,
-                      ),
-                      captchaImage == null
-                          ? Column(
-                              children: const [
-                                SizedBox(
-                                  height: 9,
-                                ),
-                                CupertinoActivityIndicator(
-                                  radius: 12,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                        !isLogined
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 12.0,
+                                    horizontal:
+                                        MediaQuery.of(context).size.width / 5),
+                                child: Column(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(12)),
-                                      child: Image.memory(
-                                        captchaImage!,
-                                        height: 42,
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
+                                    CupertinoTextField(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      padding: const EdgeInsets.all(10),
+                                      placeholder: "Имя пользователья",
+                                      textInputAction: TextInputAction.next,
+                                      controller: username,
+                                      prefix: const Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Icon(
+                                          EcampusIcons.icons8_user,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 5,
+                                      height: 12,
                                     ),
-                                    CupertinoButton(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(12),
-                                        padding: const EdgeInsets.all(3),
-                                        child: const Icon(
-                                          EcampusIcons.icons8_restart,
-                                          size: 18,
-                                          color: Colors.black,
+                                    CupertinoTextField(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      padding: const EdgeInsets.all(10),
+                                      placeholder: "Пароль",
+                                      obscureText: true,
+                                      enableSuggestions: false,
+                                      controller: password,
+                                      autocorrect: false,
+                                      keyboardType: TextInputType.text,
+                                      textInputAction: TextInputAction.done,
+                                      prefix: const Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Icon(
+                                          EcampusIcons.icons8_password,
+                                          color: Colors.black87,
                                         ),
-                                        onPressed: () => updateCapcha())
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "Введите результат выражения:",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
+                                    ),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    captchaImage == null
+                                        ? Column(
+                                            children: const [
+                                              SizedBox(
+                                                height: 9,
+                                              ),
+                                              CupertinoActivityIndicator(
+                                                radius: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ],
+                                          )
+                                        : Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                12)),
+                                                    child: Image.memory(
+                                                      captchaImage!,
+                                                      height: 42,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  CupertinoButton(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3),
+                                                      child: const Icon(
+                                                        EcampusIcons
+                                                            .icons8_restart,
+                                                        size: 18,
+                                                        color: Colors.black,
+                                                      ),
+                                                      onPressed: () =>
+                                                          updateCapcha())
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              CupertinoTextField(
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium,
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12)),
+                                                placeholder: "Результат капчи",
+                                                obscureText: true,
+                                                controller: captcha,
+                                                enableSuggestions: false,
+                                                autocorrect: false,
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                textInputAction:
+                                                    TextInputAction.done,
+                                                prefix: const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 8.0),
+                                                  child: Icon(
+                                                    EcampusIcons.icons8_captcha,
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    !loading
+                                        ? CupertinoButton(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  "Войти",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                                const SizedBox(
+                                                  width: 4,
+                                                ),
+                                                const Icon(
+                                                  EcampusIcons.icons8_login,
+                                                  color: Colors.black87,
+                                                )
+                                              ],
+                                            ),
+                                            onPressed: () => login())
+                                        : const CupertinoActivityIndicator(
+                                            radius: 12,
+                                            color: Colors.white,
+                                          ),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 4,
+                              )
+                            : const Padding(
+                                padding: EdgeInsets.all(12),
+                                child: CupertinoActivityIndicator(
+                                  radius: 12,
+                                  color: Colors.white,
                                 ),
-                                CupertinoTextField(
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12)),
-                                  placeholder: "Результат капчи",
-                                  obscureText: true,
-                                  controller: captcha,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.done,
-                                  prefix: const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Icon(
-                                      EcampusIcons.icons8_captcha,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      !loading
-                          ? CupertinoButton(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "Войти",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  const Icon(
-                                    EcampusIcons.icons8_login,
-                                    color: Colors.black87,
-                                  )
-                                ],
                               ),
-                              onPressed: () => login())
-                          : const CupertinoActivityIndicator(
-                              radius: 12,
-                              color: Colors.white,
-                            ),
-                    ],
-                  ),
+                      ]),
                 )
-              : const Padding(
-                  padding: EdgeInsets.all(12),
-                  child: CupertinoActivityIndicator(
-                    radius: 12,
-                    color: Colors.white,
-                  ),
-                ),
-        ]),
-      )),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

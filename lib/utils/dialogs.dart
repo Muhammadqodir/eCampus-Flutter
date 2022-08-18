@@ -4,7 +4,6 @@ import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ecampus_icons.dart';
@@ -23,7 +22,7 @@ void showConfirmDialog(BuildContext context, String title, String msg,
           /// the action's text color to red.
           isDestructiveAction: false,
           onPressed: confirmAction,
-          child: Text("Подтверить"),
+          child: const Text("Подтверить"),
         ),
         CupertinoDialogAction(
           /// This parameter indicates the action would perform
@@ -33,7 +32,7 @@ void showConfirmDialog(BuildContext context, String title, String msg,
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Отменить"),
+          child: const Text("Отменить"),
         )
       ],
     ),
@@ -45,7 +44,7 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
   showCupertinoDialog<void>(
     context: context,
     builder: (BuildContext dialogContext) => CupertinoAlertDialog(
-      title: Text("eCampus"),
+      title: const Text("eCampus"),
       content: Center(
         child: Column(children: [
           Text(
@@ -111,7 +110,7 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
               ecampus.authenticate(value.getString("login")??"", value.getString("password")??"", captcha.text).then((response) => {
                 if(response.isSuccess){
                   print(response.userName),
-                  value.setString("token", response.cookie).then((_value) => {
+                  value.setString("token", response.cookie).then((value) => {
                     Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
