@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
@@ -7,6 +8,7 @@ import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
+import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,17 +39,59 @@ class _ContentMainState extends State<ContentMain> {
   }
 
   void update() {
+    CacheSystem.isActualCache().then(
+      (value) => {
+        if (value)
+          {
+            getCacheData(),
+          }
+        else
+          {
+            ecampus.isActualToken().then((value) => {
+                  if (value)
+                    {
+                      getFreshData(),
+                    }
+                  else
+                    {
+                      ecampus.getCaptcha().then(
+                            (captchaImage) => {
+                              showCapchaDialog(context, captchaImage, ecampus)
+                            },
+                          ),
+                    }
+                })
+          }
+      },
+    );
+  }
+
+  void getCacheData() {
+    CacheSystem.getStudentCache().then((value) => {
+          setState(
+            () => {
+              userName = value.userName,
+              userPic = value.userPic,
+              ratingModel = value.ratingModel
+            },
+          )
+        });
+  }
+
+  void getFreshData() {
     setState(() {
       userName = null;
       ratingModel = null;
       userPic = null;
     });
     ecampus.getUserName().then((vUserName) => {
+          CacheSystem.saveUserName(vUserName),
           setState(
             () => {userName = vUserName},
           ),
         });
     ecampus.getUserPic().then((vUserPic) => {
+          CacheSystem.saveUserPic(vUserPic),
           setState(
             () => {userPic = vUserPic},
           )
@@ -55,6 +99,7 @@ class _ContentMainState extends State<ContentMain> {
     ecampus.getRating().then((ratingResponse) => {
           if (ratingResponse.isSuccess)
             {
+              CacheSystem.saveRating(getMyRating(ratingResponse.items)),
               setState(
                 () => {ratingModel = getMyRating(ratingResponse.items)},
               )
@@ -104,10 +149,16 @@ class _ContentMainState extends State<ContentMain> {
                       width: double.infinity,
                       height: 50,
                       child: CupertinoButton(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                           disabledColor: Theme.of(context).dividerColor,
                           color: Theme.of(context).primaryColor,
-                          child: Text("Электронный пропуск", style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),),
+                          child: Text(
+                            "Электронный пропуск",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
                           onPressed: () {}))),
               Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12),
@@ -121,11 +172,14 @@ class _ContentMainState extends State<ContentMain> {
                     child: Column(children: [
                       Text(
                         "Расписание",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 12,),
-
-
+                      SizedBox(
+                        height: 12,
+                      ),
                     ]),
                   ),
                 ),
