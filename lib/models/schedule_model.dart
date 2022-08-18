@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ScheduleLessonsModel{
+class ScheduleLessonsModel {
   String subName, room, timeStart, timeEnd, teacher, lessonType, group;
   int para, teacherId, roomId;
   bool current;
@@ -16,11 +16,12 @@ class ScheduleLessonsModel{
     required this.para,
     required this.teacherId,
     required this.roomId,
-    required this.current
-    });
+    required this.current,
+  });
 
-  Widget getView(){
-    return Text("data");
+  Widget getView() {
+    return const Text(
+      "data",
+    );
   }
-
 }

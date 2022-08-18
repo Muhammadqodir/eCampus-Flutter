@@ -1,13 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:ecampus_ncfu/ecampus_icons.dart';
-import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/utils/gui_utils.dart';
-import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../ecampus_master/ecampus.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({
@@ -21,7 +18,7 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  eCampus? ecampus;
+  ECampus? ecampus;
   List<NotificationModel>? notifications;
   double elevation = 0;
 
@@ -29,7 +26,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((sPref) => {
-          ecampus = eCampus(sPref.getString("token")!),
+          ecampus = ECampus(sPref.getString("token")!),
           update(),
         });
   }
@@ -42,10 +39,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
           if (response.isSuccess)
             {
               setState(
-                  (() => {notifications = response.unread! + response.read!}))
+                (() => {notifications = response.unread! + response.read!}),
+              )
             }
           else
-            {print("error" + response.error)}
+            {
+              print("error" + response.error),
+            }
         });
   }
 
@@ -57,12 +57,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
           onPressed: (() {
             Navigator.pop(context);
           }),
-          child: Icon(EcampusIcons.icons8_back),
+          child: const Icon(EcampusIcons.icons8_back),
         ),
         actions: [
           CupertinoButton(
             onPressed: update,
-            child: Icon(EcampusIcons.icons8_restart),
+            child: const Icon(
+              EcampusIcons.icons8_restart,
+            ),
           )
         ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -76,48 +78,58 @@ class _NotificationsPageState extends State<NotificationsPage> {
         child: NotificationListener<ScrollUpdateNotification>(
           onNotification: (notification) {
             print(notification.metrics.pixels);
-            if(notification.metrics.pixels > 0 && elevation == 0){
+            if (notification.metrics.pixels > 0 && elevation == 0) {
               setState(() {
                 elevation = 0.5;
               });
             }
-            if(notification.metrics.pixels < 0 && elevation != 0){
+            if (notification.metrics.pixels < 0 && elevation != 0) {
               setState(() {
                 elevation = 0;
               });
             }
             return true;
           },
-            child: CustomScrollView(
-          slivers: [
-            CupertinoSliverRefreshControl(
-              onRefresh: () async {
-                update();
-              },
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              Column(
-                children: <Widget>[
-                  notifications != null
-                      ? Column(
-                          children: notifications!
-                              .map((element) => element.getView(context))
-                              .toList(),
-                        )
-                      : Column(children: [
-                        getNotificationSkeleton(context),
-                        getNotificationSkeleton(context),
-                        getNotificationSkeleton(context),
-                        getNotificationSkeleton(context),
-                        getNotificationSkeleton(context),
-                      ],)
-                ],
+          child: CustomScrollView(
+            slivers: [
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  update();
+                },
               ),
-              SizedBox(height: 12,)
-            ]))
-          ],
-        )),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Column(
+                      children: <Widget>[
+                        notifications != null
+                            ? Column(
+                                children: notifications!
+                                    .map(
+                                      (element) => element.getView(context),
+                                    )
+                                    .toList(),
+                              )
+                            : Column(
+                                children: [
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                ],
+                              ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

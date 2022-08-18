@@ -13,7 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
 
   final String title;
 
@@ -29,89 +32,113 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     List<CustomBottomNavItem> bottomNavItems = [
       CustomBottomNavItem(
-          "eCampus",
-          CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_logout_rounded_left),
-            onPressed: () {
-              showConfirmDialog(
-                  context, "Выход из профиля", "Подтвердите действие", () {
-                SharedPreferences.getInstance().then((value) => {
-                      value.setBool("isLogin", false),
-                      value.setString("ecampus", "undefined"),
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LoginPage(
-                                  context: context,
-                                )),
-                      )
-                    });
-              });
-            },
+        "eCampus",
+        CupertinoButton(
+          child: const Icon(
+            EcampusIcons.icons8_logout_rounded_left,
           ),
-          [
-            CupertinoButton(
-                child: const Icon(EcampusIcons.icons8_notification),
-                onPressed: () {
-                  Navigator.push(
+          onPressed: () {
+            showConfirmDialog(
+                context, "Выход из профиля", "Подтвердите действие", () {
+              SharedPreferences.getInstance().then((value) => {
+                    value.setBool(
+                      "isLogin",
+                      false,
+                    ),
+                    value.setString(
+                      "ecampus",
+                      "undefined",
+                    ),
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NotificationsPage(
-                                context: context,
-                              )));
-                })
-          ],
-          ContentMain(context: context),
-          EcampusIcons.icons8_student_male_1,
-          'Главная'),
-      CustomBottomNavItem(
-          "Рассписание",
+                        builder: (context) => LoginPage(
+                          context: context,
+                        ),
+                      ),
+                    )
+                  });
+            });
+          },
+        ),
+        [
           CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_teacher),
+              child: const Icon(
+                EcampusIcons.icons8_notification,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationsPage(
+                      context: context,
+                    ),
+                  ),
+                );
+              })
+        ],
+        ContentMain(context: context),
+        EcampusIcons.icons8_student_male_1,
+        'Главная',
+      ),
+      CustomBottomNavItem(
+        "Рассписание",
+        CupertinoButton(
+          child: const Icon(
+            EcampusIcons.icons8_teacher,
+          ),
+          onPressed: () {},
+        ),
+        [
+          CupertinoButton(
+            child: const Icon(
+              EcampusIcons.icons8_search,
+            ),
+            onPressed: () {},
+          )
+        ],
+        ContentSchedule(context: context),
+        EcampusIcons.icons8_schedule,
+        'Рассписание',
+      ),
+      CustomBottomNavItem(
+        "Предметы",
+        CupertinoButton(
+          child: const Icon(
+            EcampusIcons.icons8_teacher,
+          ),
+          onPressed: () {},
+        ),
+        [
+          CupertinoButton(
+            child: const Icon(
+              EcampusIcons.icons8_doughnut_chart,
+            ),
             onPressed: () {},
           ),
-          [
-            CupertinoButton(
-                child: const Icon(EcampusIcons.icons8_search),
-                onPressed: () {
-                  //do somemthig
-                })
-          ],
-          ContentSchedule(context: context),
-          EcampusIcons.icons8_schedule,
-          'Рассписание'),
+        ],
+        ContentSchedule(context: context),
+        EcampusIcons.icons8_books,
+        'Предметы',
+      ),
       CustomBottomNavItem(
-          "Предметы",
-          CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_teacher),
-            onPressed: () {},
+        "Сервисы",
+        CupertinoButton(
+          child: const Icon(
+            EcampusIcons.icons8_buy_upgrade,
           ),
-          [
-            CupertinoButton(
-                child: const Icon(EcampusIcons.icons8_doughnut_chart),
-                onPressed: () {
-                  //do somemthig
-                })
-          ],
-          ContentSchedule(context: context),
-          EcampusIcons.icons8_books,
-          'Предметы'),
-      CustomBottomNavItem(
-          "Сервисы",
+          onPressed: () {},
+        ),
+        [
           CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_buy_upgrade),
+            child: const Icon(EcampusIcons.icons8_notification),
             onPressed: () {},
-          ),
-          [
-            CupertinoButton(
-                child: const Icon(EcampusIcons.icons8_notification),
-                onPressed: () {
-                  //do somemthig
-                })
-          ],
-          ContentSchedule(context: context),
-          EcampusIcons.icons8_circled_menu,
-          'Сервисы'),
+          )
+        ],
+        ContentSchedule(context: context),
+        EcampusIcons.icons8_circled_menu,
+        'Сервисы',
+      ),
     ];
 
     return Scaffold(
@@ -127,70 +154,86 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: bottomNavItems[pageIndex].content,
       bottomNavigationBar: SafeArea(
-        child: buildCustomBottomNavigaton(context, bottomNavItems),
+        child: buildCustomBottomNavigaton(
+          context,
+          bottomNavItems,
+        ),
       ),
     );
   }
 
   Container buildCustomBottomNavigaton(
-      BuildContext ctx, List<CustomBottomNavItem> items) {
+    BuildContext ctx,
+    List<CustomBottomNavItem> items,
+  ) {
     return Container(
-      height: 69,
+      height: 67,
       decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: lightGray, offset: Offset(0, -0.5)),
+          BoxShadow(
+            color: lightGray,
+            offset: Offset(
+              0,
+              -0.5,
+            ),
+          ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             for (var item in items)
               Expanded(
-                  child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    pageIndex = items.indexOf(item);
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.fastOutSlowIn,
-                  decoration: BoxDecoration(
-                      color: pageIndex == items.indexOf(item)
-                          ? Theme.of(ctx).primaryColor
-                          : Theme.of(ctx).scaffoldBackgroundColor,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Opacity(
-                      opacity: pageIndex == items.indexOf(item) ? 1 : 0.6,
-                      child: Column(
-                        children: [
-                          Icon(
-                            size: 28,
-                            item.icon,
-                            color: pageIndex == items.indexOf(item)
-                                ? Colors.white
-                                : Theme.of(ctx).textTheme.titleSmall!.color,
-                          ),
-                          Text(
-                            item.label,
-                            maxLines: 1,
-                            softWrap: false,
-                            style: pageIndex == items.indexOf(item)
-                                ? Theme.of(ctx).textTheme.headlineSmall
-                                : Theme.of(ctx).textTheme.titleSmall,
-                          ),
-                        ],
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      pageIndex = items.indexOf(item);
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(
+                      milliseconds: 200,
+                    ),
+                    curve: Curves.fastOutSlowIn,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Opacity(
+                        opacity: pageIndex == items.indexOf(item) ? 1 : 0.6,
+                        child: Column(
+                          children: [
+                            Icon(
+                              item.icon,
+                              size: 28,
+                              color: pageIndex == items.indexOf(item)
+                                  ? Colors.blue
+                                  : Theme.of(ctx).textTheme.titleSmall!.color,
+                            ),
+                            Text(
+                              item.label,
+                              maxLines: 1,
+                              softWrap: false,
+                              style: pageIndex == items.indexOf(item)
+                                  ? const TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 12,
+                                    )
+                                  : Theme.of(ctx).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              )),
+              ),
           ],
         ),
       ),

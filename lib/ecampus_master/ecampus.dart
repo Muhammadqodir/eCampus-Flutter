@@ -9,44 +9,53 @@ import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 
-class eCampus {
+class ECampus {
   final JsonEncoder _encoder = const JsonEncoder();
-  NetworkService client = new NetworkService();
+  NetworkService client = NetworkService();
   String login = "";
   String password = "";
   String ecampusToken = "undefined";
 
-  eCampus(String ecampusToken) {
-    this.ecampusToken = ecampusToken;
-    client.addCookie("ecampus", ecampusToken);
+  ECampus(this.ecampusToken) {
+    client.addCookie(
+      "ecampus",
+      ecampusToken,
+    );
   }
 
   Future<String> getToken() async {
-    http.Response response =
-        await client.get('https://ecampus.ncfu.ru/account/login');
+    http.Response response = await client.get(
+      'https://ecampus.ncfu.ru/account/login',
+    );
     var doc = parse(response.body);
     return doc
-            .querySelector('[name="__RequestVerificationToken"]')!
+            .querySelector(
+              '[name="__RequestVerificationToken"]',
+            )!
             .attributes['value'] ??
         "error";
   }
 
   Future<Uint8List> getCaptcha() async {
     client.clearCookies();
-    http.Response response =
-        await client.get('https://ecampus.ncfu.ru/Captcha/Captcha');
+    http.Response response = await client.get(
+      'https://ecampus.ncfu.ru/Captcha/Captcha',
+    );
     print(client.cookies);
     return response.bodyBytes;
   }
 
   Future<Uint8List> getUserPic() async {
-    http.Response response = await client
-        .get('https://ecampus.ncfu.ru/account/userpic?w=300&s=459124');
+    http.Response response = await client.get(
+      'https://ecampus.ncfu.ru/account/userpic?w=300&s=459124',
+    );
     return response.bodyBytes;
   }
 
   String getCookies() {
-    return _encoder.convert(client.cookies);
+    return _encoder.convert(
+      client.cookies,
+    );
   }
 
   Future<AuthenticateResponse> authenticate(
@@ -58,35 +67,52 @@ class eCampus {
       'Login': username,
       'Password': password,
       'Code': captcha,
-      'RememberMe': "true"
+      'RememberMe': "true",
     };
 
     print(body);
     client.setContentLength(body.length);
-    http.Response response =
-        await client.post('https://ecampus.ncfu.ru/Account/Login', body: body);
+    http.Response response = await client.post(
+      'https://ecampus.ncfu.ru/Account/Login',
+      body: body,
+    );
     if (response.statusCode == 302) {
-      http.Response home = await client.get('https://ecampus.ncfu.ru');
-      var doc = parse(home.body);
+      http.Response home = await client.get(
+        'https://ecampus.ncfu.ru',
+      );
+      var doc = parse(
+        home.body,
+      );
 
       String userName = doc.getElementsByClassName("username")[0].innerHtml;
       String cookie = client.cookies["ecampus"] ?? 'undefined';
 
-      return AuthenticateResponse(true, "", userName, cookie);
+      return AuthenticateResponse(
+        true,
+        "",
+        userName,
+        cookie,
+      );
     } else {
       return AuthenticateResponse(
-          false, "Неверное имя пользователя или пароль или код проверки");
+        false,
+        "Неверное имя пользователя или пароль или код проверки",
+      );
     }
   }
 
   Future<http.Response> getMain() async {
-    http.Response response = await client.get('https://ecampus.ncfu.ru/');
+    http.Response response = await client.get(
+      'https://ecampus.ncfu.ru/',
+    );
     print(response.statusCode);
     return response;
   }
 
   Future<String> getUserName() async {
-    http.Response response = await client.get('https://ecampus.ncfu.ru');
+    http.Response response = await client.get(
+      'https://ecampus.ncfu.ru',
+    );
     print(getCookies());
     if (response.statusCode == 200) {
       var doc = parse(response.body);
@@ -98,8 +124,9 @@ class eCampus {
   }
 
   Future<bool> isActualToken() async {
-    http.Response response =
-        await client.post("https://ecampus.ncfu.ru/details");
+    http.Response response = await client.post(
+      "https://ecampus.ncfu.ru/details",
+    );
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -109,7 +136,9 @@ class eCampus {
 
   Future<bool> isOnline() async {
     try {
-      final result = await InternetAddress.lookup('example.com');
+      final result = await InternetAddress.lookup(
+        'example.com',
+      );
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print('connected');
         return true;
@@ -123,20 +152,38 @@ class eCampus {
 
   Future<RatingResponse> getRating() async {
     try {
-      http.Response response =
-          await client.post('https://ecampus.ncfu.ru/rating');
+      http.Response response = await client.post(
+        'https://ecampus.ncfu.ru/rating',
+      );
 
       print(getCookies());
       if (response.statusCode == 200) {
-        RatingResponse ratingResponse =
-            RatingResponse(false, "data is not filled");
+        RatingResponse ratingResponse = RatingResponse(
+          false,
+          "data is not filled",
+        );
         String responseString = response.body;
-        int start = responseString.indexOf("var viewModel = ") + 16;
+        int start = responseString.indexOf(
+              "var viewModel = ",
+            ) +
+            16;
         String json = responseString.substring(start);
-        start = json.indexOf("</script>") - 3;
-        json = json.substring(0, start);
-        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
-        json = json.replaceAll("\\\"\")", "\"");
+        start = json.indexOf(
+              "</script>",
+            ) -
+            3;
+        json = json.substring(
+          0,
+          start,
+        );
+        json = json.replaceAll(
+          "JSON.parse(\"\\\"",
+          "\"",
+        );
+        json = json.replaceAll(
+          "\\\"\")",
+          "\"",
+        );
         Map<String, dynamic> jsonObject = jsonDecode(json);
         if (jsonObject.containsKey("academicResults")) {
           List<dynamic> academicResults = jsonObject["academicResults"];
@@ -145,30 +192,31 @@ class eCampus {
             Map<String, dynamic> ratingList = academicResults[size - 1];
             if (ratingList.containsKey('Details')) {
               List<dynamic> detalis = ratingList["Details"];
-              int detalis_size = detalis.length;
-              if (detalis_size > 0) {
+              int detalisSize = detalis.length;
+              if (detalisSize > 0) {
                 List<RatingModel> models = [];
-                detalis.forEach((element) {
-                  Map<String, dynamic> details_item = element;
-                  models.add(RatingModel(
-                      details_item["Name"],
-                      double.parse(details_item["SumRating"])* 100,
-                      details_item["PositionInGroup"],
-                      details_item["PositionInInstitute"],
-                      detalis_size+1,
-                      details_item["MaxPositionInInstitute"],
-                      details_item["IsCurrent"]));
-                  if (details_item["IsCurrent"]) {
+                for (var element in detalis) {
+                  Map<String, dynamic> detailsItem = element;
+                  models.add(
+                    RatingModel(
+                        detailsItem["Name"],
+                        double.parse(detailsItem["SumRating"]) * 100,
+                        detailsItem["PositionInGroup"],
+                        detailsItem["PositionInInstitute"],
+                        detalisSize + 1,
+                        detailsItem["MaxPositionInInstitute"],
+                        detailsItem["IsCurrent"]),
+                  );
+                  if (detailsItem["IsCurrent"]) {
                     ratingResponse.averageRating =
-                        double.parse(details_item["SumRating"]) * 100;
-                    ratingResponse.groupRating =
-                        details_item["PositionInGroup"];
+                        double.parse(detailsItem["SumRating"]) * 100;
+                    ratingResponse.groupRating = detailsItem["PositionInGroup"];
                     ratingResponse.instituteRating =
-                        details_item["PositionInInstitute"];
+                        detailsItem["PositionInInstitute"];
                     ratingResponse.studentsNumberInInstitute =
-                        details_item["MaxPositionInInstitute"];
+                        detailsItem["MaxPositionInInstitute"];
                   }
-                });
+                }
                 ratingResponse.items = models;
                 ratingResponse.studentsNumberInGroup = models.length + 1;
                 ratingResponse.isSuccess = true;
@@ -194,59 +242,83 @@ class eCampus {
         return RatingResponse(false, "Response code${response.statusCode}");
       }
     } catch (e) {
-      return RatingResponse(false, e.toString());
+      return RatingResponse(
+        false,
+        e.toString(),
+      );
     }
   }
 
   Future<NotificationsResponse> getNotifications() async {
     // try{
-      http.Response response =
-          await client.post('https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
-      if (response.statusCode == 200) {
-        Map<String, dynamic> json = jsonDecode(response.body);
-        if(json.containsKey("Messages")){
-          List<Map<String, dynamic>> messageList = List<Map<String, dynamic>>.from(json["Messages"]);
-          List<NotificationModel> unread = [];
-          List<NotificationModel> read = [];
-          messageList.forEach((element) {
-            print(element["DateOfReading"]);
-            if(element["DateOfReading"] == null){
-              unread.add(NotificationModel(
-                title: element["Title"]??"undefined",
-                message: element["Message"]??"undefined",
-                dateOfCreation: element["DateOfCreation"]??"",
-                dateOfReading: "unread",
-                actionData: element["ActionData"]??"",
-                actionType: element["ActionType"]??"",
-                activityKindColor: element["ActivityKindColor"]??"FFB40C",
-                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
-                activityKindName: element["ActivityKindName"]??"undefined",
-                categoryId: element["CategoryId"]??"",
-                notificationImportanceId: element["NotificationImportanceId"]??""
-              ));
-            }else{
-              read.add(NotificationModel(
-                title: element["Title"]??"undefined",
-                message: element["Message"]??"undefined",
-                dateOfCreation: element["DateOfCreation"]??"",
-                dateOfReading: element["DateOfReading"]??"",
-                actionData: element["ActionData"]??"",
-                actionType: element["ActionType"]??"",
-                activityKindColor: element["ActivityKindColor"]??"FFB40C",
-                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
-                activityKindName: element["ActivityKindName"]??"undefined",
-                categoryId: element["CategoryId"]??"",
-                notificationImportanceId: element["NotificationImportanceId"]??""
-              ));
-            }
-          });
-          return NotificationsResponse(true, "error_", unread: unread, read: read);
-        }else{
-          return NotificationsResponse(true, "error_asdf", unread: [], read: []);
-        }
-      }else{
-        return NotificationsResponse(false, "Status code ${response.statusCode}");
+    http.Response response = await client.post(
+      'https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages',
+    );
+    if (response.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      if (json.containsKey("Messages")) {
+        List<Map<String, dynamic>> messageList =
+            List<Map<String, dynamic>>.from(json["Messages"]);
+        List<NotificationModel> unread = [];
+        List<NotificationModel> read = [];
+        messageList.forEach((element) {
+          print(element["DateOfReading"]);
+          if (element["DateOfReading"] == null) {
+            unread.add(
+              NotificationModel(
+                  title: element["Title"] ?? "undefined",
+                  message: element["Message"] ?? "undefined",
+                  dateOfCreation: element["DateOfCreation"] ?? "",
+                  dateOfReading: "unread",
+                  actionData: element["ActionData"] ?? "",
+                  actionType: element["ActionType"] ?? "",
+                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                  activityKindIcon: element["ActivityKindIcon"] ??
+                      "/images/icons/education.png",
+                  activityKindName: element["ActivityKindName"] ?? "undefined",
+                  categoryId: element["CategoryId"] ?? "",
+                  notificationImportanceId:
+                      element["NotificationImportanceId"] ?? ""),
+            );
+          } else {
+            read.add(
+              NotificationModel(
+                  title: element["Title"] ?? "undefined",
+                  message: element["Message"] ?? "undefined",
+                  dateOfCreation: element["DateOfCreation"] ?? "",
+                  dateOfReading: element["DateOfReading"] ?? "",
+                  actionData: element["ActionData"] ?? "",
+                  actionType: element["ActionType"] ?? "",
+                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                  activityKindIcon: element["ActivityKindIcon"] ??
+                      "/images/icons/education.png",
+                  activityKindName: element["ActivityKindName"] ?? "undefined",
+                  categoryId: element["CategoryId"] ?? "",
+                  notificationImportanceId:
+                      element["NotificationImportanceId"] ?? ""),
+            );
+          }
+        });
+        return NotificationsResponse(
+          true,
+          "error_",
+          unread: unread,
+          read: read,
+        );
+      } else {
+        return NotificationsResponse(
+          true,
+          "error_asdf",
+          unread: [],
+          read: [],
+        );
       }
+    } else {
+      return NotificationsResponse(
+        false,
+        "Status code ${response.statusCode}",
+      );
+    }
     // }catch(e){
     //   return NotificationsResponse(false, e.toString());
     // }
