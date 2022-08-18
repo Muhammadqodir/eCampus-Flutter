@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
           EcampusIcons.icons8_student_male_1,
           'Главная'),
       CustomBottomNavItem(
-          "Рассписание",
+          "Расписание",
           CupertinoButton(
             child: const Icon(EcampusIcons.icons8_teacher),
             onPressed: () {},
@@ -158,12 +158,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.fastOutSlowIn,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       // color: pageIndex == items.indexOf(item)
                       //     ? Theme.of(ctx).primaryColor
                       //     : Theme.of(ctx).scaffoldBackgroundColor,
                       borderRadius:
-                          const BorderRadius.all(Radius.circular(12))),
+                          BorderRadius.all(Radius.circular(12))),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Opacity(

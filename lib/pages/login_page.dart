@@ -40,21 +40,13 @@ class _LoginPageState extends State<LoginPage> {
           cookie = value.getString("token") ?? 'undefined',
           if (value.getBool("isLogin") ?? false)
             {
-              ecampus = eCampus(value.getString("token") ?? "undefined"),
-              ecampus.isActualToken().then((value) => {
-                    if (value)
-                      {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyHomePage(
-                                    title: 'eCampus',
-                                  )),
-                        )
-                      }
-                    else
-                      {print("solveCaptcha"), solveCapcha()}
-                  })
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MyHomePage(
+                          title: 'eCampus',
+                        )),
+              )
             }
           else
             {

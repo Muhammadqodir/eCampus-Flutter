@@ -10,4 +10,13 @@ class RatingModel{
 
     RatingModel(this.fullName, this.ball, this.ratGroup, this.ratInst, this.maxPosGroup, this.maxPosInst, this.isCurrent);
 
+    Map toJson() => {
+        'fullName': fullName,
+        'ratGroup': ratGroup,
+        'ratInst': ratInst,
+        'ball': ball,
+        'isCurrent': isCurrent,
+        'maxPosInst': maxPosInst,
+        'maxPosGroup': maxPosGroup
+      };
 }
