@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
           ContentSchedule(context: context),
           EcampusIcons.icons8_schedule,
-          'Рассписание'),
+          'Расписание'),
       CustomBottomNavItem(
           "Предметы",
           CupertinoButton(
@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Container buildCustomBottomNavigaton(
       BuildContext ctx, List<CustomBottomNavItem> items) {
     return Container(
-      height: 69,
+      height: 61,
       decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 8.0),
+        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -159,9 +159,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.fastOutSlowIn,
                   decoration: BoxDecoration(
-                      color: pageIndex == items.indexOf(item)
-                          ? Theme.of(ctx).primaryColor
-                          : Theme.of(ctx).scaffoldBackgroundColor,
+                      // color: pageIndex == items.indexOf(item)
+                      //     ? Theme.of(ctx).primaryColor
+                      //     : Theme.of(ctx).scaffoldBackgroundColor,
                       borderRadius:
                           const BorderRadius.all(Radius.circular(12))),
                   child: Padding(
@@ -174,15 +174,18 @@ class _MyHomePageState extends State<MyHomePage> {
                             size: 28,
                             item.icon,
                             color: pageIndex == items.indexOf(item)
-                                ? Colors.white
+                                ? Theme.of(ctx).primaryColor
                                 : Theme.of(ctx).textTheme.titleSmall!.color,
                           ),
                           Text(
                             item.label,
                             maxLines: 1,
                             softWrap: false,
+                            overflow: TextOverflow.ellipsis,
                             style: pageIndex == items.indexOf(item)
-                                ? Theme.of(ctx).textTheme.headlineSmall
+                                ? Theme.of(ctx).textTheme.titleSmall!.copyWith(
+                                    color: Theme.of(ctx).primaryColor,
+                                    fontWeight: FontWeight.bold)
                                 : Theme.of(ctx).textTheme.titleSmall,
                           ),
                         ],

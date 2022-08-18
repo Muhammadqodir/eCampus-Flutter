@@ -107,12 +107,12 @@ class _ContentMainState extends State<ContentMain> {
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                           disabledColor: Theme.of(context).dividerColor,
                           color: Theme.of(context).primaryColor,
-                          child: Text("Электронный пропуск", style: Theme.of(context).textTheme.headlineMedium,),
+                          child: Text("Электронный пропуск", style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),),
                           onPressed: () {}))),
               Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12),
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Color(0xFFDDF1EF),
                       borderRadius: BorderRadius.all(Radius.circular(12))),
                   width: double.infinity,
@@ -121,7 +121,7 @@ class _ContentMainState extends State<ContentMain> {
                     child: Column(children: [
                       Text(
                         "Расписание",
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 12,),
 

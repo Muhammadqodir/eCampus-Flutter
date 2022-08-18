@@ -39,7 +39,7 @@ class MainInfoView {
       padding: EdgeInsets.only(top: 12, bottom: 12),
       child: Text(
         userName,
-        style: Theme.of(context).textTheme.bodyMedium,
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }

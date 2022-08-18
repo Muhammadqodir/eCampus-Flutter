@@ -91,7 +91,7 @@ class eCampus {
     if (response.statusCode == 200) {
       var doc = parse(response.body);
       String userName = doc.getElementsByClassName("username")[0].innerHtml;
-      return userName;
+      return userName.replaceAll("  ", "");
     } else {
       return "undefined";
     }
