@@ -3,9 +3,7 @@ import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(
-    const MyApp(),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,9 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'eCampus',
       theme: lightTheme,
-      home: LoginPage(
-        context: context,
-      ),
+      home: LoginPage(context: context),
     );
   }
 }
