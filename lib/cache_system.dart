@@ -43,7 +43,7 @@ class CacheSystem{
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     DateTime cacheDate = dateFormat.parse(cacheDateStr);
     DateTime dateNow = DateTime.now();
-    if(dateNow.subtract(const Duration(hours: 2)).isAfter(cacheDate)){
+    if(dateNow.subtract(const Duration(seconds: 5)).isAfter(cacheDate)){
       return false;
     }
     return true;
