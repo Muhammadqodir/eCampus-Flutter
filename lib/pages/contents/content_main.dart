@@ -30,6 +30,7 @@ class _ContentMainState extends State<ContentMain> {
   String? userName;
   RatingModel? ratingModel;
   Uint8List? userPic;
+  bool isUnActualToken = false;
 
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _ContentMainState extends State<ContentMain> {
         {ecampus = eCampus(value.getString("token") ?? "undefined"), update()});
   }
 
-  void update() {
+  void update({bool showCaptchaDialog = false}) {
     CacheSystem.isActualCache().then(
       (value) => {
         if (value)
@@ -47,18 +48,33 @@ class _ContentMainState extends State<ContentMain> {
           }
         else
           {
+            setState(() {
+              userName = null;
+              ratingModel = null;
+              userPic = null;
+              isUnActualToken = false;
+            }),
             ecampus.isActualToken().then((value) => {
                   if (value)
                     {
+                      isUnActualToken = false,
                       getFreshData(),
                     }
                   else
                     {
-                      ecampus.getCaptcha().then(
-                            (captchaImage) => {
-                              showCapchaDialog(context, captchaImage, ecampus)
-                            },
-                          ),
+                      if (showCaptchaDialog)
+                        {
+                          ecampus.getCaptcha().then((captchaImage) => {
+                                showCapchaDialog(context, captchaImage, ecampus)
+                              })
+                        }
+                      else
+                        {
+                          setState(() => {
+                            isUnActualToken = true
+                          },),
+                          getCacheData(),
+                        }
                     }
                 })
           }
@@ -116,7 +132,7 @@ class _ContentMainState extends State<ContentMain> {
       slivers: [
         CupertinoSliverRefreshControl(
           onRefresh: () async {
-            update();
+            update(showCaptchaDialog: true);
           },
         ),
         SliverList(
@@ -125,6 +141,18 @@ class _ContentMainState extends State<ContentMain> {
             children: <Widget>[
               Column(
                 children: [
+                  isUnActualToken
+                      ? Container(
+                          child: Text(
+                            "Данные могут быть неактуальными!",
+
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Colors.red),
+                          ),
+                        )
+                      : const SizedBox(),
                   userPic != null
                       ? MainInfoView().getAvaterView(userPic!)
                       : MainInfoView().getAvaterViewSkeleton(context),
@@ -159,7 +187,11 @@ class _ContentMainState extends State<ContentMain> {
                                 .headlineMedium!
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
-                          onPressed: () {}))),
+                          onPressed: () {
+                            SharedPreferences.getInstance().then((value) => {
+                              value.setString("token", "invalid"),
+                            });
+                          }))),
               Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12),
                 child: Container(

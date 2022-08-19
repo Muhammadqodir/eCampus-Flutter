@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -42,7 +43,7 @@ class CacheSystem{
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     DateTime cacheDate = dateFormat.parse(cacheDateStr);
     DateTime dateNow = DateTime.now();
-    if(dateNow.subtract(const Duration(hours: 2)).isAfter(cacheDate)){
+    if(dateNow.subtract(const Duration(seconds: 5)).isAfter(cacheDate)){
       return false;
     }
     return true;
@@ -82,5 +83,13 @@ class CacheSystem{
     }
 
     return StudentCache(prefs.getString("${prefix}userName")??"undefined", pic, ratingModel);
+  }
+
+  static void invalidateStudentCache()async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("${prefix}userName", "undefined");
+    await prefs.setString("${prefix}userPic", "empty");
+    await prefs.setString("${prefix}rating", "empty");
+    await prefs.setString("${prefix}date", "2001-08-06 10:45:00");
   }
 }
