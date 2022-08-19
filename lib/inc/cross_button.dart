@@ -25,7 +25,6 @@ class CrossButton extends StatelessWidget {
   final BorderRadius borderRadius;
   final Color disabledColor;
 
-//disabled color
 //refresh swipe
 
   @override

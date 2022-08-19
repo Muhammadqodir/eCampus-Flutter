@@ -40,12 +40,10 @@ class RatingResponse extends Response {
   ]) : super(isSuccess, error);
 }
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class NotificationsResponse extends Response {
   List<NotificationModel>? unread = [];
   List<NotificationModel>? read = [];
 
-  //Возможно, нужны квадратные скобки
   NotificationsResponse(bool isSuccess, String error, {this.unread, this.read})
       : super(isSuccess, error);
 }
