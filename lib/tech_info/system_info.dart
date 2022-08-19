@@ -18,6 +18,7 @@ class SystemInfo {
   SystemInfo._internal();
 
   void initInfo() {
+    //print("I'm here");
     // if (Platform.isAndroid) {
     //   androidInfo = DeviceInfoPlugin().androidInfo;
     //   //release = androidInfo.version;

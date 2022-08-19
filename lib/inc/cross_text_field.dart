@@ -37,6 +37,7 @@ class CrossTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(SystemInfo().isIos);
     return SizedBox(
       width: width,
       height: height,

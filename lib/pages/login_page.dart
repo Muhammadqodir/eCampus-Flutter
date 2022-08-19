@@ -7,8 +7,8 @@ import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../inc/activity_indicator.dart';
-import '../inc/text_field.dart';
+import '../inc/cross_activity_indicator.dart';
+import '../inc/cross_text_field.dart';
 import '../utils/dialogs.dart';
 
 class LoginPage extends StatefulWidget {
@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                         title: 'eCampus',
                       ),
                     ),
-                  )
+                  ),
                 }
               else
                 {
@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                     "eCampus",
                     response.error,
                     "Попробовать снова",
-                  )
+                  ),
                 },
               ecampus.client.clearCookies(),
               updateCapcha(),
@@ -230,6 +230,8 @@ class _LoginPageState extends State<LoginPage> {
                             height: 12,
                           ),
                           CrossTextField(
+                            width: 250,
+                            height: 45,
                             textStyle: Theme.of(context).textTheme.bodyMedium,
                             backgroundColor: Colors.white,
                             borderRadius: BorderRadius.circular(12),
@@ -251,6 +253,8 @@ class _LoginPageState extends State<LoginPage> {
                             height: 12,
                           ),
                           CrossTextField(
+                            width: 250,
+                            height: 45,
                             textStyle: Theme.of(context).textTheme.bodyMedium,
                             backgroundColor: Colors.white,
                             borderRadius: BorderRadius.circular(12),
@@ -280,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           const SizedBox(
-                            height: 3,
+                            height: 5,
                           ),
                           captchaImage == null
                               ? Column(
@@ -306,13 +310,15 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                           child: Image.memory(
                                             captchaImage!,
-                                            height: 42,
+                                            height: 45,
                                           ),
                                         ),
                                         const SizedBox(
                                           width: 5,
                                         ),
                                         CrossButton(
+                                          height: 45,
+                                          wight: 45,
                                           backgroundColor: Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -327,9 +333,11 @@ class _LoginPageState extends State<LoginPage> {
                                       ],
                                     ),
                                     const SizedBox(
-                                      height: 4,
+                                      height: 10,
                                     ),
                                     CrossTextField(
+                                      width: 250,
+                                      height: 45,
                                       textStyle: Theme.of(context)
                                           .textTheme
                                           .bodyMedium,
@@ -360,6 +368,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           !loading
                               ? CrossButton(
+                                  height: 40,
                                   onPressed: () => login(),
                                   backgroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
