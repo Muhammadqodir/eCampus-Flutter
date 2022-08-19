@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:ecampus_ncfu/content/dialogs/cross_dialog.dart';
+import 'package:ecampus_ncfu/inc/cross_dialog.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/cupertino.dart';

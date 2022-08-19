@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:ecampus_ncfu/content/buttons/cross_button.dart';
+import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';

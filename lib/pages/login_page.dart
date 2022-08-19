@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:ecampus_ncfu/content/buttons/cross_button.dart';
-import 'package:ecampus_ncfu/content/dialogs/cross_dialog.dart';
+import 'package:ecampus_ncfu/inc/cross_button.dart';
+import 'package:ecampus_ncfu/inc/cross_dialog.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../content/activity_indicator/activity_indicator.dart';
-import '../content/text_fields/text_field.dart';
+import '../inc/activity_indicator.dart';
+import '../inc/text_field.dart';
 import '../utils/dialogs.dart';
 
 class LoginPage extends StatefulWidget {
