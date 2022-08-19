@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
@@ -35,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               showConfirmDialog(
                   context, "Выход из профиля", "Подтвердите действие", () {
+                CacheSystem.invalidateStudentCache();
                 SharedPreferences.getInstance().then((value) => {
                       value.setBool("isLogin", false),
                       value.setString("ecampus", "undefined"),

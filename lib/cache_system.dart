@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -82,5 +83,13 @@ class CacheSystem{
     }
 
     return StudentCache(prefs.getString("${prefix}userName")??"undefined", pic, ratingModel);
+  }
+
+  static void invalidateStudentCache()async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("${prefix}userName", "undefined");
+    await prefs.setString("${prefix}userPic", "empty");
+    await prefs.setString("${prefix}rating", "empty");
+    await prefs.setString("${prefix}date", "2001-08-06 10:45:00");
   }
 }
