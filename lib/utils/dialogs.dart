@@ -41,7 +41,7 @@ void showConfirmDialog(
 void showCapchaDialog(
   BuildContext context,
   Uint8List captchaImage,
-  ECampus ecampus,
+  eCampus ecampus,
 ) {
   TextEditingController captcha = TextEditingController();
   showCupertinoDialog<void>(

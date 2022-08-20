@@ -1,4 +1,4 @@
-import 'package:ecampus_ncfu/tech_info/system_info.dart';
+import 'package:ecampus_ncfu/utils/system_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

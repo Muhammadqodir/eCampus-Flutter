@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
@@ -40,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             showConfirmDialog(
                 context, "Выход из профиля", "Подтвердите действие", () {
+                  CacheSystem.invalidateStudentCache();
               SharedPreferences.getInstance().then((value) => {
                     value.setBool(
                       "isLogin",
@@ -167,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<CustomBottomNavItem> items,
   ) {
     return Container(
-      height: 67,
+      height: 61,
       decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -175,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: lightGray,
             offset: Offset(
               0,
-              -0.5,
+              -0.5
             ),
           ),
         ],
@@ -199,6 +201,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     curve: Curves.fastOutSlowIn,
                     decoration: const BoxDecoration(
+                      // color: pageIndex == items.indexOf(item)
+                      //     ? Theme.of(ctx).primaryColor
+                      //     : Theme.of(ctx).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.all(
                         Radius.circular(12),
                       ),
@@ -213,18 +218,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               item.icon,
                               size: 28,
                               color: pageIndex == items.indexOf(item)
-                                  ? Colors.blue
+                                  ? Theme.of(ctx).primaryColor
                                   : Theme.of(ctx).textTheme.titleSmall!.color,
                             ),
                             Text(
                               item.label,
                               maxLines: 1,
                               softWrap: false,
+                              overflow: TextOverflow.ellipsis,
                               style: pageIndex == items.indexOf(item)
-                                  ? const TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 12,
-                                    )
+                                  ? Theme.of(ctx).textTheme.titleSmall!.copyWith(
+                                    color: Theme.of(ctx).primaryColor,
+                                    fontWeight: FontWeight.bold)
                                   : Theme.of(ctx).textTheme.titleSmall,
                             ),
                           ],

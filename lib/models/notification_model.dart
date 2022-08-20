@@ -1,3 +1,4 @@
+import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/gui_utils.dart';
@@ -34,78 +35,70 @@ class NotificationModel {
       children: [
         CupertinoInkWell(
           onPressed: (() {}),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(children: [
                 Stack(
                   children: <Widget>[
                     ClipOval(
                       child: SizedBox.fromSize(
                         size: const Size.fromRadius(24), // Image radius
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: HexColor.fromHex(
-                              activityKindColor,
-                            ).withAlpha(200),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: Image.network(
-                              'https://ecampus.ncfu.ru$activityKindIcon',
-                              color: Colors.white,
-                              fit: BoxFit.cover,
+                            decoration: BoxDecoration(
+                              color: HexColor.fromHex(activityKindColor).withAlpha(200),
                             ),
-                          ),
-                        ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(6),
+                                child: Image.network(
+                                    'https://ecampus.ncfu.ru$activityKindIcon',
+                                    color: Colors.white,
+                                    fit: BoxFit.cover))),
                       ),
                     ),
-                    if (dateOfReading == "unread")
-                      Positioned(
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
+                    dateOfReading == "unread" ?
+                    Positioned(
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                      )
-                    else
-                      const SizedBox.shrink(),
+                        constraints: const BoxConstraints(
+                          minWidth: 12,
+                          minHeight: 12,
+                        ),
+                      ),
+                    ):SizedBox.shrink()
                   ],
                 ),
                 const SizedBox(
                   width: 12,
                 ),
                 Flexible(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(
-                        height: 2,
-                      ),
-                      Text(
-                        message,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      )
-                    ],
-                  ),
-                ),
-              ],
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Text(
+                      message,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    )
+                  ],
+                )),
+              ]),
             ),
           ),
         ),
-        const Divider(
+        Divider(
           height: 1,
         )
       ],

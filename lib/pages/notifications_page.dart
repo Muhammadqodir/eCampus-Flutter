@@ -18,7 +18,7 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  ECampus? ecampus;
+  eCampus? ecampus;
   List<NotificationModel>? notifications;
   double elevation = 0;
 
@@ -26,7 +26,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((sPref) => {
-          ecampus = ECampus(sPref.getString("token")!),
+          ecampus = eCampus(sPref.getString("token")!),
           update(),
         });
   }

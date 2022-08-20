@@ -9,29 +9,24 @@ import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 
-class ECampus {
+class eCampus {
   final JsonEncoder _encoder = const JsonEncoder();
-  NetworkService client = NetworkService();
+  NetworkService client = new NetworkService();
   String login = "";
   String password = "";
   String ecampusToken = "undefined";
 
-  ECampus(this.ecampusToken) {
-    client.addCookie(
-      "ecampus",
-      ecampusToken,
-    );
+  eCampus(String ecampusToken) {
+    this.ecampusToken = ecampusToken;
+    client.addCookie("ecampus", ecampusToken);
   }
 
   Future<String> getToken() async {
-    http.Response response = await client.get(
-      'https://ecampus.ncfu.ru/account/login',
-    );
+    http.Response response =
+        await client.get('https://ecampus.ncfu.ru/account/login');
     var doc = parse(response.body);
     return doc
-            .querySelector(
-              '[name="__RequestVerificationToken"]',
-            )!
+            .querySelector('[name="__RequestVerificationToken"]')!
             .attributes['value'] ??
         "error";
   }
@@ -51,9 +46,7 @@ class ECampus {
   }
 
   String getCookies() {
-    return _encoder.convert(
-      client.cookies,
-    );
+    return _encoder.convert(client.cookies);
   }
 
   Future<AuthenticateResponse> authenticate(
@@ -65,7 +58,7 @@ class ECampus {
       'Login': username,
       'Password': password,
       'Code': captcha,
-      'RememberMe': "true",
+      'RememberMe': "true"
     };
 
     print(body);
@@ -98,7 +91,7 @@ class ECampus {
     if (response.statusCode == 200) {
       var doc = parse(response.body);
       String userName = doc.getElementsByClassName("username")[0].innerHtml;
-      return userName;
+      return userName.replaceAll("  ", "");
     } else {
       return "undefined";
     }
@@ -152,29 +145,30 @@ class ECampus {
             Map<String, dynamic> ratingList = academicResults[size - 1];
             if (ratingList.containsKey('Details')) {
               List<dynamic> detalis = ratingList["Details"];
-              int detalisSize = detalis.length;
-              if (detalisSize > 0) {
+              int detalis_size = detalis.length;
+              if (detalis_size > 0) {
                 List<RatingModel> models = [];
-                for (var element in detalis) {
-                  Map<String, dynamic> detailsItem = element;
+                detalis.forEach((element) {
+                  Map<String, dynamic> details_item = element;
                   models.add(RatingModel(
-                      detailsItem["Name"],
-                      double.parse(detailsItem["SumRating"]) * 100,
-                      detailsItem["PositionInGroup"],
-                      detailsItem["PositionInInstitute"],
-                      detalisSize + 1,
-                      detailsItem["MaxPositionInInstitute"],
-                      detailsItem["IsCurrent"]));
-                  if (detailsItem["IsCurrent"]) {
+                      details_item["Name"],
+                      double.parse(details_item["SumRating"])* 100,
+                      details_item["PositionInGroup"],
+                      details_item["PositionInInstitute"],
+                      detalis_size+1,
+                      details_item["MaxPositionInInstitute"],
+                      details_item["IsCurrent"]));
+                  if (details_item["IsCurrent"]) {
                     ratingResponse.averageRating =
-                        double.parse(detailsItem["SumRating"]) * 100;
-                    ratingResponse.groupRating = detailsItem["PositionInGroup"];
+                        double.parse(details_item["SumRating"]) * 100;
+                    ratingResponse.groupRating =
+                        details_item["PositionInGroup"];
                     ratingResponse.instituteRating =
-                        detailsItem["PositionInInstitute"];
+                        details_item["PositionInInstitute"];
                     ratingResponse.studentsNumberInInstitute =
-                        detailsItem["MaxPositionInInstitute"];
+                        details_item["MaxPositionInInstitute"];
                   }
-                }
+                });
                 ratingResponse.items = models;
                 ratingResponse.studentsNumberInGroup = models.length + 1;
                 ratingResponse.isSuccess = true;
@@ -206,57 +200,53 @@ class ECampus {
 
   Future<NotificationsResponse> getNotifications() async {
     // try{
-    http.Response response = await client.post(
-        'https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
-    if (response.statusCode == 200) {
-      Map<String, dynamic> json = jsonDecode(response.body);
-      if (json.containsKey("Messages")) {
-        List<Map<String, dynamic>> messageList =
-            List<Map<String, dynamic>>.from(json["Messages"]);
-        List<NotificationModel> unread = [];
-        List<NotificationModel> read = [];
-        messageList.forEach((element) {
-          print(element["DateOfReading"]);
-          if (element["DateOfReading"] == null) {
-            unread.add(NotificationModel(
-                title: element["Title"] ?? "undefined",
-                message: element["Message"] ?? "undefined",
-                dateOfCreation: element["DateOfCreation"] ?? "",
+      http.Response response =
+          await client.post('https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
+      if (response.statusCode == 200) {
+        Map<String, dynamic> json = jsonDecode(response.body);
+        if(json.containsKey("Messages")){
+          List<Map<String, dynamic>> messageList = List<Map<String, dynamic>>.from(json["Messages"]);
+          List<NotificationModel> unread = [];
+          List<NotificationModel> read = [];
+          messageList.forEach((element) {
+            print(element["DateOfReading"]);
+            if(element["DateOfReading"] == null){
+              unread.add(NotificationModel(
+                title: element["Title"]??"undefined",
+                message: element["Message"]??"undefined",
+                dateOfCreation: element["DateOfCreation"]??"",
                 dateOfReading: "unread",
-                actionData: element["ActionData"] ?? "",
-                actionType: element["ActionType"] ?? "",
-                activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
-                activityKindIcon: element["ActivityKindIcon"] ??
-                    "/images/icons/education.png",
-                activityKindName: element["ActivityKindName"] ?? "undefined",
-                categoryId: element["CategoryId"] ?? "",
-                notificationImportanceId:
-                    element["NotificationImportanceId"] ?? ""));
-          } else {
-            read.add(NotificationModel(
-                title: element["Title"] ?? "undefined",
-                message: element["Message"] ?? "undefined",
-                dateOfCreation: element["DateOfCreation"] ?? "",
-                dateOfReading: element["DateOfReading"] ?? "",
-                actionData: element["ActionData"] ?? "",
-                actionType: element["ActionType"] ?? "",
-                activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
-                activityKindIcon: element["ActivityKindIcon"] ??
-                    "/images/icons/education.png",
-                activityKindName: element["ActivityKindName"] ?? "undefined",
-                categoryId: element["CategoryId"] ?? "",
-                notificationImportanceId:
-                    element["NotificationImportanceId"] ?? ""));
-          }
-        });
-        return NotificationsResponse(true, "error_",
-            unread: unread, read: read);
-      } else {
-        return NotificationsResponse(true, "error_asdf", unread: [], read: []);
+                actionData: element["ActionData"]??"",
+                actionType: element["ActionType"]??"",
+                activityKindColor: element["ActivityKindColor"]??"FFB40C",
+                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
+                activityKindName: element["ActivityKindName"]??"undefined",
+                categoryId: element["CategoryId"]??"",
+                notificationImportanceId: element["NotificationImportanceId"]??""
+              ));
+            }else{
+              read.add(NotificationModel(
+                title: element["Title"]??"undefined",
+                message: element["Message"]??"undefined",
+                dateOfCreation: element["DateOfCreation"]??"",
+                dateOfReading: element["DateOfReading"]??"",
+                actionData: element["ActionData"]??"",
+                actionType: element["ActionType"]??"",
+                activityKindColor: element["ActivityKindColor"]??"FFB40C",
+                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
+                activityKindName: element["ActivityKindName"]??"undefined",
+                categoryId: element["CategoryId"]??"",
+                notificationImportanceId: element["NotificationImportanceId"]??""
+              ));
+            }
+          });
+          return NotificationsResponse(true, "error_", unread: unread, read: read);
+        }else{
+          return NotificationsResponse(true, "error_asdf", unread: [], read: []);
+        }
+      }else{
+        return NotificationsResponse(false, "Status code ${response.statusCode}");
       }
-    } else {
-      return NotificationsResponse(false, "Status code ${response.statusCode}");
-    }
     // }catch(e){
     //   return NotificationsResponse(false, e.toString());
     // }

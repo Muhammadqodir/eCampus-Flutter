@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController password = TextEditingController();
   TextEditingController captcha = TextEditingController();
 
-  late ECampus ecampus;
+  late eCampus ecampus;
   Uint8List? captchaImage;
   bool isLogined = true;
   bool loading = false;
@@ -52,32 +52,20 @@ class _LoginPageState extends State<LoginPage> {
           cookie = value.getString("token") ?? 'undefined',
           if (value.getBool("isLogin") ?? false)
             {
-              ecampus = ECampus(value.getString("token") ?? "undefined"),
-              ecampus.isActualToken().then((value) => {
-                    if (value)
-                      {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyHomePage(
-                              title: 'eCampus',
-                            ),
-                          ),
-                        )
-                      }
-                    else
-                      {
-                        print("solveCaptcha"),
-                        solveCapcha(),
-                      }
-                  })
+               Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MyHomePage(
+                          title: 'eCampus',
+                        )),
+              )
             }
           else
             {
               setState(() {
                 isLogined = false;
               }),
-              ecampus = ECampus("undefined"),
+              ecampus = eCampus("undefined"),
               ecampus.getCaptcha().then((value) => {
                     setState(() {
                       captchaImage = value;
