@@ -39,6 +39,26 @@ void showConfirmDialog(BuildContext context, String title, String msg,
   );
 }
 
+
+void showOfflineDialog(BuildContext context) {
+  showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: const Text("Нет подключение"),
+      content: const Text("Не удалось подключится к серверу. Проверьте подключение  интернету и попробуйте снова."),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          isDestructiveAction: false,
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          child: const Text("Окей"),
+        ),
+      ],
+    ),
+  );
+}
+
 void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecampus, Function successCallBack) {
   TextEditingController captcha = TextEditingController();
   showCupertinoDialog<void>(

@@ -173,8 +173,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         children: [
                           Icon(
-                            size: 28,
                             item.icon,
+                            size: 28,
                             color: pageIndex == items.indexOf(item)
                                 ? Theme.of(ctx).primaryColor
                                 : Theme.of(ctx).textTheme.titleSmall!.color,

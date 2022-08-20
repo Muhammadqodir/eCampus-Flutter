@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -39,13 +41,14 @@ extension HexColor on Color {
 
 Future<bool> isOnline() async {
   try {
-    final result = await InternetAddress.lookup('https://ecampus.ncfu.ru/');
+    final result = await InternetAddress.lookup('ecampus.ncfu.ru');
     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
       return true;
     }else{
       return false;
     }
-  } on SocketException catch (_) {
+  } on SocketException catch (error) {
+    log(error.toString());
     return false;
   }
 }
