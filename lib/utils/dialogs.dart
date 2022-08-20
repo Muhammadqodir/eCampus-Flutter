@@ -39,7 +39,7 @@ void showConfirmDialog(BuildContext context, String title, String msg,
   );
 }
 
-void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecampus) {
+void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecampus, Function successCallBack) {
   TextEditingController captcha = TextEditingController();
   showCupertinoDialog<void>(
     context: context,
@@ -111,17 +111,13 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
                 if(response.isSuccess){
                   print(response.userName),
                   value.setString("token", response.cookie).then((value) => {
-                    Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyHomePage(
-                                      title: 'eCampus',
-                                    ))),
+                    Navigator.pop(context),
+                    successCallBack(),
                   }),
                 }else{
                   ecampus.getCaptcha().then((value) => {
                     Navigator.pop(context),
-                    showCapchaDialog(context, value, ecampus),
+                    showCapchaDialog(context, value, ecampus, successCallBack),
                   })
                 }
               })

@@ -6,7 +6,6 @@ import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/dialogs.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.context}) : super(key: key);
@@ -25,12 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   Uint8List? captchaImage;
   bool isLogined = true;
   bool loading = false;
-
-  void solveCapcha() {
-    ecampus.getCaptcha().then(
-          (value) => {showCapchaDialog(context, value, ecampus)},
-        );
-  }
 
   @override
   void initState() {
@@ -73,7 +66,6 @@ class _LoginPageState extends State<LoginPage> {
           setState(() {
             captchaImage = value;
             captcha.text = "";
-            print(ecampus.getCookies());
           })
         });
   }

@@ -65,7 +65,7 @@ class _ContentMainState extends State<ContentMain> {
                       if (showCaptchaDialog)
                         {
                           ecampus.getCaptcha().then((captchaImage) => {
-                                showCapchaDialog(context, captchaImage, ecampus)
+                                showCapchaDialog(context, captchaImage, ecampus, update)
                               })
                         }
                       else
