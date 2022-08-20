@@ -44,7 +44,7 @@ class _ContentMainState extends State<ContentMain> {
         });
   }
 
-  void update({bool showCaptchaDialog = false}) {
+ void update({bool showCaptchaDialog = false}) {
     CacheSystem.isActualCache().then(
       (value) => {
         if (value)

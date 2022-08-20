@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           cookie = value.getString("token") ?? 'undefined',
           if (value.getBool("isLogin") ?? false)
             {
-               Navigator.pushReplacement(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const MyHomePage(
