@@ -11,13 +11,13 @@ class CrossButton extends StatelessWidget {
     this.disabledColor = const Color.fromARGB(255, 71, 71, 71),
     required this.child,
     this.height,
-    this.wight,
+    this.width,
     this.padding = EdgeInsets.zero,
     this.borderRadius = BorderRadius.zero,
   }) : super(key: key);
 
   final EdgeInsetsGeometry? padding;
-  final double? wight, height;
+  final double? width, height;
   final Widget child;
   final String text;
   final void Function()? onPressed;
@@ -25,17 +25,16 @@ class CrossButton extends StatelessWidget {
   final BorderRadius borderRadius;
   final Color disabledColor;
 
-//refresh swipe
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      width: wight,
+      width: width,
       child: SystemInfo().isIos
           ? CupertinoButton(
               padding: padding,
               color: backgroundColor,
+              alignment: Alignment.center,
               borderRadius: borderRadius,
               onPressed: onPressed,
               disabledColor: disabledColor,
@@ -47,6 +46,8 @@ class CrossButton extends StatelessWidget {
                 primary: backgroundColor,
                 onSurface: disabledColor,
                 padding: padding,
+                elevation: 0,
+                alignment: Alignment.center,
                 shape: RoundedRectangleBorder(
                   borderRadius: borderRadius,
                 ),
