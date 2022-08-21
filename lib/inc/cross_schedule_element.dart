@@ -35,6 +35,8 @@ class CrossScheduleElement extends StatelessWidget {
   final Color backgroundColor, splashColor;
   final void Function()? onPressed;
 
+//ОБОЗНАЧЕНИЕ ТЕКУЩЕЙ ПАРЫ current
+
   @override
   Widget build(BuildContext context) {
     return SystemInfo().isAndroid
