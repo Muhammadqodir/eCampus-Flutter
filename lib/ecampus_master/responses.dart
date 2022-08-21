@@ -1,5 +1,6 @@
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:flutter/material.dart';
 
 class Response {
@@ -45,4 +46,30 @@ class NotificationsResponse extends Response {
   NotificationsResponse(bool isSuccess, String error,
       {this.unread, this.read})
       : super(isSuccess, error);
+}
+
+class AcademicYearsResponse extends Response{
+
+    List<AcademicYearsModel>? models = [];
+    int? kodCart = -1;
+    int? portionSize = -1;
+    int? studentId = -1;
+    SubjectsResponse? currentSubjects = SubjectsResponse.buildDefault();
+
+    AcademicYearsResponse(bool isSuccess, String error,
+    {this.models, this.kodCart, this.portionSize, this.studentId, this.currentSubjects}) : super(isSuccess, error);
+
+}
+
+class SubjectsResponse extends Response{
+  
+    List? fileAbleActivities = [];
+    List? sciFiles = [];
+    // List<SubjectModel> models;
+
+    SubjectsResponse(bool isSuccess, String error,
+    {this.fileAbleActivities, this.sciFiles}) : super(isSuccess, error);
+
+    SubjectsResponse.buildDefault() : super(false, "undefined");
+
 }

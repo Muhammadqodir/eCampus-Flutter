@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -6,6 +7,7 @@ import 'package:ecampus_ncfu/ecampus_master/NetworkService.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 
@@ -152,10 +154,10 @@ class eCampus {
                   Map<String, dynamic> details_item = element;
                   models.add(RatingModel(
                       details_item["Name"],
-                      double.parse(details_item["SumRating"])* 100,
+                      double.parse(details_item["SumRating"]) * 100,
                       details_item["PositionInGroup"],
                       details_item["PositionInInstitute"],
-                      detalis_size+1,
+                      detalis_size + 1,
                       details_item["MaxPositionInInstitute"],
                       details_item["IsCurrent"]));
                   if (details_item["IsCurrent"]) {
@@ -199,56 +201,172 @@ class eCampus {
   }
 
   Future<NotificationsResponse> getNotifications() async {
-    // try{
-      http.Response response =
-          await client.post('https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
+    try {
+      http.Response response = await client.post(
+          'https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
       if (response.statusCode == 200) {
         Map<String, dynamic> json = jsonDecode(response.body);
-        if(json.containsKey("Messages")){
-          List<Map<String, dynamic>> messageList = List<Map<String, dynamic>>.from(json["Messages"]);
+        if (json.containsKey("Messages")) {
+          List<Map<String, dynamic>> messageList =
+              List<Map<String, dynamic>>.from(json["Messages"]);
           List<NotificationModel> unread = [];
           List<NotificationModel> read = [];
           messageList.forEach((element) {
             print(element["DateOfReading"]);
-            if(element["DateOfReading"] == null){
+            if (element["DateOfReading"] == null) {
               unread.add(NotificationModel(
-                title: element["Title"]??"undefined",
-                message: element["Message"]??"undefined",
-                dateOfCreation: element["DateOfCreation"]??"",
-                dateOfReading: "unread",
-                actionData: element["ActionData"]??"",
-                actionType: element["ActionType"]??"",
-                activityKindColor: element["ActivityKindColor"]??"FFB40C",
-                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
-                activityKindName: element["ActivityKindName"]??"undefined",
-                categoryId: element["CategoryId"]??"",
-                notificationImportanceId: element["NotificationImportanceId"]??""
-              ));
-            }else{
+                  title: element["Title"] ?? "undefined",
+                  message: element["Message"] ?? "undefined",
+                  dateOfCreation: element["DateOfCreation"] ?? "",
+                  dateOfReading: "unread",
+                  actionData: element["ActionData"] ?? "",
+                  actionType: element["ActionType"] ?? "",
+                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                  activityKindIcon: element["ActivityKindIcon"] ??
+                      "/images/icons/education.png",
+                  activityKindName: element["ActivityKindName"] ?? "undefined",
+                  categoryId: element["CategoryId"] ?? "",
+                  notificationImportanceId:
+                      element["NotificationImportanceId"] ?? ""));
+            } else {
               read.add(NotificationModel(
-                title: element["Title"]??"undefined",
-                message: element["Message"]??"undefined",
-                dateOfCreation: element["DateOfCreation"]??"",
-                dateOfReading: element["DateOfReading"]??"",
-                actionData: element["ActionData"]??"",
-                actionType: element["ActionType"]??"",
-                activityKindColor: element["ActivityKindColor"]??"FFB40C",
-                activityKindIcon: element["ActivityKindIcon"]??"/images/icons/education.png",
-                activityKindName: element["ActivityKindName"]??"undefined",
-                categoryId: element["CategoryId"]??"",
-                notificationImportanceId: element["NotificationImportanceId"]??""
-              ));
+                  title: element["Title"] ?? "undefined",
+                  message: element["Message"] ?? "undefined",
+                  dateOfCreation: element["DateOfCreation"] ?? "",
+                  dateOfReading: element["DateOfReading"] ?? "",
+                  actionData: element["ActionData"] ?? "",
+                  actionType: element["ActionType"] ?? "",
+                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                  activityKindIcon: element["ActivityKindIcon"] ??
+                      "/images/icons/education.png",
+                  activityKindName: element["ActivityKindName"] ?? "undefined",
+                  categoryId: element["CategoryId"] ?? "",
+                  notificationImportanceId:
+                      element["NotificationImportanceId"] ?? ""));
             }
           });
-          return NotificationsResponse(true, "error_", unread: unread, read: read);
-        }else{
-          return NotificationsResponse(true, "error_asdf", unread: [], read: []);
+          return NotificationsResponse(true, "error_",
+              unread: unread, read: read);
+        } else {
+          return NotificationsResponse(true, "error_asdf",
+              unread: [], read: []);
         }
-      }else{
-        return NotificationsResponse(false, "Status code ${response.statusCode}");
+      } else {
+        return NotificationsResponse(
+            false, "Status code ${response.statusCode}");
       }
-    // }catch(e){
-    //   return NotificationsResponse(false, e.toString());
-    // }
+    } catch (e) {
+      return NotificationsResponse(false, e.toString());
+    }
+  }
+
+  Future<AcademicYearsResponse> getAcademicYears() async {
+    try {
+      http.Response response =
+          await client.post('https://ecampus.ncfu.ru/studies');
+      if (response.statusCode == 200) {
+        String responseString = response.body;
+        int start = responseString.indexOf("var viewModel = ") + 16;
+        String json = responseString.substring(start);
+        start = json.indexOf("</script>") - 3;
+        json = json.substring(0, start);
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        Map<String, dynamic> jsonObject = jsonDecode(json);
+        if (jsonObject.containsKey("specialities")) {
+          SubjectsResponse subjectsResponse = SubjectsResponse.buildDefault();
+          int Kod_cart = 0;
+          int portionSize = 0;
+          int studentId = 0;
+          try {
+            Kod_cart = jsonObject["Kod_cart"];
+          } catch (e) {}
+          try {
+            portionSize = jsonObject["portionSize"];
+          } catch (e) {}
+
+          List<dynamic> specialities = jsonObject["specialities"];
+          int size = specialities.length;
+
+          Map<String, dynamic> lastSpecialitie = specialities[size - 1];
+          List<dynamic> academicYears = lastSpecialitie["AcademicYears"];
+
+          try {
+            studentId = lastSpecialitie["Id"];
+          } catch (e) {}
+
+          List<AcademicYearsModel> models = [];
+          for (var i = 0; i < academicYears.length; i++) {
+            Map<String, dynamic> academicYear = academicYears[i];
+            String kursName = "";
+            String kursTypeName = "";
+            String name = "";
+            int id = 0;
+            int parent_id = 0;
+            try {
+              kursName = academicYear["KursTypeName"];
+            } catch (e) {}
+            try {
+              name = academicYear["Name"];
+            } catch (e) {}
+            try {
+              parent_id = academicYear["ParentId"];
+            } catch (e) {}
+            try {
+              id = academicYear["Id"];
+            } catch (e) {}
+            log(name);
+
+            AcademicYearsModel model = AcademicYearsModel(kursName, name, id, parent_id, false, []);
+            List<TermModel> termModels = [];
+            List<dynamic> terms = academicYear["Terms"];
+            for (var j = 0; j < terms.length; j++) {
+              Map<String, dynamic> term = terms[j];
+              bool isCurrent = false;
+              String TermTypeName = "";
+              String term_Name = "";
+              int term_id = 0;
+              int term_parent_id = 0;
+              try {
+                term_parent_id = term["ParentId"];
+              } catch (e) {}
+              try {
+                term_id = term["Id"];
+              } catch (e) {}
+              try {
+                term_Name = term["Name"];
+              } catch (e) {}
+              try {
+                TermTypeName = term["TermTypeName"];
+              } catch (e) {}
+              try {
+                isCurrent = term["IsCurrent"];
+                if (isCurrent) {
+                  // subjectsResponse = getSubjectsByJSON(term);
+                }
+              } catch (e) {}
+              if (isCurrent) {
+                model.isCurrent = true;
+              }
+
+              TermModel termModel = TermModel(
+                  isCurrent, TermTypeName, term_Name, term_parent_id, term_id);
+              termModels.add(termModel);
+            }
+
+            model.termModels = termModels;
+            models.add(model);
+          }
+          return AcademicYearsResponse(true, "", models: models, kodCart: Kod_cart, portionSize: portionSize, studentId: studentId, currentSubjects: subjectsResponse);
+        }else{
+          return AcademicYearsResponse(false, "specialities is empty");
+        }
+      } else {
+        return AcademicYearsResponse(
+            false, "Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return AcademicYearsResponse(false, e.toString());
+    }
   }
 }
