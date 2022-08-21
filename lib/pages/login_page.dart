@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
+import 'package:ecampus_ncfu/utils/dialogs.dart';
+import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,27 +49,23 @@ class _LoginPageState extends State<LoginPage> {
                 isLogined = false;
               }),
               ecampus = eCampus("undefined"),
-              ecampus.getCaptcha().then((value) => {
-                    setState(() {
-                      captchaImage = value;
-                      captcha.text = "";
-                      print(ecampus.getCookies());
-                    })
-                  })
+              updateCapcha(),
             },
         });
   }
 
   void updateCapcha() {
-    setState(() {
-      captchaImage = null;
-    });
-    ecampus.getCaptcha().then((value) => {
-          setState(() {
-            captchaImage = value;
-            captcha.text = "";
-          })
-        });
+    isOnline().then((isOnline) => {
+      setState(() {
+        captchaImage = null;
+      }),
+      ecampus.getCaptcha().then((value) => {
+            setState(() {
+              captchaImage = value;
+              captcha.text = "";
+            })
+          }),
+    },);
   }
 
   void _showAlertDialog(
@@ -97,41 +95,54 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = true;
     });
-    ecampus
-        .authenticate(username.text, password.text, captcha.text)
-        .then((response) => {
-              if (response.isSuccess)
-                {
-                  SharedPreferences.getInstance().then(
-                    (value) => {
-                      value.setBool("isLogin", true),
-                      value.setString("login", username.text),
-                      value.setString("password", password.text),
-                      value.setString("token", response.cookie),
-                      value.setString("userName", response.userName)
+    isOnline().then((isOnline) => {
+          if (isOnline)
+            {
+              ecampus
+                  .authenticate(username.text, password.text, captcha.text)
+                  .then(
+                    (response) => {
+                      if (response.isSuccess)
+                        {
+                          SharedPreferences.getInstance().then(
+                            (value) => {
+                              value.setBool("isLogin", true),
+                              value.setString("login", username.text),
+                              value.setString("password", password.text),
+                              value.setString("token", response.cookie),
+                              value.setString("userName", response.userName)
+                            },
+                          ),
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyHomePage(
+                                      title: 'eCampus',
+                                    )),
+                          )
+                        }
+                      else
+                        {
+                          password.text = "",
+                          _showAlertDialog(context, "eCampus", response.error,
+                              "Попробовать снова")
+                        },
+                      ecampus.client.clearCookies(),
+                      updateCapcha(),
+                      setState(() {
+                        loading = false;
+                      })
                     },
-                  ),
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MyHomePage(
-                              title: 'eCampus',
-                            )),
                   )
-                }
-              else
-                {
-                  password.text = "",
-                  _showAlertDialog(
-                      context, "eCampus", response.error, "Попробовать снова")
-                },
-              ecampus.client.clearCookies(),
-              updateCapcha(),
+            }
+          else
+            {
+              showOfflineDialog(context),
               setState(() {
                 loading = false;
-              })
-            });
-    //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage(title: "ecampus")));
+              }),
+            }
+        });
   }
 
   @override

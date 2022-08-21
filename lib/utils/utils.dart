@@ -1,18 +1,21 @@
+import 'dart:developer';
+
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
-double getWidthPercent(BuildContext context, int percent){
-  return MediaQuery.of(context).size.width * (percent/100);
+double getWidthPercent(BuildContext context, int percent) {
+  return MediaQuery.of(context).size.width * (percent / 100);
 }
 
-double getHeightPercent(BuildContext context, int percent){
-  return MediaQuery.of(context).size.height * (percent/100);
+double getHeightPercent(BuildContext context, int percent) {
+  return MediaQuery.of(context).size.height * (percent / 100);
 }
 
-RatingModel getMyRating(List<RatingModel> models){
+RatingModel getMyRating(List<RatingModel> models) {
   RatingModel model = RatingModel("undefined", -1, -1, -1, -1, -1, true);
   models.forEach((element) {
-    if(element.isCurrent){
+    if (element.isCurrent) {
       model = element;
     }
   });
@@ -34,4 +37,18 @@ extension HexColor on Color {
       '${red.toRadixString(16).padLeft(2, '0')}'
       '${green.toRadixString(16).padLeft(2, '0')}'
       '${blue.toRadixString(16).padLeft(2, '0')}';
+}
+
+Future<bool> isOnline() async {
+  try {
+    final result = await InternetAddress.lookup('ecampus.ncfu.ru');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      return true;
+    }else{
+      return false;
+    }
+  } on SocketException catch (error) {
+    log(error.toString());
+    return false;
+  }
 }

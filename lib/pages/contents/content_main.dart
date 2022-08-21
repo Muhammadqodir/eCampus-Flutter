@@ -64,15 +64,28 @@ class _ContentMainState extends State<ContentMain> {
                     {
                       if (showCaptchaDialog)
                         {
-                          ecampus.getCaptcha().then((captchaImage) => {
-                                showCapchaDialog(context, captchaImage, ecampus, update)
+                          isOnline().then((isOnline) => {
+                                if (isOnline)
+                                  {
+                                    ecampus
+                                        .getCaptcha()
+                                        .then((captchaImage) => {
+                                              showCapchaDialog(
+                                                  context,
+                                                  captchaImage,
+                                                  ecampus,
+                                                  update),
+                                            })
+                                  }
+                                else
+                                  {showOfflineDialog(context)}
                               })
                         }
                       else
                         {
-                          setState(() => {
-                            isUnActualToken = true
-                          },),
+                          setState(
+                            () => {isUnActualToken = true},
+                          ),
                           getCacheData(),
                         }
                     }
@@ -145,7 +158,6 @@ class _ContentMainState extends State<ContentMain> {
                       ? Container(
                           child: Text(
                             "Данные могут быть неактуальными!",
-
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -189,8 +201,8 @@ class _ContentMainState extends State<ContentMain> {
                           ),
                           onPressed: () {
                             SharedPreferences.getInstance().then((value) => {
-                              value.setString("token", "invalid"),
-                            });
+                                  value.setString("token", "invalid"),
+                                });
                           }))),
               Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12),

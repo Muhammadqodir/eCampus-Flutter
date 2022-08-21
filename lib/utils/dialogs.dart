@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
+import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,9 +18,6 @@ void showConfirmDialog(BuildContext context, String title, String msg,
       content: Text(msg),
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
-          /// This parameter indicates the action would perform
-          /// a destructive action such as deletion, and turns
-          /// the action's text color to red.
           isDestructiveAction: false,
           onPressed: confirmAction,
           child: const Text("Подтверить"),
@@ -39,7 +37,28 @@ void showConfirmDialog(BuildContext context, String title, String msg,
   );
 }
 
-void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecampus, Function successCallBack) {
+void showOfflineDialog(BuildContext context) {
+  showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: const Text("Нет подключение"),
+      content: const Text(
+          "Не удалось подключится к серверу. Проверьте подключение  интернету и попробуйте снова."),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          isDestructiveAction: false,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("Окей"),
+        ),
+      ],
+    ),
+  );
+}
+
+void showCapchaDialog(BuildContext context, Uint8List captchaImage,
+    eCampus ecampus, Function successCallBack) {
   TextEditingController captcha = TextEditingController();
   showCupertinoDialog<void>(
     context: context,
@@ -102,26 +121,44 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage, eCampus ecam
           /// a destructive action such as deletion, and turns
           /// the action's text color to red.
           isDestructiveAction: false,
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(dialogContext);
             showLoadingDialog(context);
             print(captcha.text);
             SharedPreferences.getInstance().then((value) => {
-              ecampus.authenticate(value.getString("login")??"", value.getString("password")??"", captcha.text).then((response) => {
-                if(response.isSuccess){
-                  print(response.userName),
-                  value.setString("token", response.cookie).then((value) => {
-                    Navigator.pop(context),
-                    successCallBack(),
-                  }),
-                }else{
-                  ecampus.getCaptcha().then((value) => {
-                    Navigator.pop(context),
-                    showCapchaDialog(context, value, ecampus, successCallBack),
-                  })
-                }
-              })
-            });
+                  ecampus
+                      .authenticate(value.getString("login") ?? "",
+                          value.getString("password") ?? "", captcha.text)
+                      .then((response) => {
+                            if (response.isSuccess)
+                              {
+                                print(response.userName),
+                                value
+                                    .setString("token", response.cookie)
+                                    .then((value) => {
+                                          Navigator.pop(context),
+                                          successCallBack(),
+                                        }),
+                              }
+                            else
+                              {
+                                isOnline().then((isOnline) => {
+                                      if (isOnline)
+                                        {
+                                          ecampus.getCaptcha().then((value) => {
+                                                Navigator.pop(context),
+                                                showCapchaDialog(context, value,
+                                                    ecampus, successCallBack),
+                                              }),
+                                        }
+                                      else
+                                        {
+                                          showOfflineDialog(context),
+                                        }
+                                    }),
+                              }
+                          })
+                });
           },
           child: Text("Подтверить"),
         ),
@@ -150,7 +187,9 @@ void showLoadingDialog(BuildContext context) {
           SizedBox(
             height: 12,
           ),
-          CupertinoActivityIndicator(radius: 12,)
+          CupertinoActivityIndicator(
+            radius: 12,
+          )
         ]),
       ),
     ),
