@@ -5,6 +5,7 @@ import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/gui_utils.dart';
+import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,30 +36,42 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 
   void update() {
-    setState(() {
-      notifications = null;
-    });
-    ecampus!.getNotifications().then((response) => {
-          if (response.isSuccess)
-            {
-              setState((() => {
-                    notifications = response.unread! + response.read!,
-                  }))
-            }
-          else
-            {
-              if (response.error == "Status code 302")
-                {
-                  ecampus?.getCaptcha().then((captchaImage) => {
-                    showCapchaDialog(context, captchaImage, ecampus!, update)
-                  })
-                }
-              else
-                {
-                  log(response.error),
-                }
-            }
-        });
+    isOnline().then(
+      (isOnline) => {
+        if (isOnline)
+          {
+            setState(() {
+              notifications = null;
+            }),
+            ecampus!.getNotifications().then((response) => {
+                  if (response.isSuccess)
+                    {
+                      setState(() => {
+                            notifications = response.unread! + response.read!,
+                          })
+                    }
+                  else
+                    {
+                      if (response.error == "Status code 302")
+                        {
+                          ecampus?.getCaptcha().then((captchaImage) => {
+                                showCapchaDialog(
+                                    context, captchaImage, ecampus!, update),
+                              })
+                        }
+                      else
+                        {
+                          log(response.error),
+                        }
+                    }
+                }),
+          }
+        else
+          {
+            showOfflineDialog(context),
+          }
+      },
+    );
   }
 
   @override

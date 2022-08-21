@@ -49,27 +49,23 @@ class _LoginPageState extends State<LoginPage> {
                 isLogined = false;
               }),
               ecampus = eCampus("undefined"),
-              ecampus.getCaptcha().then((value) => {
-                    setState(() {
-                      captchaImage = value;
-                      captcha.text = "";
-                      print(ecampus.getCookies());
-                    })
-                  })
+              updateCapcha(),
             },
         });
   }
 
   void updateCapcha() {
-    setState(() {
-      captchaImage = null;
-    });
-    ecampus.getCaptcha().then((value) => {
-          setState(() {
-            captchaImage = value;
-            captcha.text = "";
-          })
-        });
+    isOnline().then((isOnline) => {
+      setState(() {
+        captchaImage = null;
+      }),
+      ecampus.getCaptcha().then((value) => {
+            setState(() {
+              captchaImage = value;
+              captcha.text = "";
+            })
+          }),
+    },);
   }
 
   void _showAlertDialog(
