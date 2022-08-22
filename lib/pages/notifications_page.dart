@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/gui_utils.dart';
@@ -127,7 +128,17 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       notifications != null
                           ? Column(
                               children: notifications!
-                                  .map((element) => element.getView(context))
+                                  .map(
+                                    (element) => CrossListElement(
+                                      onPressed: () {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(element.message),
+                                        ));
+                                      },
+                                      child: element.getView(context),
+                                    ),
+                                  )
                                   .toList(),
                             )
                           : Column(
