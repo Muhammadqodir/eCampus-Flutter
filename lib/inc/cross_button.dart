@@ -7,13 +7,13 @@ class CrossButton extends StatelessWidget {
     Key? key,
     this.text = "",
     required this.onPressed,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = Colors.transparent,
     this.disabledColor = const Color.fromARGB(255, 71, 71, 71),
     required this.child,
     this.height,
     this.wight,
     this.padding = EdgeInsets.zero,
-    this.borderRadius = BorderRadius.zero,
+    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
   }) : super(key: key);
 
   final EdgeInsetsGeometry? padding;

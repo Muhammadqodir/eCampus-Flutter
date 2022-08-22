@@ -1,4 +1,5 @@
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
@@ -90,16 +91,28 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                 Row(
                   children: academicYears
                       .map(
-                        (element) => Text(
-                          element.name,
-                        ),
+                        (element) => Expanded(
+                            child: CrossButton(
+                          onPressed: () {},
+                          child: Text(
+                            element.name,
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                          backgroundColor: Theme.of(context).primaryColor,
+                        )),
                       )
                       .toList(),
                 ),
                 Row(
                   children: academicYears[selectedCourse]
                       .termModels
-                      .map((element) => Text(element.name))
+                      .map(
+                        (element) => Expanded(
+                          child: Text(
+                            element.name,
+                          ),
+                        ),
+                      )
                       .toList(),
                 )
               ]),
