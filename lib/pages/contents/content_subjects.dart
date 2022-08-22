@@ -21,6 +21,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
   bool loading = true;
   List<AcademicYearsModel> academicYears = [];
   int selectedCourse = 3;
+  List<SubjectModel> subjectModels = [];
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                           () => {
                             academicYears = value.models!,
                             selectedCourse = value.getCurrentCourse(),
+                            subjectModels = value.currentSubjects!.models,
                             loading = false,
                           },
                         )
@@ -86,7 +88,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
               ],
             ),
           )
-        : Column(
+        : ListView(
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
@@ -105,7 +107,9 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                                 child: Text(
                                   "${element.name} ${element.kursTypeName}",
                                   style: element.isCurrent
-                                      ? Theme.of(context).textTheme.headlineMedium
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
                                       : Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
@@ -129,7 +133,9 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                                 child: Text(
                                   "${element.name} ${element.termTypeName}",
                                   style: element.isCurrent
-                                      ? Theme.of(context).textTheme.headlineMedium
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
                                       : Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
@@ -137,7 +143,15 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                           ),
                         )
                         .toList(),
-                  )
+                  ),
+                  Text("Size: " + subjectModels.length.toString()),
+                  Column(
+                    children: subjectModels
+                        .map(
+                          (element) => element.getView(context),
+                        )
+                        .toList(),
+                  ),
                 ]),
               ),
             ],

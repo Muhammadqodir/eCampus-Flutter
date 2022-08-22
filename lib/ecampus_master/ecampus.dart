@@ -116,7 +116,7 @@ class eCampus {
         print('connected');
         return true;
       }
-    } on SocketException catch (_) {
+    } catch (_) {
       print('not connected');
       return false;
     }
@@ -317,7 +317,8 @@ class eCampus {
             } catch (e) {}
             log(name);
 
-            AcademicYearsModel model = AcademicYearsModel(kursName, name, id, parent_id, false, []);
+            AcademicYearsModel model =
+                AcademicYearsModel(kursName, name, id, parent_id, false, []);
             List<TermModel> termModels = [];
             List<dynamic> terms = academicYear["Terms"];
             for (var j = 0; j < terms.length; j++) {
@@ -342,7 +343,7 @@ class eCampus {
               try {
                 isCurrent = term["IsCurrent"];
                 if (isCurrent) {
-                  // subjectsResponse = getSubjectsByJSON(term);
+                  subjectsResponse = getSubjectsByJSON(term);
                 }
               } catch (e) {}
               if (isCurrent) {
@@ -357,8 +358,13 @@ class eCampus {
             model.termModels = termModels;
             models.add(model);
           }
-          return AcademicYearsResponse(true, "", models: models, kodCart: Kod_cart, portionSize: portionSize, studentId: studentId, currentSubjects: subjectsResponse);
-        }else{
+          return AcademicYearsResponse(true, "",
+              models: models,
+              kodCart: Kod_cart,
+              portionSize: portionSize,
+              studentId: studentId,
+              currentSubjects: subjectsResponse);
+        } else {
           return AcademicYearsResponse(false, "specialities is empty");
         }
       } else {
@@ -367,6 +373,150 @@ class eCampus {
       }
     } catch (e) {
       return AcademicYearsResponse(false, e.toString());
+    }
+  }
+
+  SubjectsResponse getSubjectsByJSON(Map<String, dynamic> jsonObject) {
+    try {
+      if (jsonObject != null) {
+        List<dynamic> fileAbleActivities = [];
+        List<dynamic> sciFiles = [];
+        try {
+          fileAbleActivities = jsonObject["FileAbleActivities"];
+        } catch (e) {}
+        try {
+          sciFiles = jsonObject["SciFiles"];
+        } catch (e) {}
+        List<dynamic> courses = jsonObject["Courses"];
+        int size = courses.length;
+        if (size > 0) {
+          List<SubjectModel> subjectModels = [];
+          for (int i = 0; i < size; i++) {
+            Map<String, dynamic> subject = courses[i];
+            double currentRating = 0;
+            bool hasInstruction = false;
+            bool hasLectures = false;
+            bool HasUMK = false;
+            bool isConfirmDocumentExists = false;
+            double maxRating = 0;
+            String name = "";
+            int paretId = 0;
+            bool locked = false;
+            int id = 0;
+            String termsForAtt = "";
+            try {
+              termsForAtt = subject["termsForAtt"];
+            } catch (e) {}
+            try {
+              currentRating = subject["CurrentRating"];
+            } catch (e) {}
+            try {
+              hasInstruction = subject["HasInstruction"];
+            } catch (e) {}
+            try {
+              hasLectures = subject["HasLectures"];
+            } catch (e) {}
+            try {
+              HasUMK = subject["HasUMK"];
+            } catch (e) {}
+            try {
+              isConfirmDocumentExists = subject["IsConfirmDocumentExists"];
+            } catch (e) {}
+            try {
+              locked = subject["locked"];
+            } catch (e) {}
+            try {
+              maxRating = subject["MaxRating"];
+            } catch (e) {}
+            try {
+              name = subject["Name"];
+              log(name);
+            } catch (e) {}
+            try {
+              paretId = subject["ParentId"];
+            } catch (e) {}
+            try {
+              id = subject["Id"];
+            } catch (e) {}
+            List<dynamic> lessonTypes = [];
+            try {
+              lessonTypes = subject["LessonTypes"];
+            } catch (e) {}
+            String subType = "";
+            List<LessonTypesModel> lessonTypesArrayList = [];
+            for (int j = 0; j < lessonTypes.length; j++) {
+              Map<String, dynamic> lessonTypeObject = lessonTypes[j];
+              int typeId = 0;
+              int kodPr = 0;
+              int lessonType_ = 0;
+              String typeName = "";
+              int typeParentId = 0;
+              bool schoolType = false;
+              try {
+                typeId = lessonTypeObject["Id"];
+              } catch (e) {}
+              try {
+                kodPr = lessonTypeObject["Kod_pr"];
+              } catch (e) {}
+              try {
+                lessonType_ = lessonTypeObject["LessonType"];
+              } catch (e) {}
+              try {
+                typeName = lessonTypeObject["Name"];
+                if (lessonType_ == 55 || lessonType_ == 5 || lessonType_ == 4) {
+                  subType = typeName;
+                }
+              } catch (e) {}
+              try {
+                typeParentId = lessonTypeObject["ParentId"];
+              } catch (e) {}
+              try {
+                schoolType = lessonTypeObject["SchoolType"];
+              } catch (e) {}
+              lessonTypesArrayList.add(
+                LessonTypesModel(
+                  id: typeId,
+                  parentId: typeParentId,
+                  kodPr: kodPr,
+                  lessonType: lessonType_,
+                  name: typeName,
+                  schoolType: schoolType,
+                ),
+              );
+            }
+            subjectModels.add(
+              SubjectModel(
+                id: id,
+                parentId: paretId,
+                name: name,
+                termsForAtt: termsForAtt,
+                subType: subType,
+                currentRating: currentRating,
+                maxRating: maxRating,
+                locked: locked,
+                lessonTypes: lessonTypesArrayList,
+                hasInstruction: hasLectures,
+                hasLectures: hasLectures,
+                hasUMK: HasUMK,
+                isConfirmDocumentExists: isConfirmDocumentExists,
+              ),
+            );
+          }
+          return SubjectsResponse(
+            true,
+            "",
+            fileAbleActivities: fileAbleActivities,
+            sciFiles: sciFiles,
+            models: subjectModels,
+          );
+        } else {
+          return SubjectsResponse(false, "Subjects is Null");
+        }
+      } else {
+        return SubjectsResponse(false, "json is null");
+      }
+    } catch (e) {
+      return SubjectsResponse(false, e.toString());
     }
   }
 }

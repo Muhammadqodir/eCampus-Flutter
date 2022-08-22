@@ -43,41 +43,47 @@ class NotificationsResponse extends Response {
   List<NotificationModel>? unread = [];
   List<NotificationModel>? read = [];
 
-  NotificationsResponse(bool isSuccess, String error,
-      {this.unread, this.read})
+  NotificationsResponse(bool isSuccess, String error, {this.unread, this.read})
       : super(isSuccess, error);
 }
 
-class AcademicYearsResponse extends Response{
+class AcademicYearsResponse extends Response {
+  List<AcademicYearsModel>? models = [];
+  int? kodCart = -1;
+  int? portionSize = -1;
+  int? studentId = -1;
+  SubjectsResponse? currentSubjects = SubjectsResponse.buildDefault();
 
-    List<AcademicYearsModel>? models = [];
-    int? kodCart = -1;
-    int? portionSize = -1;
-    int? studentId = -1;
-    SubjectsResponse? currentSubjects = SubjectsResponse.buildDefault();
+  AcademicYearsResponse(bool isSuccess, String error,
+      {this.models,
+      this.kodCart,
+      this.portionSize,
+      this.studentId,
+      this.currentSubjects})
+      : super(isSuccess, error);
 
-    AcademicYearsResponse(bool isSuccess, String error,
-    {this.models, this.kodCart, this.portionSize, this.studentId, this.currentSubjects}) : super(isSuccess, error);
-
-    int getCurrentCourse(){
-      for (var i = 0; i < models!.length; i++) {
-        if(models![i].isCurrent){
-          return i;
-        }
+  int getCurrentCourse() {
+    for (var i = 0; i < models!.length; i++) {
+      if (models![i].isCurrent) {
+        return i;
       }
-      return 0;
     }
+    return 0;
+  }
 }
 
-class SubjectsResponse extends Response{
-  
-    List? fileAbleActivities = [];
-    List? sciFiles = [];
-    // List<SubjectModel> models;
+class SubjectsResponse extends Response {
+  List fileAbleActivities = [];
+  List sciFiles = [];
+  List<SubjectModel> models = [];
 
-    SubjectsResponse(bool isSuccess, String error,
-    {this.fileAbleActivities, this.sciFiles}) : super(isSuccess, error);
+  SubjectsResponse(
+    bool isSuccess,
+    String error, {
+    this.fileAbleActivities = const [],
+    this.sciFiles = const [],
+    this.models = const [],
+  }) : super(isSuccess, error);
 
-    SubjectsResponse.buildDefault() : super(false, "undefined");
-
+  SubjectsResponse.buildDefault() : super(false, "undefined");
 }
