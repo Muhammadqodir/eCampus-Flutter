@@ -20,7 +20,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
   late eCampus ecampus;
   bool loading = true;
   List<AcademicYearsModel> academicYears = [];
-  int selectedCourse = 0;
+  int selectedCourse = 3;
 
   @override
   void initState() {
@@ -43,6 +43,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                         setState(
                           () => {
                             academicYears = value.models!,
+                            selectedCourse = value.getCurrentCourse(),
                             loading = false,
                           },
                         )
@@ -87,35 +88,58 @@ class _ContentSubjectsState extends State<ContentSubjects> {
           )
         : Column(
             children: [
-              Column(children: [
-                Row(
-                  children: academicYears
-                      .map(
-                        (element) => Expanded(
-                            child: CrossButton(
-                          onPressed: () {},
-                          child: Text(
-                            element.name,
-                            style: Theme.of(context).textTheme.headlineMedium,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: Column(children: [
+                  Row(
+                    children: academicYears
+                        .map(
+                          (element) => Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.all(4),
+                              child: CrossButton(
+                                onPressed: () {},
+                                backgroundColor: element.isCurrent
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).scaffoldBackgroundColor,
+                                child: Text(
+                                  "${element.name} ${element.kursTypeName}",
+                                  style: element.isCurrent
+                                      ? Theme.of(context).textTheme.headlineMedium
+                                      : Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                            ),
                           ),
-                          backgroundColor: Theme.of(context).primaryColor,
-                        )),
-                      )
-                      .toList(),
-                ),
-                Row(
-                  children: academicYears[selectedCourse]
-                      .termModels
-                      .map(
-                        (element) => Expanded(
-                          child: Text(
-                            element.name,
+                        )
+                        .toList(),
+                  ),
+                  Row(
+                    children: academicYears[selectedCourse]
+                        .termModels
+                        .map(
+                          (element) => Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.all(4),
+                              child: CrossButton(
+                                onPressed: () {},
+                                backgroundColor: element.isCurrent
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).scaffoldBackgroundColor,
+                                child: Text(
+                                  "${element.name} ${element.termTypeName}",
+                                  style: element.isCurrent
+                                      ? Theme.of(context).textTheme.headlineMedium
+                                      : Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                )
-              ]),
+                        )
+                        .toList(),
+                  )
+                ]),
+              ),
             ],
           );
   }

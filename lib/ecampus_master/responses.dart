@@ -59,6 +59,14 @@ class AcademicYearsResponse extends Response{
     AcademicYearsResponse(bool isSuccess, String error,
     {this.models, this.kodCart, this.portionSize, this.studentId, this.currentSubjects}) : super(isSuccess, error);
 
+    int getCurrentCourse(){
+      for (var i = 0; i < models!.length; i++) {
+        if(models![i].isCurrent){
+          return i;
+        }
+      }
+      return 0;
+    }
 }
 
 class SubjectsResponse extends Response{
