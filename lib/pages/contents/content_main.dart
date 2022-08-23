@@ -5,6 +5,7 @@ import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
+import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
@@ -208,8 +209,11 @@ class _ContentMainState extends State<ContentMain> {
                 padding: const EdgeInsets.only(left: 12, right: 12),
                 child: Container(
                   decoration: const BoxDecoration(
-                      color: Color(0xFFDDF1EF),
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                    color: Color(0xFFDDF1EF),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                  ),
                   width: double.infinity,
                   child: Padding(
                     padding: EdgeInsets.all(12),
@@ -221,7 +225,7 @@ class _ContentMainState extends State<ContentMain> {
                             .bodyMedium!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                     ]),
