@@ -80,8 +80,7 @@ class SubjectModel {
                       name,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .bodyMedium,
                     ),
                     const SizedBox(
                       height: 5,
@@ -130,7 +129,7 @@ class SubjectModel {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircularPercentIndicator(
-                    radius: 40.0,
+                    radius: 30.0,
                     animation: true,
                     animationDuration: 400,
                     lineWidth: 5.0,
@@ -142,15 +141,27 @@ class SubjectModel {
                       children: [
                         Text(
                           "$currentRating",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         Text(
                           "из",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         Text(
                           "$maxRating",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),

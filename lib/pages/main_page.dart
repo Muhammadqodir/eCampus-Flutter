@@ -26,6 +26,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
   Uint8List? captchaImage;
+  double elevation = 0;
+  
+  void setAppbarElevation(double visibility) {
+    setState(() {
+      elevation = visibility;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   //do somemthig
                 })
           ],
-          ContentSubjects(context: context),
+          ContentSubjects(context: context, setElevation: setAppbarElevation,),
           EcampusIcons.icons8_books,
           'Предметы'),
       CustomBottomNavItem(
@@ -122,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: bottomNavItems[pageIndex].leading,
         actions: bottomNavItems[pageIndex].actions,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
+        elevation: elevation,
         title: Text(
           bottomNavItems[pageIndex].title,
           style: Theme.of(context).textTheme.titleMedium,
