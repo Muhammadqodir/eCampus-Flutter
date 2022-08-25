@@ -1,9 +1,8 @@
-import 'dart:html';
 import 'dart:math';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -67,6 +66,16 @@ class SubjectModel {
     required this.isConfirmDocumentExists,
   });
 
+  Color getSubTypeColor() {
+    if (subType == "Экзамен") {
+      return CustomColors.error;
+    } else if (subType == "Дифферинцированный зачет") {
+      return CustomColors.warning;
+    } else {
+      return CustomColors.perfect;
+    }
+  }
+
   Widget getView(BuildContext context) {
     return Column(
       children: [
@@ -79,9 +88,7 @@ class SubjectModel {
                   children: [
                     Text(
                       name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 5,
@@ -89,39 +96,42 @@ class SubjectModel {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.green,
-                        border: Border.all(
-                          width: 5,
-                          color: Colors.green,
-                        ),
+                        color: getSubTypeColor(),
                       ),
-                      child: Text(
-                        subType,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                      child: Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Text(
+                          subType,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    CrossButton(
-                      wight: 120,
-                      height: 32,
-                      padding: const EdgeInsets.all(4),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            EcampusIcons.icons8_download,
-                            color: Theme.of(context).canvasColor,
-                          ),
-                          Text(
-                            "Загрузки",
-                            style: Theme.of(context).textTheme.headlineMedium,
+                    hasLectures || hasInstruction || hasUMK
+                        ? CrossButton(
+                            wight: 120,
+                            height: 32,
+                            padding: const EdgeInsets.all(4),
+                            backgroundColor: Theme.of(context).primaryColor,
+                            onPressed: () {},
+                            child: Row(
+                              children: [
+                                Icon(
+                                  EcampusIcons.icons8_download,
+                                  color: Theme.of(context).canvasColor,
+                                ),
+                                Text(
+                                  "Загрузки",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
+                                )
+                              ],
+                            ),
                           )
-                        ],
-                      ),
-                    ),
+                        : const SizedBox(),
                   ],
                 ),
               ),
@@ -135,7 +145,8 @@ class SubjectModel {
                     animationDuration: 400,
                     lineWidth: 5.0,
                     backgroundWidth: 3.0,
-                    percent: min(currentRating / maxRating.toDouble(), 1),
+                    percent:
+                        maxRating != 0 ? min(currentRating / maxRating, 0) : 0,
                     center: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,7 +178,7 @@ class SubjectModel {
                       ],
                     ),
                     circularStrokeCap: CircularStrokeCap.butt,
-                    backgroundColor: Theme.of(context).disabledColor,
+                    backgroundColor: Theme.of(context).dividerColor,
                     progressColor: Theme.of(context).primaryColor,
                   ),
                 ],
@@ -197,31 +208,32 @@ class LessonTypesModel {
   });
 }
 
-class LessonItemModel{
+class LessonItemModel {
+  int attendance = 0,
+      gainedScore = 0,
+      grade = 0,
+      id = 0,
+      kodPr = 0,
+      loadId = 0,
+      lostScore = 0;
+  String subject = "", name = "", room = "", date = "", gradeText = "";
+  bool isCheckpoint = false, hasFile = false;
 
-    int attendance = 0, gainedScore = 0, grade = 0, id = 0, kodPr = 0, loadId = 0, lostScore = 0;
-    String subject = "", name = "", room = "", date = "", gradeText = "";
-    bool isCheckpoint = false, hasFile = false;
+  LessonItemModel.buildDefault();
 
-    LessonItemModel.buildDefault();
-
-    LessonItemModel(
-      {
-        required this.id, 
-        required this.attendance,
-        required this.gainedScore,
-        required this.grade,
-        required this.kodPr,
-        required this.loadId,
-        required this.lostScore,
-        required this.subject,
-        required this.name,
-        required this.room,
-        required this.date,
-        required this.gradeText,
-        required this.isCheckpoint,
-        required this.hasFile
-      }
-    );
-    
+  LessonItemModel(
+      {required this.id,
+      required this.attendance,
+      required this.gainedScore,
+      required this.grade,
+      required this.kodPr,
+      required this.loadId,
+      required this.lostScore,
+      required this.subject,
+      required this.name,
+      required this.room,
+      required this.date,
+      required this.gradeText,
+      required this.isCheckpoint,
+      required this.hasFile});
 }
