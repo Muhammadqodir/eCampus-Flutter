@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
@@ -194,4 +195,33 @@ class LessonTypesModel {
     required this.name,
     required this.schoolType,
   });
+}
+
+class LessonItemModel{
+
+    int attendance = 0, gainedScore = 0, grade = 0, id = 0, kodPr = 0, loadId = 0, lostScore = 0;
+    String subject = "", name = "", room = "", date = "", gradeText = "";
+    bool isCheckpoint = false, hasFile = false;
+
+    LessonItemModel.buildDefault();
+
+    LessonItemModel(
+      {
+        required this.id, 
+        required this.attendance,
+        required this.gainedScore,
+        required this.grade,
+        required this.kodPr,
+        required this.loadId,
+        required this.lostScore,
+        required this.subject,
+        required this.name,
+        required this.room,
+        required this.date,
+        required this.gradeText,
+        required this.isCheckpoint,
+        required this.hasFile
+      }
+    );
+    
 }
