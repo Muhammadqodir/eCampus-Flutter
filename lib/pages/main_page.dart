@@ -5,6 +5,7 @@ import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
 import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
+import 'package:ecampus_ncfu/pages/contents/content_subjects.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
@@ -25,6 +26,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
   Uint8List? captchaImage;
+  double elevation = 0;
+  
+  void setAppbarElevation(double visibility) {
+    setState(() {
+      elevation = visibility;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   //do somemthig
                 })
           ],
-          ContentSchedule(context: context),
+          ContentSubjects(context: context, setElevation: setAppbarElevation,),
           EcampusIcons.icons8_books,
           'Предметы'),
       CustomBottomNavItem(
@@ -121,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: bottomNavItems[pageIndex].leading,
         actions: bottomNavItems[pageIndex].actions,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
+        elevation: elevation,
         title: Text(
           bottomNavItems[pageIndex].title,
           style: Theme.of(context).textTheme.titleMedium,
