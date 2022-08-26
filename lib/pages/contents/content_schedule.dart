@@ -1,5 +1,6 @@
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
+import 'package:ecampus_ncfu/inc/week_tab.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,13 @@ class ContentSchedule extends StatefulWidget {
 class _ContentScheduleState extends State<ContentSchedule> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Text(
-      "Рассписание",
-      style: Theme.of(context).textTheme.bodyMedium,
-    ));
+    return Column(
+      children: [
+        WeekTab(
+          start: DateTime.now(),
+          selected_date: DateTime.now().add(Duration(days: 2)),
+        ),
+      ],
+    );
   }
 }
