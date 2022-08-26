@@ -417,7 +417,7 @@ class eCampus {
                 termsForAtt = subject["termsForAtt"];
               } catch (e) {}
               try {
-                currentRating = subject["CurrentRating"];
+                currentRating = subject["CurrentRating"].toDouble();;
               } catch (e) {}
               try {
                 hasInstruction = subject["HasInstruction"];
@@ -434,7 +434,9 @@ class eCampus {
               try {
                 locked = subject["locked"];
               } catch (e) {}
+              try {
                 maxRating = subject["MaxRating"].toDouble();
+              } catch (e) {}
               try {
                 name = subject["Name"];
                 log(name);
@@ -562,7 +564,7 @@ class eCampus {
               termsForAtt = subject["termsForAtt"];
             } catch (e) {}
             try {
-              currentRating = subject["CurrentRating"];
+              currentRating = subject["CurrentRating"].toDouble();
             } catch (e) {}
             try {
               hasInstruction = subject["HasInstruction"];
@@ -580,7 +582,7 @@ class eCampus {
               locked = subject["locked"];
             } catch (e) {}
             try {
-              maxRating = subject["MaxRating"];
+              maxRating = subject["MaxRating"].toDouble();
             } catch (e) {}
             try {
               name = subject["Name"];

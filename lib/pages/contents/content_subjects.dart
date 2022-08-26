@@ -210,16 +210,18 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                                 padding: EdgeInsets.all(4),
                                 child: CrossButton(
                                   onPressed: () {
-                                    isOnline().then((isOnline) => {
-                                          if (isOnline)
-                                            {
-                                              getsubjects(element.id),
-                                            }
-                                          else
-                                            {
-                                              showOfflineDialog(context),
-                                            }
-                                        });
+                                    if (element.id != selectedTermId) {
+                                      isOnline().then((isOnline) => {
+                                            if (isOnline)
+                                              {
+                                                getsubjects(element.id),
+                                              }
+                                            else
+                                              {
+                                                showOfflineDialog(context),
+                                              }
+                                          });
+                                    }
                                   },
                                   backgroundColor: element.id == selectedTermId
                                       ? Theme.of(context).primaryColor
@@ -243,7 +245,6 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                           )
                           .toList(),
                     ),
-                    Text("Size: " + subjectModels.length.toString()),
                     Column(
                       children: subjectModels
                           .map(
