@@ -69,7 +69,7 @@ class SubjectModel {
   Color getSubTypeColor() {
     if (subType == "Экзамен") {
       return CustomColors.error;
-    } else if (subType == "Дифферинцированный зачет") {
+    } else if (subType == "Дифференцированный зачет") {
       return CustomColors.warning;
     } else {
       return CustomColors.perfect;
@@ -88,24 +88,37 @@ class SubjectModel {
                   children: [
                     Text(
                       name,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
                     ),
+                    termsForAtt != ""
+                    ?
+                    Text(
+                      "в аттестацию учитываются рейтинговые баллы за $termsForAtt семестры.",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ):
+                    const SizedBox(),
                     const SizedBox(
                       height: 5,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: getSubTypeColor(),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text(
-                          subType,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
-                    ),
+                    subType != ""
+                        ? Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              color: getSubTypeColor(),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                subType,
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
                     const SizedBox(
                       height: 5,
                     ),
@@ -146,7 +159,7 @@ class SubjectModel {
                     lineWidth: 5.0,
                     backgroundWidth: 3.0,
                     percent:
-                        maxRating != 0 ? min(currentRating / maxRating, 0) : 0,
+                        maxRating != 0 ? currentRating / maxRating : 0,
                     center: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ContentSubjects extends StatefulWidget {
-  const ContentSubjects({Key? key, required this.context, required this.setElevation}) : super(key: key);
+  const ContentSubjects(
+      {Key? key, required this.context, required this.setElevation})
+      : super(key: key);
 
   final BuildContext context;
   final Function setElevation;
@@ -22,9 +24,11 @@ class _ContentSubjectsState extends State<ContentSubjects> {
   late eCampus ecampus;
   bool loading = true;
   List<AcademicYearsModel> academicYears = [];
-  int selectedCourse = 3;
+  int selectedCourseIndex = 0;
+  int selectedTermId = 0;
   List<SubjectModel> subjectModels = [];
   double elevation = 0;
+  int studentId = 0;
 
   @override
   void initState() {
@@ -32,12 +36,22 @@ class _ContentSubjectsState extends State<ContentSubjects> {
     SharedPreferences.getInstance().then((value) => {
           ecampus = eCampus(value.getString("token") ?? "undefined"),
           isOnline().then((isOnline) => {
-                getData(),
+                if (isOnline)
+                  {
+                    getData(),
+                  }
+                else
+                  {
+                    showOfflineDialog(context),
+                  }
               }),
         });
   }
 
   void getData() {
+    setState(() {
+      loading = true;
+    });
     ecampus.isActualToken().then((isActualToken) => {
           if (isActualToken)
             {
@@ -47,8 +61,45 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                         setState(
                           () => {
                             academicYears = value.models!,
-                            selectedCourse = value.getCurrentCourse(),
+                            selectedCourseIndex = value.getCurrentCourse(),
+                            selectedTermId = value.getCurrentTerm(),
                             subjectModels = value.currentSubjects!.models,
+                            studentId = value.studentId!,
+                            loading = false,
+                          },
+                        )
+                      }
+                    else
+                      {
+                        showAlertDialog(context, "Ошибка", value.error),
+                      }
+                  }),
+            }
+          else
+            {
+              ecampus.getCaptcha().then((captcha) => {
+                    showCapchaDialog(context, captcha, ecampus, () {
+                      getData();
+                    }),
+                  }),
+            }
+        });
+  }
+
+  void getsubjects(int termId) {
+    setState(() {
+      loading = true;
+    });
+    ecampus.isActualToken().then((isActualToken) => {
+          if (isActualToken)
+            {
+              ecampus.getSubjects(studentId, termId).then((value) => {
+                    if (value.isSuccess)
+                      {
+                        setState(
+                          () => {
+                            selectedTermId = termId,
+                            subjectModels = value.models,
                             loading = false,
                           },
                         )
@@ -111,23 +162,30 @@ class _ContentSubjectsState extends State<ContentSubjects> {
             child: ListView(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Column(children: [
                     Row(
                       children: academicYears
                           .map(
                             (element) => Expanded(
                               child: Padding(
-                                padding: EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(4),
                                 child: CrossButton(
-                                  onPressed: () {},
-                                  backgroundColor: element.isCurrent
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedCourseIndex =
+                                          academicYears.indexOf(element);
+                                    });
+                                  },
+                                  backgroundColor: selectedCourseIndex ==
+                                          academicYears.indexOf(element)
                                       ? Theme.of(context).primaryColor
                                       : Theme.of(context)
                                           .scaffoldBackgroundColor,
                                   child: Text(
                                     "${element.name} ${element.kursTypeName}",
-                                    style: element.isCurrent
+                                    style: selectedCourseIndex ==
+                                            academicYears.indexOf(element)
                                         ? Theme.of(context)
                                             .textTheme
                                             .headlineMedium
@@ -144,21 +202,32 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                           .toList(),
                     ),
                     Row(
-                      children: academicYears[selectedCourse]
+                      children: academicYears[selectedCourseIndex]
                           .termModels
                           .map(
                             (element) => Expanded(
                               child: Padding(
                                 padding: EdgeInsets.all(4),
                                 child: CrossButton(
-                                  onPressed: () {},
-                                  backgroundColor: element.isCurrent
+                                  onPressed: () {
+                                    isOnline().then((isOnline) => {
+                                          if (isOnline)
+                                            {
+                                              getsubjects(element.id),
+                                            }
+                                          else
+                                            {
+                                              showOfflineDialog(context),
+                                            }
+                                        });
+                                  },
+                                  backgroundColor: element.id == selectedTermId
                                       ? Theme.of(context).primaryColor
                                       : Theme.of(context)
                                           .scaffoldBackgroundColor,
                                   child: Text(
                                     "${element.name} ${element.termTypeName}",
-                                    style: element.isCurrent
+                                    style: element.id == selectedTermId
                                         ? Theme.of(context)
                                             .textTheme
                                             .headlineMedium

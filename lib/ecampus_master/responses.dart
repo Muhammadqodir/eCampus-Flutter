@@ -70,6 +70,18 @@ class AcademicYearsResponse extends Response {
     }
     return 0;
   }
+
+  int getCurrentTerm(){
+    for (var i = 0; i < models!.length; i++) {
+      for(var j = 0; j < models![i].termModels.length; j++){
+        TermModel termModel = models![i].termModels[j];
+        if (termModel.isCurrent) {
+          return termModel.id;
+        }
+      }
+    }
+    return 0;
+  }
 }
 
 class SubjectsResponse extends Response {
