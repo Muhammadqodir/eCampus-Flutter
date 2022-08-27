@@ -151,7 +151,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                   widget.setElevation(elevation);
                 });
               }
-              if (notification.metrics.pixels < 0 && elevation != 0) {
+              if (notification.metrics.pixels <= 0 && elevation != 0) {
                 setState(() {
                   elevation = 0;
                   widget.setElevation(elevation);

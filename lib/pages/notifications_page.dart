@@ -107,7 +107,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   elevation = 0.5;
                 });
               }
-              if (notification.metrics.pixels < 0 && elevation != 0) {
+              if (notification.metrics.pixels <= 0 && elevation != 0) {
                 setState(() {
                   elevation = 0;
                 });
