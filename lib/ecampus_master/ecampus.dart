@@ -676,5 +676,4 @@ class eCampus {
     }
   }
 
-  
 }
