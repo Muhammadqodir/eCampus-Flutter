@@ -49,4 +49,10 @@ class EcampusIcons {
   static const IconData icons8_restart = IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_captcha = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_logout_rounded_left = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_communication = IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_user_not_found = IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_select = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_download_1 = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_delete_file = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_downloads_folder = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
