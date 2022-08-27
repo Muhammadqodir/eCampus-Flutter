@@ -1,17 +1,17 @@
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
-import 'package:ecampus_ncfu/utils/system_info.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WeekTab extends StatelessWidget {
   const WeekTab({
     Key? key,
     required this.start,
-    required this.selected_date,
+    required this.selectedIndex,
+    required this.setSelected,
   }) : super(key: key);
 
   final DateTime start;
-  final DateTime selected_date;
+  final int selectedIndex;
+  final Function setSelected;
 
   static List<String> weekDays = [
     "Пн",
@@ -35,12 +35,15 @@ class WeekTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<WeekDay> list = getNextWeekDays();
     return Row(
-      children: getNextWeekDays()
+      children: list
           .map(
             (e) => Expanded(
               child: CrossListElement(
-                onPressed: () {},
+                onPressed: (){
+                  setSelected(list.indexOf(e));
+                },
                 child: Column(
                   children: [
                     Text(
@@ -51,7 +54,7 @@ class WeekTab extends StatelessWidget {
                       e.date.day.toString(),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    e.date.day == selected_date.day
+                    list.indexOf(e) == selectedIndex
                         ? Container(
                             height: 2,
                             width: double.infinity,

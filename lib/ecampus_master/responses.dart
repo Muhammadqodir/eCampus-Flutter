@@ -1,5 +1,6 @@
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:flutter/material.dart';
 
@@ -98,4 +99,25 @@ class SubjectsResponse extends Response {
   }) : super(isSuccess, error);
 
   SubjectsResponse.buildDefault() : super(false, "undefined");
+}
+
+
+class ScheduleResponse extends Response{
+  List<ScheduleModel> scheduleModels;
+
+  ScheduleResponse(bool isSuccess, String error, this.scheduleModels) : super(isSuccess, error);
+
+}
+
+class ScheduleWeeksResponse extends Response{
+
+    List<ScheduleWeeksModel> weeks;
+    int id = 0, type = 0, currentWeek = 0;
+
+    ScheduleWeeksResponse(bool isSuccess, String error, {
+      required this.id,
+      required this.type,
+      required this.currentWeek,
+      required this.weeks
+    }) : super(isSuccess, error);
 }

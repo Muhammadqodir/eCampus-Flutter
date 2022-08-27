@@ -15,13 +15,37 @@ class ContentSchedule extends StatefulWidget {
 }
 
 class _ContentScheduleState extends State<ContentSchedule> {
+  int selectedIndex = 0;
+
+  void setSelected(int value) {
+    setState(() => {
+      selectedIndex = value,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         WeekTab(
           start: DateTime.now(),
-          selected_date: DateTime.now().add(Duration(days: 2)),
+          selectedIndex: selectedIndex,
+          setSelected: setSelected,
+        ),
+        Expanded(
+          child: PageView(
+              onPageChanged: (value) => {
+                    setState(
+                      () => {
+                        selectedIndex = value,
+                      },
+                    )
+                  },
+              children: WeekTab.weekDays
+                  .map((e) => Center(
+                        child: Text(e),
+                      ))
+                  .toList()),
         ),
       ],
     );
