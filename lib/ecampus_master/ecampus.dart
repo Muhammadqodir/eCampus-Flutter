@@ -7,6 +7,7 @@ import 'package:ecampus_ncfu/ecampus_master/NetworkService.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
@@ -378,155 +379,159 @@ class eCampus {
 
   Future<SubjectsResponse> getSubjects(int studentId, int termId) async {
     // try {
-      Map<String, String> body = {'studentId': studentId.toString(), 'termId': termId.toString()};
-      http.Response response = await client
-          .post('https://ecampus.ncfu.ru/studies/GetCourses', body: body);
+    Map<String, String> body = {
+      'studentId': studentId.toString(),
+      'termId': termId.toString()
+    };
+    http.Response response = await client
+        .post('https://ecampus.ncfu.ru/studies/GetCourses', body: body);
 
-      if(response.statusCode == 200){
-        String json = response.body;
-        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
-        json = json.replaceAll("\\\"\")", "\"");
-        Map<String, dynamic> jsonObject = jsonDecode(response.body);
-        if (jsonObject != null) {
-          List<dynamic> fileAbleActivities = [];
-          List<dynamic> sciFiles = [];
-          try {
-            fileAbleActivities = jsonObject["fileAbleActivities"];
-          } catch (e) {}
-          try {
-            sciFiles = jsonObject["sciFiles"];
-          } catch (e) {}
-          List<dynamic> courses = jsonObject["courses"];
-          int size = courses.length;
-          if (size > 0) {
-            List<SubjectModel> subjectModels = [];
-            for (int i = 0; i < size; i++) {
-              Map<String, dynamic> subject = courses[i];
-              double currentRating = 0;
-              bool hasInstruction = false;
-              bool hasLectures = false;
-              bool HasUMK = false;
-              bool isConfirmDocumentExists = false;
-              double maxRating = 0;
-              String name = "";
-              int paretId = 0;
-              bool locked = false;
-              int id = 0;
-              String termsForAtt = "";
+    if (response.statusCode == 200) {
+      String json = response.body;
+      json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+      json = json.replaceAll("\\\"\")", "\"");
+      Map<String, dynamic> jsonObject = jsonDecode(response.body);
+      if (jsonObject != null) {
+        List<dynamic> fileAbleActivities = [];
+        List<dynamic> sciFiles = [];
+        try {
+          fileAbleActivities = jsonObject["fileAbleActivities"];
+        } catch (e) {}
+        try {
+          sciFiles = jsonObject["sciFiles"];
+        } catch (e) {}
+        List<dynamic> courses = jsonObject["courses"];
+        int size = courses.length;
+        if (size > 0) {
+          List<SubjectModel> subjectModels = [];
+          for (int i = 0; i < size; i++) {
+            Map<String, dynamic> subject = courses[i];
+            double currentRating = 0;
+            bool hasInstruction = false;
+            bool hasLectures = false;
+            bool HasUMK = false;
+            bool isConfirmDocumentExists = false;
+            double maxRating = 0;
+            String name = "";
+            int paretId = 0;
+            bool locked = false;
+            int id = 0;
+            String termsForAtt = "";
+            try {
+              termsForAtt = subject["termsForAtt"];
+            } catch (e) {}
+            try {
+              currentRating = subject["CurrentRating"].toDouble();
+              ;
+            } catch (e) {}
+            try {
+              hasInstruction = subject["HasInstruction"];
+            } catch (e) {}
+            try {
+              hasLectures = subject["HasLectures"];
+            } catch (e) {}
+            try {
+              HasUMK = subject["HasUMK"];
+            } catch (e) {}
+            try {
+              isConfirmDocumentExists = subject["IsConfirmDocumentExists"];
+            } catch (e) {}
+            try {
+              locked = subject["locked"];
+            } catch (e) {}
+            try {
+              maxRating = subject["MaxRating"].toDouble();
+            } catch (e) {}
+            try {
+              name = subject["Name"];
+              log(name);
+            } catch (e) {}
+            try {
+              paretId = subject["ParentId"];
+            } catch (e) {}
+            try {
+              id = subject["Id"];
+            } catch (e) {}
+            List<dynamic> lessonTypes = [];
+            try {
+              lessonTypes = subject["LessonTypes"];
+            } catch (e) {}
+            String subType = "";
+            List<LessonTypesModel> lessonTypesArrayList = [];
+            for (int j = 0; j < lessonTypes.length; j++) {
+              Map<String, dynamic> lessonTypeObject = lessonTypes[j];
+              int typeId = 0;
+              int kodPr = 0;
+              int lessonType_ = 0;
+              String typeName = "";
+              int typeParentId = 0;
+              bool schoolType = false;
               try {
-                termsForAtt = subject["termsForAtt"];
+                typeId = lessonTypeObject["Id"];
               } catch (e) {}
               try {
-                currentRating = subject["CurrentRating"].toDouble();;
+                kodPr = lessonTypeObject["Kod_pr"];
               } catch (e) {}
               try {
-                hasInstruction = subject["HasInstruction"];
+                lessonType_ = lessonTypeObject["LessonType"];
               } catch (e) {}
               try {
-                hasLectures = subject["HasLectures"];
+                typeName = lessonTypeObject["Name"];
+                if (lessonType_ == 55 || lessonType_ == 5 || lessonType_ == 4) {
+                  subType = typeName;
+                }
               } catch (e) {}
               try {
-                HasUMK = subject["HasUMK"];
+                typeParentId = lessonTypeObject["ParentId"];
               } catch (e) {}
               try {
-                isConfirmDocumentExists = subject["IsConfirmDocumentExists"];
+                schoolType = lessonTypeObject["SchoolType"];
               } catch (e) {}
-              try {
-                locked = subject["locked"];
-              } catch (e) {}
-              try {
-                maxRating = subject["MaxRating"].toDouble();
-              } catch (e) {}
-              try {
-                name = subject["Name"];
-                log(name);
-              } catch (e) {}
-              try {
-                paretId = subject["ParentId"];
-              } catch (e) {}
-              try {
-                id = subject["Id"];
-              } catch (e) {}
-              List<dynamic> lessonTypes = [];
-              try {
-                lessonTypes = subject["LessonTypes"];
-              } catch (e) {}
-              String subType = "";
-              List<LessonTypesModel> lessonTypesArrayList = [];
-              for (int j = 0; j < lessonTypes.length; j++) {
-                Map<String, dynamic> lessonTypeObject = lessonTypes[j];
-                int typeId = 0;
-                int kodPr = 0;
-                int lessonType_ = 0;
-                String typeName = "";
-                int typeParentId = 0;
-                bool schoolType = false;
-                try {
-                  typeId = lessonTypeObject["Id"];
-                } catch (e) {}
-                try {
-                  kodPr = lessonTypeObject["Kod_pr"];
-                } catch (e) {}
-                try {
-                  lessonType_ = lessonTypeObject["LessonType"];
-                } catch (e) {}
-                try {
-                  typeName = lessonTypeObject["Name"];
-                  if (lessonType_ == 55 || lessonType_ == 5 || lessonType_ == 4) {
-                    subType = typeName;
-                  }
-                } catch (e) {}
-                try {
-                  typeParentId = lessonTypeObject["ParentId"];
-                } catch (e) {}
-                try {
-                  schoolType = lessonTypeObject["SchoolType"];
-                } catch (e) {}
-                lessonTypesArrayList.add(
-                  LessonTypesModel(
-                    id: typeId,
-                    parentId: typeParentId,
-                    kodPr: kodPr,
-                    lessonType: lessonType_,
-                    name: typeName,
-                    schoolType: schoolType,
-                  ),
-                );
-              }
-              subjectModels.add(
-                SubjectModel(
-                  id: id,
-                  parentId: paretId,
-                  name: name,
-                  termsForAtt: termsForAtt,
-                  subType: subType,
-                  currentRating: currentRating,
-                  maxRating: maxRating,
-                  locked: locked,
-                  lessonTypes: lessonTypesArrayList,
-                  hasInstruction: hasLectures,
-                  hasLectures: hasLectures,
-                  hasUMK: HasUMK,
-                  isConfirmDocumentExists: isConfirmDocumentExists,
+              lessonTypesArrayList.add(
+                LessonTypesModel(
+                  id: typeId,
+                  parentId: typeParentId,
+                  kodPr: kodPr,
+                  lessonType: lessonType_,
+                  name: typeName,
+                  schoolType: schoolType,
                 ),
               );
             }
-            return SubjectsResponse(
-              true,
-              "",
-              fileAbleActivities: fileAbleActivities,
-              sciFiles: sciFiles,
-              models: subjectModels,
+            subjectModels.add(
+              SubjectModel(
+                id: id,
+                parentId: paretId,
+                name: name,
+                termsForAtt: termsForAtt,
+                subType: subType,
+                currentRating: currentRating,
+                maxRating: maxRating,
+                locked: locked,
+                lessonTypes: lessonTypesArrayList,
+                hasInstruction: hasLectures,
+                hasLectures: hasLectures,
+                hasUMK: HasUMK,
+                isConfirmDocumentExists: isConfirmDocumentExists,
+              ),
             );
-          } else {
-            return SubjectsResponse(false, "Subjects is Null");
           }
+          return SubjectsResponse(
+            true,
+            "",
+            fileAbleActivities: fileAbleActivities,
+            sciFiles: sciFiles,
+            models: subjectModels,
+          );
         } else {
-          return SubjectsResponse(false, "json is null");
+          return SubjectsResponse(false, "Subjects is Null");
         }
-      }else{
-        return SubjectsResponse(false, "Status code ${response.statusCode}");
+      } else {
+        return SubjectsResponse(false, "json is null");
       }
+    } else {
+      return SubjectsResponse(false, "Status code ${response.statusCode}");
+    }
     // } catch (e) {
     //   return SubjectsResponse(false, e.toString());
     // }
@@ -676,4 +681,77 @@ class eCampus {
     }
   }
 
+  Future<ScheduleWeeksResponse> getScheduleWeeks() async {
+    try {
+      http.Response response =
+          await client.post('https://ecampus.ncfu.ru/schedule/my/student');
+      if (response.statusCode == 200) {
+        String responseString = response.body;
+        int start = responseString.indexOf("var viewModel = ") + 16;
+        String json = responseString.substring(start);
+        start = json.indexOf("</script>") - 3;
+        json = json.substring(0, start);
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        Map<String, dynamic> jsonObject = jsonDecode(json);
+        if (jsonObject.containsKey("weeks")) {
+          int size = jsonObject["weeks"].length;
+          if (size > 0) {
+            List<ScheduleWeeksModel> scheduleWeeks = [];
+            for (var i = 0; i < size; i++) {
+              Map<String, dynamic> weekday = jsonObject["weeks"][i];
+              String weekType = "";
+              String dateBegin = "";
+              String dateEnd = "";
+              String number = "";
+              try {
+                weekType = weekday["WeekType"];
+              } catch (e) {}
+              try {
+                dateBegin = weekday["DateBegin"];
+              } catch (e) {}
+              try {
+                dateEnd = weekday["DateEnd"];
+              } catch (e) {}
+              try {
+                number = weekday["Number"].toString();
+              } catch (e) {}
+
+              scheduleWeeks.add(
+                ScheduleWeeksModel(
+                  weekType: weekType,
+                  dateBegin: dateBegin,
+                  dateEnd: dateEnd,
+                  number: number,
+                ),
+              );
+            }
+
+            int id = 0;
+            int type = 0;
+            int current = 0;
+            try {
+              current = jsonObject["currentWeekIndex"];
+            } catch (e) {}
+            try {
+              type = jsonObject["Model"]["Type"];
+            } catch (e) {}
+            try {
+              id = jsonObject["Model"]["Id"];
+            } catch (e) {}
+            return ScheduleWeeksResponse(true, "", id: id, type: type, currentWeek: current, weeks: scheduleWeeks);
+          } else {
+            return ScheduleWeeksResponse(false, "weeks array is empty");
+          }
+        } else {
+          return ScheduleWeeksResponse(false, "specialities is empty");
+        }
+      } else {
+        return ScheduleWeeksResponse(
+            false, "Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return ScheduleWeeksResponse(false, e.toString());
+    }
+  }
 }

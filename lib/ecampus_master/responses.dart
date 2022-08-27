@@ -115,9 +115,9 @@ class ScheduleWeeksResponse extends Response{
     int id = 0, type = 0, currentWeek = 0;
 
     ScheduleWeeksResponse(bool isSuccess, String error, {
-      required this.id,
-      required this.type,
-      required this.currentWeek,
-      required this.weeks
+      this.id = 0,
+      this.type = 0,
+      this.currentWeek = 0,
+      this.weeks = const [],
     }) : super(isSuccess, error);
 }
