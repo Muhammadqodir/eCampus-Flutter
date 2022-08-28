@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class ScheduleModel{
+class ScheduleModel {
   String weekDay;
-  String date;
+  DateTime date;
   List<ScheduleLessonsModel> lessons;
 
   ScheduleModel({
@@ -10,22 +11,37 @@ class ScheduleModel{
     required this.date,
     required this.lessons,
   });
-
 }
 
 class ScheduleWeeksModel {
   String weekType, dateBegin, dateEnd, number;
 
-  ScheduleWeeksModel({
-    required this.weekType, 
-    required this.dateBegin, 
-    required this.dateEnd, 
-    required this.number
-  });
+  ScheduleWeeksModel(
+      {required this.weekType,
+      required this.dateBegin,
+      required this.dateEnd,
+      required this.number});
+
+  DateTime getDateBegin() {
+    return DateTime.parse(dateBegin);
+  }
+
+  DateTime getDateEnd() {
+    return DateTime.parse(dateEnd);
+  }
+
+  String getStrDateBegin() {
+    return DateFormat('MM.dd').format(getDateBegin());
+  }
+
+  String getStrDateEnd() {
+    return DateFormat('MM.dd').format(getDateEnd());
+  }
 }
 
 class ScheduleLessonsModel {
-  String subName, room, timeStart, timeEnd, teacher, lessonType, group;
+  String subName, room, teacher, lessonType, group;
+  DateTime timeStart, timeEnd;
   int para, teacherId, roomId;
   bool current;
 
@@ -42,81 +58,95 @@ class ScheduleLessonsModel {
       required this.roomId,
       required this.current});
 
+  String getTimeStart() {
+    return "${timeStart.hour}:${timeStart.minute}";
+  }
+
+  String getTimeEnd() {
+    return "${timeEnd.hour}:${timeEnd.minute}";
+  }
+
   Widget getView(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).primaryColor,
+    return Padding(
+      padding: EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    child: Text(
+                      para.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.white),
+                    ),
                   ),
-                  child: Text(
-                    para.toString(),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    lessonType,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  lessonType,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                Text(
-                  "$timeStart-$timeEnd",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        Text(
-          subName,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        Text(
-          teacher,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        Row(
-          children: [
-            Text(
-              room,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const Spacer(),
-            Text(
-              group,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ],
+                ],
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Text(
+                    "${getTimeStart()}-${getTimeEnd()}",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Text(
+            subName,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Text(
+            teacher,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Row(
+            children: [
+              Text(
+                room,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const Spacer(),
+              Text(
+                group,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
