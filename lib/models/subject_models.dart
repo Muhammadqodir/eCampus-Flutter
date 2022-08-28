@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -94,12 +95,11 @@ class SubjectModel {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     termsForAtt != ""
-                    ?
-                    Text(
-                      "в аттестацию учитываются рейтинговые баллы за $termsForAtt семестры.",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ):
-                    const SizedBox(),
+                        ? Text(
+                            "в аттестацию учитываются рейтинговые баллы за $termsForAtt семестры.",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          )
+                        : const SizedBox(),
                     const SizedBox(
                       height: 5,
                     ),
@@ -158,8 +158,7 @@ class SubjectModel {
                     animationDuration: 400,
                     lineWidth: 5.0,
                     backgroundWidth: 3.0,
-                    percent:
-                        maxRating != 0 ? currentRating / maxRating : 0,
+                    percent: maxRating != 0 ? currentRating / maxRating : 0,
                     center: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -229,7 +228,7 @@ class LessonItemModel {
       kodPr = 0,
       loadId = 0,
       lostScore = 0;
-  String subject = "", name = "", room = "", date = "", gradeText = "";
+  String subject = "", name = "", room = "", date = "", gradeText = "отлично";
   bool isCheckpoint = false, hasFile = false;
 
   LessonItemModel.buildDefault();
@@ -249,4 +248,141 @@ class LessonItemModel {
       required this.gradeText,
       required this.isCheckpoint,
       required this.hasFile});
+
+  Color getScoreBgColor() {
+    if (gradeText == "отлично") {
+      return CustomColors.perfect;
+    } else if (gradeText == "хорошо") {
+      return CustomColors.good;
+    } else if (gradeText == "удовлетворительно") {
+      return CustomColors.satisfactorily;
+    } else {
+      return CustomColors.unsatisfactorily;
+    }
+  }
+
+  Widget getView(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '19.08.2001',
+                style: Theme.of(context).textTheme.bodySmall,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Container(
+            child: Row(
+              children: [
+                Icon(
+                  EcampusIcons.icons8_select,
+                  size: 22,
+                  color: Color.fromARGB(255, 10, 119, 14),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Лабораторная работа',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.0),
+                        color: getScoreBgColor(),
+                      ),
+                      child: Padding(
+                          padding: EdgeInsets.all(3),
+                          child: Row(
+                            children: [
+                              Icon(
+                                EcampusIcons.icons8_star,
+                                size: 21,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'отлично',
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              Icon(
+                                EcampusIcons.icons8_up,
+                                size: 21,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              Text(
+                                '20',
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                            ],
+                          )),
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(50)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      child: Row(
+                        children: [
+                          Icon(
+                            EcampusIcons.icons8_user_not_found,
+                            size: 21,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            'Н',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(child: Container()),
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CupertinoButton(
+                    borderRadius: BorderRadius.circular(50),
+                    padding: const EdgeInsets.all(0),
+                    onPressed: () {},
+                    child: Icon(EcampusIcons.icons8_communication),
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
