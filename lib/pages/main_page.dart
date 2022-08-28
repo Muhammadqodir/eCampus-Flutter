@@ -143,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  bool bottomNavShadow = true;
   Container buildCustomBottomNavigaton(
       BuildContext ctx, List<CustomBottomNavItem> items) {
     return Container(

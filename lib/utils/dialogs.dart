@@ -196,7 +196,7 @@ void showLoadingDialog(BuildContext context) {
   );
 }
 
-void showAlertDialog(BuildContext context, String title, String message){
+void showAlertDialog(BuildContext context, String title, String message) {
   showCupertinoDialog<void>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(

@@ -72,9 +72,9 @@ class AcademicYearsResponse extends Response {
     return 0;
   }
 
-  int getCurrentTerm(){
+  int getCurrentTerm() {
     for (var i = 0; i < models!.length; i++) {
-      for(var j = 0; j < models![i].termModels.length; j++){
+      for (var j = 0; j < models![i].termModels.length; j++) {
         TermModel termModel = models![i].termModels[j];
         if (termModel.isCurrent) {
           return termModel.id;
@@ -101,23 +101,24 @@ class SubjectsResponse extends Response {
   SubjectsResponse.buildDefault() : super(false, "undefined");
 }
 
+class ScheduleWeeksResponse extends Response {
+  List<ScheduleWeeksModel> weeks;
+  int id = 0, type = 0, currentWeek = 0;
 
-class ScheduleResponse extends Response{
-  List<ScheduleModel> scheduleModels;
-
-  ScheduleResponse(bool isSuccess, String error, this.scheduleModels) : super(isSuccess, error);
-
+  ScheduleWeeksResponse(
+    bool isSuccess,
+    String error, {
+    this.id = 0,
+    this.type = 0,
+    this.currentWeek = 0,
+    this.weeks = const [],
+  }) : super(isSuccess, error);
 }
 
-class ScheduleWeeksResponse extends Response{
+class ScheduleResponse extends Response {
+  List<ScheduleModel> scheduleModels = [];
 
-    List<ScheduleWeeksModel> weeks;
-    int id = 0, type = 0, currentWeek = 0;
-
-    ScheduleWeeksResponse(bool isSuccess, String error, {
-      required this.id,
-      required this.type,
-      required this.currentWeek,
-      required this.weeks
-    }) : super(isSuccess, error);
+  ScheduleResponse(bool isSuccess, String error,
+      {this.scheduleModels = const []})
+      : super(isSuccess, error);
 }

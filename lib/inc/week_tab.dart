@@ -23,6 +23,16 @@ class WeekTab extends StatelessWidget {
     "Вс",
   ];
 
+  static Map<String, String> weekAbbrv = {
+    "Пн": "Понедельник",
+    "Вт": "Вторник",
+    "Ср": "Среда",
+    "Чт": "Четверг",
+    "Пт": "Пятница",
+    "Сб": "Субота",
+    "Вс": "Воскресенье",
+  };
+
   List<WeekDay> getNextWeekDays() {
     List<WeekDay> list = [];
     DateTime day = start;
@@ -41,18 +51,21 @@ class WeekTab extends StatelessWidget {
           .map(
             (e) => Expanded(
               child: CrossListElement(
-                onPressed: (){
+                onPressed: () {
                   setSelected(list.indexOf(e));
                 },
                 child: Column(
                   children: [
                     Text(
                       e.name,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: list.indexOf(e) != selectedIndex ?Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       e.date.day.toString(),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: list.indexOf(e) != selectedIndex ?Theme.of(context).textTheme.bodyMedium : Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 4,
                     ),
                     list.indexOf(e) == selectedIndex
                         ? Container(
@@ -63,7 +76,7 @@ class WeekTab extends StatelessWidget {
                         : const SizedBox(
                             height: 2,
                             width: double.infinity,
-                          )
+                          ),
                   ],
                 ),
               ),
