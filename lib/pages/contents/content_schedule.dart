@@ -278,63 +278,58 @@ class _ContentScheduleState extends State<ContentSchedule> {
                         )
                         .toList()),
               ),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 0, top: 0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 50,
-                        child: CupertinoButton(
-                          child: const Icon(EcampusIcons.icons8_back),
-                          onPressed: () {
-                            if (selectedWeekId > 0) {
-                              setState(() {
-                                selectedWeekId -= 1;
-                                selectedWeek =
-                                    "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                                getSchedule(weeks[selectedWeekId].dateBegin);
-                              });
-                            }
-                          },
-                        ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 0, top: 0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 50,
+                      child: CupertinoButton(
+                        child: const Icon(EcampusIcons.icons8_back),
+                        onPressed: () {
+                          if (selectedWeekId > 0) {
+                            setState(() {
+                              selectedWeekId -= 1;
+                              selectedWeek =
+                                  "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                              getSchedule(weeks[selectedWeekId].dateBegin);
+                            });
+                          }
+                        },
                       ),
-                      Expanded(
-                        child: Center(
-                          child: OnTapScaleAndFade(
-                            onTap: () => showSelectWeekDialog(),
-                            child: Text(
-                              selectedWeek,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: OnTapScaleAndFade(
+                          onTap: () => showSelectWeekDialog(),
+                          child: Text(
+                            selectedWeek,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 50,
-                        child: CupertinoButton(
-                          child: const Icon(EcampusIcons.icons8_forward),
-                          onPressed: () {
-                            if (selectedIndex < weeks.length) {
-                              setState(() {
-                                selectedWeekId += 1;
-                                selectedWeek =
-                                    "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                                getSchedule(weeks[selectedWeekId].dateBegin);
-                              });
-                            }
-                          },
-                        ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                      child: CupertinoButton(
+                        child: const Icon(EcampusIcons.icons8_forward),
+                        onPressed: () {
+                          if (selectedIndex < weeks.length) {
+                            setState(() {
+                              selectedWeekId += 1;
+                              selectedWeek =
+                                  "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                              getSchedule(weeks[selectedWeekId].dateBegin);
+                            });
+                          }
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],

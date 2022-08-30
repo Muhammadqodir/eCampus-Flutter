@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/cache_system.dart';
@@ -185,26 +186,30 @@ class _ContentMainState extends State<ContentMain> {
                 ],
               ),
               Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: CupertinoButton(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          disabledColor: Theme.of(context).dividerColor,
-                          color: Theme.of(context).primaryColor,
-                          child: Text(
-                            "Электронный пропуск",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () {
-                            SharedPreferences.getInstance().then((value) => {
-                                  value.setString("token", "invalid"),
-                                });
-                          }))),
+                padding: const EdgeInsets.all(12),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: CupertinoButton(
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    disabledColor: Theme.of(context).dividerColor,
+                    color: Theme.of(context).primaryColor,
+                    child: Text(
+                      "Электронный пропуск",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      // SharedPreferences.getInstance().then((value) => {
+                      //       value.setString("token", "invalid"),
+                      //     });
+                      log(ratingModel!.toJson().toString());
+                    },
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12),
                 child: Container(
