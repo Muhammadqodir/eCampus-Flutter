@@ -276,13 +276,11 @@ class _ContentScheduleState extends State<ContentSchedule> {
               Expanded(
                 child: PageView(
                     controller: _pageController,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     onPageChanged: (value) => {
-                          setState(
-                            () => {
-                              selectedIndex = value,
-                            },
-                          )
+                          setState(() {
+                            selectedIndex = value;
+                          })
                         },
                     children: WeekTab.weekDays
                         .map(

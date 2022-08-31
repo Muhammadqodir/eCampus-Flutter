@@ -60,25 +60,33 @@ class WeekTab extends StatelessWidget {
                   children: [
                     Text(
                       e.name,
-                      style: list.indexOf(e) != selectedIndex ?Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
+                      style: list.indexOf(e) != selectedIndex
+                          ? Theme.of(context).textTheme.bodySmall
+                          : Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       e.date.day.toString(),
-                      style: list.indexOf(e) != selectedIndex ?Theme.of(context).textTheme.bodyMedium : Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                      style: list.indexOf(e) != selectedIndex
+                          ? Theme.of(context).textTheme.bodyMedium
+                          : Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
-                    list.indexOf(e) == selectedIndex
-                        ? Container(
-                            height: 2,
-                            width: double.infinity,
-                            color: Theme.of(context).primaryColor,
-                          )
-                        : const SizedBox(
-                            height: 2,
-                            width: double.infinity,
-                          ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 400),
+                      height: 2,
+                      width: double.infinity,
+                      color: list.indexOf(e) == selectedIndex
+                          ? Theme.of(context).primaryColor
+                          : Colors.transparent,
+                    )
                   ],
                 ),
               ),
