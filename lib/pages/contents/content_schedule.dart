@@ -1,5 +1,7 @@
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
@@ -36,30 +38,22 @@ class _ContentScheduleState extends State<ContentSchedule> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) => {
-          ecampus = eCampus(value.getString("token") ?? "undefined"),
-          isOnline().then((isOnline) => {
-                if (isOnline)
-                  {
-                    getWeeks(),
-                  }
-                else
-                  {
-                    showOfflineDialog(context),
-                  }
-              }),
-        });
+    SharedPreferences.getInstance().then((value) {
+      ecampus = eCampus(value.getString("token") ?? "undefined");
+      fillData();
+    });
   }
 
   void setSelected(int value) {
-    setState(() => {
-          selectedIndex = value,
-        });
+    setState(() {
+      selectedIndex = value;
+    });
   }
 
   int selectedWeekId = 0;
   int scheduleId = 0;
   int targetType = 0;
+  String currentWeekDate = "";
   List<ScheduleModel> scheduleModels = [];
 
   ScheduleModel? getScheduleModel(String weekDay_) {
@@ -71,81 +65,112 @@ class _ContentScheduleState extends State<ContentSchedule> {
     return null;
   }
 
-  void getWeeks() {
-    setState(() {
-      loading = true;
+  void fillData() {
+    CacheSystem.getScheduleWeeksResponse().then((weeksResponse) {
+      if (weeksResponse != null) {
+        if (weeksResponse.isActualCache()) {
+          ScheduleWeeksResponse value = weeksResponse.value;
+          setState(() {
+            CacheSystem.saveScheduleWeeksResponse(value);
+            weeks = value.weeks;
+            scheduleId = value.id;
+            targetType = value.type;
+            selectedWeekId = value.currentWeek;
+            currentWeekDate = weeks[selectedWeekId].dateBegin;
+            selectedWeek =
+                "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+            loading = false;
+            CacheSystem.getScheduleResponse().then((schedule) {
+              setState(() {
+                scheduleModels = schedule!.value.scheduleModels;
+                selectedIndex = 0;
+                loading = false;
+              });
+            });
+          });
+        } else {
+          getWeeks();
+        }
+      } else {
+        getWeeks();
+      }
     });
-    ecampus.isActualToken().then((isActualToken) => {
-          if (isActualToken)
-            {
-              ecampus.getScheduleWeeks().then((value) => {
-                    if (value.isSuccess)
-                      {
-                        setState(
-                          () {
-                            weeks = value.weeks;
-                            scheduleId = value.id;
-                            targetType = value.type;
-                            selectedWeekId = value.currentWeek;
-                            selectedWeek =
-                                "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                            loading = false;
-                            getSchedule(weeks[selectedWeekId].dateBegin);
-                          },
-                        )
-                      }
-                    else
-                      {
-                        showAlertDialog(context, "Ошибка", value.error),
-                      }
-                  }),
-            }
-          else
-            {
-              ecampus.getCaptcha().then((captcha) => {
-                    showCapchaDialog(context, captcha, ecampus, () {
-                      getWeeks();
-                    }),
-                  }),
-            }
+  }
+
+  void getWeeks() {
+    isOnline().then((value) {
+      if (value) {
+        setState(() {
+          loading = true;
         });
+        ecampus.isActualToken().then((isActualToken) {
+          if (isActualToken) {
+            ecampus.getScheduleWeeks().then((value) {
+              if (value.isSuccess) {
+                setState(() {
+                  CacheSystem.saveScheduleWeeksResponse(value);
+                  weeks = value.weeks;
+                  scheduleId = value.id;
+                  targetType = value.type;
+                  selectedWeekId = value.currentWeek;
+                  currentWeekDate = weeks[selectedWeekId].dateBegin;
+                  selectedWeek =
+                      "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                  loading = false;
+                  getSchedule(weeks[selectedWeekId].dateBegin);
+                });
+              } else {
+                showAlertDialog(context, "Ошибка", value.error);
+              }
+            });
+          } else {
+            ecampus.getCaptcha().then((captcha) {
+              showCapchaDialog(context, captcha, ecampus, () {
+                getWeeks();
+              });
+            });
+          }
+        });
+      } else {
+        showOfflineDialog(context);
+      }
+    });
   }
 
   void getSchedule(String date) {
-    setState(() {
-      loading = true;
-    });
-    ecampus.isActualToken().then((isActualToken) => {
-          if (isActualToken)
-            {
-              ecampus
-                  .getSchedule(date, scheduleId, targetType)
-                  .then((value) => {
-                        if (value.isSuccess)
-                          {
-                            setState(
-                              () {
-                                scheduleModels = value.scheduleModels;
-                                selectedIndex = 0;
-                                loading = false;
-                              },
-                            )
-                          }
-                        else
-                          {
-                            showAlertDialog(context, "Ошибка", value.error),
-                          }
-                      }),
-            }
-          else
-            {
-              ecampus.getCaptcha().then((captcha) => {
-                    showCapchaDialog(context, captcha, ecampus, () {
-                      getSchedule(date);
-                    }),
-                  }),
-            }
+    isOnline().then((value) {
+      if (value) {
+        setState(() {
+          loading = true;
         });
+        ecampus.isActualToken().then((isActualToken) {
+          if (isActualToken) {
+            ecampus.getSchedule(date, scheduleId, targetType).then((value) {
+              if (value.isSuccess) {
+                setState(() {
+                  if (date == currentWeekDate) {
+                    CacheSystem.saveScheduleResponse(value);
+                  }
+                  scheduleModels = value.scheduleModels;
+                  selectedIndex = 0;
+                  loading = false;
+                });
+              } else {
+                showAlertDialog(context, "Ошибка", value.error);
+              }
+            });
+          } else {
+            ecampus.getCaptcha().then((captcha) {
+              showCapchaDialog(context, captcha, ecampus, () {
+                getSchedule(date);
+              });
+            });
+          }
+        });
+      } else {
+        showOfflineDialog(context);
+      }
+    });
   }
 
   // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoPicker.

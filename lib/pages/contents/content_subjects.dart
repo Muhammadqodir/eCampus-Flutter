@@ -35,19 +35,16 @@ class _ContentSubjectsState extends State<ContentSubjects> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) => {
-          ecampus = eCampus(value.getString("token") ?? "undefined"),
-          isOnline().then((isOnline) => {
-                if (isOnline)
-                  {
-                    fillData(),
-                  }
-                else
-                  {
-                    showOfflineDialog(context),
-                  }
-              }),
-        });
+    SharedPreferences.getInstance().then((value) {
+      ecampus = eCampus(value.getString("token") ?? "undefined");
+      isOnline().then((isOnline) {
+        if (isOnline) {
+          fillData();
+        } else {
+          showOfflineDialog(context);
+        }
+      });
+    });
   }
 
   void fillData() {
@@ -72,96 +69,75 @@ class _ContentSubjectsState extends State<ContentSubjects> {
   void getCacheData() {
     CacheSystem.getAcademicYearsResponse().then((value) {
       AcademicYearsResponse response = value!.value;
-        if (response.isSuccess)
-          {
-            CacheSystem.saveAcademicYearsResponse(response);
-            setState(
-              () => {
-                academicYears = response.models!,
-                selectedCourseIndex = response.getCurrentCourse(),
-                selectedTermId = response.getCurrentTerm(),
-                subjectModels = response.currentSubjects!.models,
-                studentId = response.studentId!,
-                loading = false,
-              },
-            );
-          }
-        else
-          {
-            showAlertDialog(context, "Ошибка", response.error);
-          }
-      });
+      if (response.isSuccess) {
+        CacheSystem.saveAcademicYearsResponse(response);
+        setState(() {
+          academicYears = response.models!;
+          selectedCourseIndex = response.getCurrentCourse();
+          selectedTermId = response.getCurrentTerm();
+          subjectModels = response.currentSubjects!.models;
+          studentId = response.studentId!;
+          loading = false;
+        });
+      } else {
+        showAlertDialog(context, "Ошибка", response.error);
+      }
+    });
   }
 
   void getFreshData() {
-    ecampus.isActualToken().then((isActualToken) => {
-          if (isActualToken)
-            {
-              ecampus.getAcademicYears().then((value) => {
-                    if (value.isSuccess)
-                      {
-                        CacheSystem.saveAcademicYearsResponse(value),
-                        setState(
-                          () => {
-                            academicYears = value.models!,
-                            selectedCourseIndex = value.getCurrentCourse(),
-                            selectedTermId = value.getCurrentTerm(),
-                            subjectModels = value.currentSubjects!.models,
-                            studentId = value.studentId!,
-                            loading = false,
-                          },
-                        )
-                      }
-                    else
-                      {
-                        showAlertDialog(context, "Ошибка", value.error),
-                      }
-                  }),
-            }
-          else
-            {
-              ecampus.getCaptcha().then((captcha) => {
-                    showCapchaDialog(context, captcha, ecampus, () {
-                      getFreshData();
-                    }),
-                  }),
-            }
+    ecampus.isActualToken().then((isActualToken) {
+      if (isActualToken) {
+        ecampus.getAcademicYears().then((value) {
+          if (value.isSuccess) {
+            CacheSystem.saveAcademicYearsResponse(value);
+            setState(() {
+              academicYears = value.models!;
+              selectedCourseIndex = value.getCurrentCourse();
+              selectedTermId = value.getCurrentTerm();
+              subjectModels = value.currentSubjects!.models;
+              studentId = value.studentId!;
+              loading = false;
+            });
+          } else {
+            showAlertDialog(context, "Ошибка", value.error);
+          }
         });
+      } else {
+        ecampus.getCaptcha().then((captcha) {
+          showCapchaDialog(context, captcha, ecampus, () {
+            getFreshData();
+          });
+        });
+      }
+    });
   }
 
   void getsubjects(int termId) {
     setState(() {
       loading = true;
     });
-    ecampus.isActualToken().then((isActualToken) => {
-          if (isActualToken)
-            {
-              ecampus.getSubjects(studentId, termId).then((value) => {
-                    if (value.isSuccess)
-                      {
-                        setState(
-                          () => {
-                            selectedTermId = termId,
-                            subjectModels = value.models,
-                            loading = false,
-                          },
-                        )
-                      }
-                    else
-                      {
-                        showAlertDialog(context, "Ошибка", value.error),
-                      }
-                  }),
-            }
-          else
-            {
-              ecampus.getCaptcha().then((captcha) => {
-                    showCapchaDialog(context, captcha, ecampus, () {
-                      getsubjects(termId);
-                    }),
-                  }),
-            }
+    ecampus.isActualToken().then((isActualToken) {
+      if (isActualToken) {
+        ecampus.getSubjects(studentId, termId).then((value) {
+          if (value.isSuccess) {
+            setState(() {
+              selectedTermId = termId;
+              subjectModels = value.models;
+              loading = false;
+            });
+          } else {
+            showAlertDialog(context, "Ошибка", value.error);
+          }
         });
+      } else {
+        ecampus.getCaptcha().then((captcha) {
+          showCapchaDialog(context, captcha, ecampus, () {
+            getsubjects(termId);
+          });
+        });
+      }
+    });
   }
 
   @override

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/utils/config.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -45,7 +46,9 @@ class CacheSystem {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     DateTime cacheDate = dateFormat.parse(cacheDateStr);
     DateTime dateNow = DateTime.now();
-    if (dateNow.subtract(const Duration(minutes: 1)).isAfter(cacheDate)) {
+    if (dateNow
+        .subtract(const Duration(minutes: cacheLifetime))
+        .isAfter(cacheDate)) {
       return false;
     }
     return true;
@@ -106,6 +109,50 @@ class CacheSystem {
         '${prefix}AcademicYearsResponse_time', getCurrentDateTime());
   }
 
+  static void saveScheduleResponse(ScheduleResponse response) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        '${prefix}ScheduleResponse', jsonEncode(response.toJson()));
+    await prefs.setString(
+        '${prefix}ScheduleResponse_time', getCurrentDateTime());
+  }
+
+  static void saveScheduleWeeksResponse(ScheduleWeeksResponse response) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        '${prefix}ScheduleWeeksResponse', jsonEncode(response.toJson()));
+    await prefs.setString(
+        '${prefix}ScheduleWeeksResponse_time', getCurrentDateTime());
+  }
+
+  static Future<CacheResult?> getScheduleWeeksResponse() async {
+    final prefs = await SharedPreferences.getInstance();
+    String date = prefs.getString('${prefix}ScheduleWeeksResponse_time') ??
+        "2001-08-06 10:45:00";
+    String dataStr =
+        prefs.getString('${prefix}ScheduleWeeksResponse') ?? "empty";
+    if (dataStr != "empty") {
+      Map<String, dynamic> data = jsonDecode(dataStr);
+      return CacheResult(date, ScheduleWeeksResponse.fromJson(data));
+    } else {
+      return null;
+    }
+  }
+
+  static Future<CacheResult?> getScheduleResponse() async {
+    final prefs = await SharedPreferences.getInstance();
+    String date = prefs.getString('${prefix}ScheduleResponse_time') ??
+        "2001-08-06 10:45:00";
+    String dataStr =
+        prefs.getString('${prefix}ScheduleResponse') ?? "empty";
+    if (dataStr != "empty") {
+      Map<String, dynamic> data = jsonDecode(dataStr);
+      return CacheResult(date, ScheduleResponse.fromJson(data));
+    } else {
+      return null;
+    }
+  }
+
   static Future<CacheResult?> getAcademicYearsResponse() async {
     final prefs = await SharedPreferences.getInstance();
     String date = prefs.getString('${prefix}AcademicYearsResponse_time') ??
@@ -121,13 +168,23 @@ class CacheSystem {
   }
 }
 
-class CacheResult{
+class CacheResult {
   String date = "2001-08-06 10:45:00";
   dynamic value;
 
   CacheResult(this.date, this.value);
 
-  DateTime getDate(){
+  DateTime getDate() {
     return DateTime.parse(date);
+  }
+
+  bool isActualCache() {
+    if (DateTime.now()
+        .subtract(const Duration(minutes: cacheLifetime))
+        .isAfter(DateTime.parse(date))) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

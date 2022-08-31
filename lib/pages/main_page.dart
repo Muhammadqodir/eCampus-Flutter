@@ -27,13 +27,12 @@ class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
   Uint8List? captchaImage;
   double elevation = 0;
-  
+
   void setAppbarElevation(double visibility) {
     setState(() {
       elevation = visibility;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               )));
                 })
           ],
-          ContentMain(context: context),
+          ContentMain(
+            context: context,
+            setElevation: setAppbarElevation,
+          ),
           EcampusIcons.icons8_student_male_1,
           'Главная'),
       CustomBottomNavItem(
@@ -104,7 +106,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   //do somemthig
                 })
           ],
-          ContentSubjects(context: context, setElevation: setAppbarElevation,),
+          ContentSubjects(
+            context: context,
+            setElevation: setAppbarElevation,
+          ),
           EcampusIcons.icons8_books,
           'Предметы'),
       CustomBottomNavItem(
@@ -165,6 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () {
                   setState(() {
                     pageIndex = items.indexOf(item);
+                    elevation = 0;
                   });
                 },
                 child: AnimatedContainer(
@@ -174,8 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       // color: pageIndex == items.indexOf(item)
                       //     ? Theme.of(ctx).primaryColor
                       //     : Theme.of(ctx).scaffoldBackgroundColor,
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(12))),
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Opacity(
