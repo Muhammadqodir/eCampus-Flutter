@@ -44,7 +44,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
     });
   }
 
-  final PageController _pageController = PageController();
+  PageController _pageController = PageController();
 
   void setSelected(int value) {
     setState(() {
@@ -75,7 +75,6 @@ class _ContentScheduleState extends State<ContentSchedule> {
         if (weeksResponse.isActualCache()) {
           ScheduleWeeksResponse value = weeksResponse.value;
           setState(() {
-            CacheSystem.saveScheduleWeeksResponse(value);
             weeks = value.weeks;
             scheduleId = value.id;
             targetType = value.type;
@@ -83,13 +82,13 @@ class _ContentScheduleState extends State<ContentSchedule> {
             currentWeekDate = weeks[selectedWeekId].dateBegin;
             selectedWeek =
                 "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-            loading = false;
             CacheSystem.getScheduleResponse().then((schedule) {
               setState(() {
-                scheduleModels = schedule!.value.scheduleModels;
-                selectedIndex = DateTime.now().weekday-1;
                 loading = false;
+                scheduleModels = schedule!.value.scheduleModels;
+                selectedIndex = DateTime.now().weekday - 1;
               });
+              _pageController = PageController(initialPage: selectedIndex);
             });
           });
         } else {
@@ -154,8 +153,12 @@ class _ContentScheduleState extends State<ContentSchedule> {
                 setState(() {
                   if (date == currentWeekDate) {
                     CacheSystem.saveScheduleResponse(value);
-                    selectedIndex = DateTime.now().weekday-1;
-                  }else{
+                    setState(() {
+                      selectedIndex = DateTime.now().weekday - 1;
+                    });
+                    _pageController =
+                        PageController(initialPage: selectedIndex);
+                  } else {
                     selectedIndex = 0;
                   }
                   scheduleModels = value.scheduleModels;
@@ -181,7 +184,8 @@ class _ContentScheduleState extends State<ContentSchedule> {
 
   // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoPicker.
   void showSelectWeekDialog() {
-  FixedExtentScrollController extentScrollController = FixedExtentScrollController(initialItem: selectedWeekId);
+    FixedExtentScrollController extentScrollController =
+        FixedExtentScrollController(initialItem: selectedWeekId);
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => Container(
