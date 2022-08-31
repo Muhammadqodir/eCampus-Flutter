@@ -44,9 +44,13 @@ class _ContentScheduleState extends State<ContentSchedule> {
     });
   }
 
+  final PageController _pageController = PageController();
+
   void setSelected(int value) {
     setState(() {
       selectedIndex = value;
+      _pageController.animateToPage(selectedIndex,
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     });
   }
 
@@ -271,6 +275,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
               ),
               Expanded(
                 child: PageView(
+                    controller: _pageController,
                     physics: BouncingScrollPhysics(),
                     onPageChanged: (value) => {
                           setState(

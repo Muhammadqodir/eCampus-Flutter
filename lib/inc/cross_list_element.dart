@@ -22,14 +22,14 @@ class CrossListElement extends StatelessWidget {
                 onPressed: onPressed,
                 child: OnTapScaleAndFade(
                   child: child,
-                  onTap: () {},
+                  onTap: onPressed!,
                 ),
               )
             : InkWell(
                 onTap: onPressed,
                 child: OnTapScaleAndFade(
                   child: child,
-                  onTap: () {},
+                  onTap: onPressed!,
                 ),
               ),
         const Divider(
