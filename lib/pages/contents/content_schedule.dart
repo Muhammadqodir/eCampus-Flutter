@@ -87,7 +87,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
             CacheSystem.getScheduleResponse().then((schedule) {
               setState(() {
                 scheduleModels = schedule!.value.scheduleModels;
-                selectedIndex = 0;
+                selectedIndex = DateTime.now().weekday-1;
                 loading = false;
               });
             });
@@ -154,9 +154,11 @@ class _ContentScheduleState extends State<ContentSchedule> {
                 setState(() {
                   if (date == currentWeekDate) {
                     CacheSystem.saveScheduleResponse(value);
+                    selectedIndex = DateTime.now().weekday-1;
+                  }else{
+                    selectedIndex = 0;
                   }
                   scheduleModels = value.scheduleModels;
-                  selectedIndex = 0;
                   loading = false;
                 });
               } else {
@@ -179,6 +181,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
 
   // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoPicker.
   void showSelectWeekDialog() {
+  FixedExtentScrollController extentScrollController = FixedExtentScrollController(initialItem: selectedWeekId);
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => Container(
@@ -198,8 +201,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
               SizedBox(
                 height: 150,
                 child: CupertinoPicker(
-                  scrollController:
-                      FixedExtentScrollController(initialItem: selectedWeekId),
+                  scrollController: extentScrollController,
                   magnification: 1.22,
                   squeeze: 1.2,
                   useMagnifier: false,
@@ -210,7 +212,6 @@ class _ContentScheduleState extends State<ContentSchedule> {
                     SystemSound.play(SystemSoundType.click);
                     HapticFeedback.mediumImpact();
                     setState(() {
-                      selectedWeekId = selectedItem;
                       selectedWeek =
                           "${weeks[selectedItem].number} неделя - c ${weeks[selectedItem].getStrDateBegin()} по ${weeks[selectedItem].getStrDateEnd()}";
                     });
@@ -234,6 +235,9 @@ class _ContentScheduleState extends State<ContentSchedule> {
                       .copyWith(color: Theme.of(context).primaryColor),
                 ),
                 onPressed: () {
+                  setState(() {
+                    selectedWeekId = extentScrollController.selectedItem;
+                  });
                   getSchedule(weeks[selectedWeekId].dateBegin);
                   Navigator.pop(context);
                 },
