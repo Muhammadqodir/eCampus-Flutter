@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import '../utils/gui_utils.dart';
 import '../utils/utils.dart';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'notification_model.g.dart';
+
+@JsonSerializable()
 class NotificationModel {
   String title;
   String message = "undefined";
@@ -30,6 +35,9 @@ class NotificationModel {
       this.categoryId = 4,
       this.notificationImportanceId = 3});
 
+  factory NotificationModel.fromJson(Map<String, dynamic> json) => _$NotificationModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NotificationModelToJson(this);
   Widget getView(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12),

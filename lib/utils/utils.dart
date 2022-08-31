@@ -4,6 +4,8 @@ import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
+
 double getWidthPercent(BuildContext context, int percent) {
   return MediaQuery.of(context).size.width * (percent / 100);
 }
@@ -51,4 +53,10 @@ Future<bool> isOnline() async {
     log(error.toString());
     return false;
   }
+}
+
+String getCurrentDateTime(){
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    String currentDate = dateFormat.format(DateTime.now());
+    return currentDate;
 }

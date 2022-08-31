@@ -3,7 +3,11 @@ import 'dart:ui';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'rating_model.g.dart';
+
+@JsonSerializable()
 class RatingModel {
   String fullName = "";
   int ratGroup = -1;
@@ -18,15 +22,9 @@ class RatingModel {
   RatingModel(this.fullName, this.ball, this.ratGroup, this.ratInst,
       this.maxPosGroup, this.maxPosInst, this.isCurrent);
 
-  Map toJson() => {
-        'fullName': fullName,
-        'ratGroup': ratGroup,
-        'ratInst': ratInst,
-        'ball': ball,
-        'isCurrent': isCurrent,
-        'maxPosInst': maxPosInst,
-        'maxPosGroup': maxPosGroup
-      };
+  factory RatingModel.fromJson(Map<String, dynamic> json) => _$RatingModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RatingModelToJson(this);
 
   Widget getView(BuildContext context) {
     return Padding(

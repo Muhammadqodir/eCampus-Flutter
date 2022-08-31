@@ -71,7 +71,7 @@ class MainInfoView {
                 Padding(
                   padding: EdgeInsets.only(top: 4),
                   child: Text(
-                    averageRating.toString(),
+                    averageRating.toStringAsFixed(2),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),

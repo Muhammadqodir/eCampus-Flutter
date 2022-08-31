@@ -1,4 +1,6 @@
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
@@ -38,7 +40,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
           isOnline().then((isOnline) => {
                 if (isOnline)
                   {
-                    getData(),
+                    fillData(),
                   }
                 else
                   {
@@ -48,16 +50,57 @@ class _ContentSubjectsState extends State<ContentSubjects> {
         });
   }
 
-  void getData() {
+  void fillData() {
     setState(() {
       loading = true;
     });
+    CacheSystem.getAcademicYearsResponse().then((value) {
+      if (value != null) {
+        if (DateTime.now()
+            .subtract(const Duration(minutes: 1))
+            .isAfter(value.getDate())) {
+          getFreshData();
+        } else {
+          getCacheData();
+        }
+      } else {
+        getFreshData();
+      }
+    });
+  }
+
+  void getCacheData() {
+    CacheSystem.getAcademicYearsResponse().then((value) {
+      AcademicYearsResponse response = value!.value;
+        if (response.isSuccess)
+          {
+            CacheSystem.saveAcademicYearsResponse(response);
+            setState(
+              () => {
+                academicYears = response.models!,
+                selectedCourseIndex = response.getCurrentCourse(),
+                selectedTermId = response.getCurrentTerm(),
+                subjectModels = response.currentSubjects!.models,
+                studentId = response.studentId!,
+                loading = false,
+              },
+            );
+          }
+        else
+          {
+            showAlertDialog(context, "Ошибка", response.error);
+          }
+      });
+  }
+
+  void getFreshData() {
     ecampus.isActualToken().then((isActualToken) => {
           if (isActualToken)
             {
               ecampus.getAcademicYears().then((value) => {
                     if (value.isSuccess)
                       {
+                        CacheSystem.saveAcademicYearsResponse(value),
                         setState(
                           () => {
                             academicYears = value.models!,
@@ -79,7 +122,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
             {
               ecampus.getCaptcha().then((captcha) => {
                     showCapchaDialog(context, captcha, ecampus, () {
-                      getData();
+                      getFreshData();
                     }),
                   }),
             }
@@ -114,7 +157,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
             {
               ecampus.getCaptcha().then((captcha) => {
                     showCapchaDialog(context, captcha, ecampus, () {
-                      getData();
+                      getsubjects(termId);
                     }),
                   }),
             }

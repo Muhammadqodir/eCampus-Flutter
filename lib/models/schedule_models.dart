@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'schedule_models.g.dart';
+
+
+@JsonSerializable()
 class ScheduleModel {
   String weekDay;
   DateTime date;
@@ -11,8 +16,14 @@ class ScheduleModel {
     required this.date,
     required this.lessons,
   });
+
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) => _$ScheduleModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ScheduleModelToJson(this);
 }
 
+
+@JsonSerializable()
 class ScheduleWeeksModel {
   String weekType, dateBegin, dateEnd, number;
 
@@ -21,6 +32,10 @@ class ScheduleWeeksModel {
       required this.dateBegin,
       required this.dateEnd,
       required this.number});
+
+  factory ScheduleWeeksModel.fromJson(Map<String, dynamic> json) => _$ScheduleWeeksModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ScheduleWeeksModelToJson(this);
 
   DateTime getDateBegin() {
     return DateTime.parse(dateBegin);
@@ -39,6 +54,8 @@ class ScheduleWeeksModel {
   }
 }
 
+
+@JsonSerializable()
 class ScheduleLessonsModel {
   String subName, room, teacher, lessonType, group;
   DateTime timeStart, timeEnd;
@@ -57,6 +74,11 @@ class ScheduleLessonsModel {
       required this.teacherId,
       required this.roomId,
       required this.current});
+
+
+  factory ScheduleLessonsModel.fromJson(Map<String, dynamic> json) => _$ScheduleLessonsModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ScheduleLessonsModelToJson(this);
 
   String getTimeStart() {
     return "${timeStart.hour}:${timeStart.minute}";

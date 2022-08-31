@@ -6,7 +6,11 @@ import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'subject_models.g.dart';
+
+@JsonSerializable()
 class AcademicYearsModel {
   String kursTypeName = "";
   String name = "";
@@ -19,8 +23,13 @@ class AcademicYearsModel {
       this.isCurrent, this.termModels);
 
   AcademicYearsModel.buildDefault();
+
+  factory AcademicYearsModel.fromJson(Map<String, dynamic> json) => _$AcademicYearsModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AcademicYearsModelToJson(this);
 }
 
+@JsonSerializable()
 class TermModel {
   bool isCurrent = false;
   String termTypeName = "";
@@ -32,8 +41,14 @@ class TermModel {
 
   TermModel(
       this.isCurrent, this.termTypeName, this.name, this.parentId, this.id);
+
+
+  factory TermModel.fromJson(Map<String, dynamic> json) => _$TermModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TermModelToJson(this);
 }
 
+@JsonSerializable()
 class SubjectModel {
   String name = "";
   String termsForAtt = "";
@@ -76,6 +91,11 @@ class SubjectModel {
       return CustomColors.perfect;
     }
   }
+
+
+  factory SubjectModel.fromJson(Map<String, dynamic> json) => _$SubjectModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SubjectModelToJson(this);
 
   Widget getView(BuildContext context) {
     return Column(
@@ -203,6 +223,7 @@ class SubjectModel {
   }
 }
 
+@JsonSerializable()
 class LessonTypesModel {
   String name = "";
   bool schoolType = false;
@@ -218,8 +239,14 @@ class LessonTypesModel {
     required this.name,
     required this.schoolType,
   });
+
+
+  factory LessonTypesModel.fromJson(Map<String, dynamic> json) => _$LessonTypesModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LessonTypesModelToJson(this);
 }
 
+@JsonSerializable()
 class LessonItemModel {
   int attendance = 0,
       gainedScore = 0,
@@ -232,6 +259,10 @@ class LessonItemModel {
   bool isCheckpoint = false, hasFile = false;
 
   LessonItemModel.buildDefault();
+
+  factory LessonItemModel.fromJson(Map<String, dynamic> json) => _$LessonItemModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LessonItemModelToJson(this);
 
   LessonItemModel(
       {required this.id,
