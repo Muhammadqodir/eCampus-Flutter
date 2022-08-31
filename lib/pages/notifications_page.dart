@@ -101,7 +101,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       body: Center(
         child: NotificationListener<ScrollUpdateNotification>(
             onNotification: (notification) {
-              print(notification.metrics.pixels);
               if (notification.metrics.pixels > 0 && elevation == 0) {
                 setState(() {
                   elevation = 0.5;

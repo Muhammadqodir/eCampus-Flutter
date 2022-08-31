@@ -144,7 +144,6 @@ class _ContentSubjectsState extends State<ContentSubjects> {
           )
         : NotificationListener<ScrollUpdateNotification>(
             onNotification: (notification) {
-              print(notification.metrics.pixels);
               if (notification.metrics.pixels > 0 && elevation == 0) {
                 setState(() {
                   elevation = 0.5;
