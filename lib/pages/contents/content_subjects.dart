@@ -53,12 +53,10 @@ class _ContentSubjectsState extends State<ContentSubjects> {
     });
     CacheSystem.getAcademicYearsResponse().then((value) {
       if (value != null) {
-        if (DateTime.now()
-            .subtract(const Duration(minutes: 1))
-            .isAfter(value.getDate())) {
-          getFreshData();
-        } else {
+        if (value.isActualCache()) {
           getCacheData();
+        } else {
+          getFreshData();
         }
       } else {
         getFreshData();

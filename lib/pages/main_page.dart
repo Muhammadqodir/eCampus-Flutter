@@ -96,14 +96,14 @@ class _MyHomePageState extends State<MyHomePage> {
       CustomBottomNavItem(
           "Предметы",
           CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_teacher),
+            child: const Icon(EcampusIcons.icons8_doughnut_chart),
             onPressed: () {},
           ),
           [
             CupertinoButton(
-                child: const Icon(EcampusIcons.icons8_doughnut_chart),
+                child: const Icon(EcampusIcons.icons8_restart),
                 onPressed: () {
-                  //do somemthig
+                  
                 })
           ],
           ContentSubjects(

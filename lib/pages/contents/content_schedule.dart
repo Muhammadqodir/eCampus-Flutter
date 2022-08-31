@@ -245,6 +245,13 @@ class _ContentScheduleState extends State<ContentSchedule> {
     );
   }
 
+  final List<AssetImage> freeIllustrations = [
+    const AssetImage("images/free_1.png"),
+    const AssetImage("images/free_2.png"),
+    const AssetImage("images/free_3.png"),
+    const AssetImage("images/free_4.png"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return loading
@@ -297,10 +304,28 @@ class _ContentScheduleState extends State<ContentSchedule> {
                                           )
                                           .toList())
                               : Center(
-                                  child: Text(
-                                    "Рассписание не предоставлено",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(20),
+                                        child: Image(
+                                          image: freeIllustrations[0],
+                                        ),
+                                      ),
+                                      Text(
+                                        "Для данного дня рассписание не\nпредоставлено",
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                      ),
+                                    ],
                                   ),
                                 ),
                         )

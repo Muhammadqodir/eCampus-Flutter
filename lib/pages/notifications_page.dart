@@ -44,28 +44,21 @@ class _NotificationsPageState extends State<NotificationsPage> {
             setState(() {
               notifications = null;
             }),
-            ecampus!.getNotifications().then((response) => {
-                  if (response.isSuccess)
-                    {
-                      setState(() => {
-                            notifications = response.unread! + response.read!,
-                          })
-                    }
-                  else
-                    {
-                      if (response.error == "Status code 302")
-                        {
-                          ecampus?.getCaptcha().then((captchaImage) => {
-                                showCapchaDialog(
-                                    context, captchaImage, ecampus!, update),
-                              })
-                        }
-                      else
-                        {
-                          log(response.error),
-                        }
-                    }
-                }),
+            ecampus!.getNotifications().then((response) {
+              if (response.isSuccess) {
+                setState(() {
+                  notifications = response.unread! + response.read!;
+                });
+              } else {
+                if (response.error == "Status code 302") {
+                  ecampus?.getCaptcha().then((captchaImage) {
+                    showCapchaDialog(context, captchaImage, ecampus!, update);
+                  });
+                } else {
+                  log(response.error);
+                }
+              }
+            }),
           }
         else
           {
