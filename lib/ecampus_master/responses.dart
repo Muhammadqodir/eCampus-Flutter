@@ -2,6 +2,7 @@ import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
+import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'responses.g.dart';
@@ -165,4 +166,17 @@ class ScheduleResponse extends Response {
   factory ScheduleResponse.fromJson(Map<String, dynamic> json) => _$ScheduleResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScheduleResponseToJson(this);
+}
+
+@JsonSerializable()
+class MyTeachersResponse extends Response {
+  List<TeacherModel> scheduleModels = [];
+
+  MyTeachersResponse(bool isSuccess, String error,
+      {this.scheduleModels = const []})
+      : super(isSuccess, error);
+  
+  factory MyTeachersResponse.fromJson(Map<String, dynamic> json) => _$MyTeachersResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MyTeachersResponseToJson(this);
 }

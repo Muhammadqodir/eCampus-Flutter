@@ -9,6 +9,7 @@ import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
+import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 
@@ -850,6 +851,120 @@ class eCampus {
             try {
               id = jsonObject["Model"]["Id"];
             } catch (e) {}
+            return ScheduleWeeksResponse(true, "",
+                id: id, type: type, currentWeek: current, weeks: scheduleWeeks);
+          } else {
+            return ScheduleWeeksResponse(false, "weeks array is empty");
+          }
+        } else {
+          return ScheduleWeeksResponse(false, "specialities is empty");
+        }
+      } else {
+        return ScheduleWeeksResponse(
+            false, "Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return ScheduleWeeksResponse(false, e.toString());
+    }
+  }
+
+  Future<ScheduleWeeksResponse> getMyTeachers() async {
+    try {
+      http.Response response =
+          await client.post('https://ecampus.ncfu.ru/schedule/my/student');
+      if (response.statusCode == 200) {
+        String responseString = response.body;
+        int start = responseString.indexOf("var viewModel = ") + 16;
+        String json = responseString.substring(start);
+        start = json.indexOf("</script>") - 3;
+        json = json.substring(0, start);
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        Map<String, dynamic> jsonObject = jsonDecode(json);
+        if (jsonObject.containsKey("weeks")) {
+          int size = jsonObject["weeks"].length;
+          if (size > 0) {
+            List<ScheduleWeeksModel> scheduleWeeks = [];
+            for (var i = 0; i < size; i++) {
+              Map<String, dynamic> weekday = jsonObject["weeks"][i];
+              String weekType = "";
+              String dateBegin = "";
+              String dateEnd = "";
+              String number = "";
+              try {
+                weekType = weekday["WeekType"];
+              } catch (e) {}
+              try {
+                dateBegin = weekday["DateBegin"];
+              } catch (e) {}
+              try {
+                dateEnd = weekday["DateEnd"];
+              } catch (e) {}
+              try {
+                number = weekday["Number"].toString();
+              } catch (e) {}
+
+              scheduleWeeks.add(
+                ScheduleWeeksModel(
+                  weekType: weekType,
+                  dateBegin: dateBegin,
+                  dateEnd: dateEnd,
+                  number: number,
+                ),
+              );
+            }
+
+            int id = 0;
+            int type = 0;
+            int current = 0;
+            try {
+              current = jsonObject["currentWeekIndex"];
+            } catch (e) {}
+            try {
+              type = jsonObject["Model"]["Type"];
+            } catch (e) {}
+            try {
+              id = jsonObject["Model"]["Id"];
+            } catch (e) {}
+            //Creating list of teachers
+            List<TeacherModel> teacherModels = [];
+            int secondWeek = ((current == 0) ? current + 1 : current - 1);
+            var weeks = {current, secondWeek};
+            String tIDs = "";
+            for (int i in weeks) {
+              log("Size: ${scheduleWeeks.length}");
+              ScheduleResponse scheduleResponse =
+                  await getSchedule(scheduleWeeks[i].dateBegin, id, type);
+              //test
+              if (scheduleResponse.isSuccess) {
+                List<ScheduleModel> scheduleModels =
+                    scheduleResponse.scheduleModels;
+                for (ScheduleModel scheduleModel in scheduleModels) {
+                  for (ScheduleLessonsModel lessonsModel
+                      in scheduleModel.lessons) {
+                    if (!tIDs.contains(lessonsModel.teacherId.toString())) {
+                      TeacherModel teacherModel = TeacherModel(
+                          lessonsModel.teacherId, lessonsModel.teacher, []);
+                      teacherModel.addSubject(lessonsModel.subName);
+                      teacherModels.add(teacherModel);
+                      tIDs += "${teacherModel.id}-${lessonsModel.subName} ";
+                    } else {
+                      if (!tIDs.contains(
+                          "${lessonsModel.teacherId}-${lessonsModel.subName}")) {
+                        for (int j = 0; j < teacherModels.length; j++) {
+                          if (teacherModels[j].id == lessonsModel.teacherId) {
+                            teacherModels[j].addSubject(lessonsModel.subName);
+                            tIDs +=
+                                "${lessonsModel.teacherId}-${lessonsModel.subName} ";
+                            break;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
             return ScheduleWeeksResponse(true, "",
                 id: id, type: type, currentWeek: current, weeks: scheduleWeeks);
           } else {

@@ -173,3 +173,21 @@ Map<String, dynamic> _$ScheduleResponseToJson(ScheduleResponse instance) =>
       'data': instance.data,
       'scheduleModels': instance.scheduleModels,
     };
+
+MyTeachersResponse _$MyTeachersResponseFromJson(Map<String, dynamic> json) =>
+    MyTeachersResponse(
+      json['isSuccess'] as bool,
+      json['error'] as String,
+      scheduleModels: (json['scheduleModels'] as List<dynamic>?)
+              ?.map((e) => TeacherModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    )..data = json['data'];
+
+Map<String, dynamic> _$MyTeachersResponseToJson(MyTeachersResponse instance) =>
+    <String, dynamic>{
+      'isSuccess': instance.isSuccess,
+      'error': instance.error,
+      'data': instance.data,
+      'scheduleModels': instance.scheduleModels,
+    };
