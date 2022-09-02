@@ -110,6 +110,25 @@ Map<String, dynamic> _$SubjectsResponseToJson(SubjectsResponse instance) =>
       'models': instance.models,
     };
 
+LessonItemsResponse _$LessonItemsResponseFromJson(Map<String, dynamic> json) =>
+    LessonItemsResponse(
+      json['isSuccess'] as bool,
+      json['error'] as String,
+      models: (json['models'] as List<dynamic>?)
+              ?.map((e) => LessonItemModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    )..data = json['data'];
+
+Map<String, dynamic> _$LessonItemsResponseToJson(
+        LessonItemsResponse instance) =>
+    <String, dynamic>{
+      'isSuccess': instance.isSuccess,
+      'error': instance.error,
+      'data': instance.data,
+      'models': instance.models,
+    };
+
 ScheduleWeeksResponse _$ScheduleWeeksResponseFromJson(
         Map<String, dynamic> json) =>
     ScheduleWeeksResponse(

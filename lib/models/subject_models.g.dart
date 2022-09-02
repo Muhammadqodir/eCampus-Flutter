@@ -103,11 +103,11 @@ LessonItemModel _$LessonItemModelFromJson(Map<String, dynamic> json) =>
     LessonItemModel(
       id: json['id'] as int,
       attendance: json['attendance'] as int,
-      gainedScore: json['gainedScore'] as int,
-      grade: json['grade'] as int,
+      gainedScore: (json['gainedScore'] as num).toDouble(),
+      grade: (json['grade'] as num).toDouble(),
       kodPr: json['kodPr'] as int,
       loadId: json['loadId'] as int,
-      lostScore: json['lostScore'] as int,
+      lostScore: (json['lostScore'] as num).toDouble(),
       subject: json['subject'] as String,
       name: json['name'] as String,
       room: json['room'] as String,
@@ -119,12 +119,12 @@ LessonItemModel _$LessonItemModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$LessonItemModelToJson(LessonItemModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
+      'loadId': instance.loadId,
       'attendance': instance.attendance,
+      'kodPr': instance.kodPr,
       'gainedScore': instance.gainedScore,
       'grade': instance.grade,
-      'id': instance.id,
-      'kodPr': instance.kodPr,
-      'loadId': instance.loadId,
       'lostScore': instance.lostScore,
       'subject': instance.subject,
       'name': instance.name,

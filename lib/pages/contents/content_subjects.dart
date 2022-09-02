@@ -4,6 +4,7 @@ import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
+import 'package:ecampus_ncfu/pages/subject_details.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class _ContentSubjectsState extends State<ContentSubjects> {
   List<SubjectModel> subjectModels = [];
   double elevation = 0;
   int studentId = 0;
+  int kodCart = 0;
 
   @override
   void initState() {
@@ -74,7 +76,8 @@ class _ContentSubjectsState extends State<ContentSubjects> {
           selectedCourseIndex = response.getCurrentCourse();
           selectedTermId = response.getCurrentTerm();
           subjectModels = response.currentSubjects!.models;
-          studentId = response.studentId!;
+          studentId = response.studentId ?? 0;
+          kodCart = response.kodCart ?? 0;
           loading = false;
         });
       } else {
@@ -265,7 +268,20 @@ class _ContentSubjectsState extends State<ContentSubjects> {
                       children: subjectModels
                           .map(
                             (element) => CrossListElement(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SubjectDetailsPage(
+                                      context: context,
+                                      subName: element.name,
+                                      studentId: studentId,
+                                      kodCart: kodCart,
+                                      lessonTypes: element.lessonTypes,
+                                    ),
+                                  ),
+                                );
+                              },
                               child: Padding(
                                 padding: EdgeInsets.all(12),
                                 child: element.getView(context),

@@ -123,6 +123,19 @@ class SubjectsResponse extends Response {
 }
 
 @JsonSerializable()
+class LessonItemsResponse extends Response {
+  List<LessonItemModel> models = [];
+
+  LessonItemsResponse(bool isSuccess, String error, {this.models = const []}) : super(isSuccess, error);
+
+
+  factory LessonItemsResponse.fromJson(Map<String, dynamic> json) => _$LessonItemsResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LessonItemsResponseToJson(this);
+
+}
+
+@JsonSerializable()
 class ScheduleWeeksResponse extends Response {
   List<ScheduleWeeksModel> weeks;
   int id = 0, type = 0, currentWeek = 0;

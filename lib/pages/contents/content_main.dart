@@ -75,11 +75,9 @@ class _ContentMainState extends State<ContentMain> {
                   }
                 });
               } else {
-                setState(
-                  () {
-                    isUnActualToken = true;
-                  },
-                );
+                setState(() {
+                  isUnActualToken = true;
+                });
                 getCacheData();
               }
             }

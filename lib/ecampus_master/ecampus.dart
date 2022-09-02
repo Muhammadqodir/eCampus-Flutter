@@ -539,6 +539,115 @@ class eCampus {
     }
   }
 
+  Future<LessonItemsResponse> getLessonItems(
+      int studentId, int lessonTypeId) async {
+    try {
+      Map<String, String> body = {
+        'studentId': studentId.toString(),
+        'lessonTypeId': lessonTypeId.toString()
+      };
+      http.Response response = await client
+          .post('https://ecampus.ncfu.ru/studies/GetLessons', body: body);
+
+      if (response.statusCode == 200) {
+        String json = response.body;
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        List<dynamic>? lessonItems = jsonDecode(response.body);
+        if (lessonItems != null) {
+          int size = lessonItems.length;
+          if (size > 0) {
+            List<LessonItemModel> items_arr = [];
+            for (int i = 0; i < size; i++) {
+              Map<String, dynamic> lessonItem = lessonItems[i];
+
+              int attendance = 0, id = 0, kodPr = 0, loadId = 0;
+              double gainedScore = 0, grade = 0, lostScore = 0;
+              String name = "", room = "", date = "", gradeText = "";
+              bool isCheckpoint = false, hasFile = false;
+              try {
+                attendance = lessonItem["Attendance"];
+              } catch (e) {}
+              try {
+                gainedScore = lessonItem["GainedScore"];
+              } catch (e) {}
+              try {
+                grade = lessonItem["Grade"];
+              } catch (e) {}
+              try {
+                id = lessonItem["Id"];
+              } catch (e) {}
+              try {
+                kodPr = lessonItem["Kod_pr"];
+              } catch (e) {}
+              try {
+                loadId = lessonItem["LoadId"];
+              } catch (e) {}
+              try {
+                lostScore = lessonItem["LostScore"];
+              } catch (e) {}
+
+              try {
+                name = lessonItem["Name"];
+              } catch (e) {}
+              try {
+                room = lessonItem["Room"];
+              } catch (e) {}
+              try {
+                date = lessonItem["Date"];
+              } catch (e) {}
+              try {
+                gradeText = lessonItem["GradeText"];
+              } catch (e) {}
+
+              try {
+                isCheckpoint = lessonItem["IsCheckpoint"];
+              } catch (e) {}
+              try {
+                hasFile = lessonItem["HasFile"];
+              } catch (e) {}
+              items_arr.add(LessonItemModel(
+                  id: id,
+                  attendance: attendance,
+                  gainedScore: gainedScore,
+                  grade: grade,
+                  kodPr: kodPr,
+                  loadId: loadId,
+                  lostScore: lostScore,
+                  subject: "",
+                  name: name,
+                  room: room,
+                  date: date,
+                  gradeText: gradeText,
+                  isCheckpoint: isCheckpoint,
+                  hasFile: hasFile));
+            }
+            return LessonItemsResponse(true, "", models: items_arr);
+          } else {
+            return LessonItemsResponse(false, "empty list of lessons");
+          }
+        } else {
+          return LessonItemsResponse(false, "json is null");
+        }
+      } else {
+        return LessonItemsResponse(false, "Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return LessonItemsResponse(false, e.toString());
+    }
+  }
+
+  Future<List<LessonItemsResponse>> getAllLessonItems(
+      int studentId, List<LessonTypesModel> types) async {
+    List<LessonItemsResponse> models = [];
+    for (var element in types) {
+      LessonItemsResponse lessonItems =
+          await getLessonItems(studentId, element.id);
+      models.add(lessonItems);
+    }
+    return models;
+  }
+
   SubjectsResponse getSubjectsByJSON(Map<String, dynamic> jsonObject) {
     try {
       if (jsonObject != null) {
@@ -761,108 +870,107 @@ class eCampus {
   Future<ScheduleResponse> getSchedule(
       String dateFrom, int id, int type) async {
     // try {
-      Map<String, String> body = {
-        'date': dateFrom,
-        'Id': id.toString(),
-        'targetType': type.toString()
-      };
-      http.Response response = await client
-          .post('https://ecampus.ncfu.ru/Schedule/GetSchedule', body: body);
+    Map<String, String> body = {
+      'date': dateFrom,
+      'Id': id.toString(),
+      'targetType': type.toString()
+    };
+    http.Response response = await client
+        .post('https://ecampus.ncfu.ru/Schedule/GetSchedule', body: body);
 
-      if (response.statusCode == 200) {
-        String json = response.body;
+    if (response.statusCode == 200) {
+      String json = response.body;
 
-        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
-        json = json.replaceAll("\\\"\")", "\"");
-        List<dynamic> jsonObject = jsonDecode(json);
-        int size = jsonObject.length;
-        if (size > 0) {
-          List<ScheduleModel> scheduleModels = [];
-          for (var i = 0; i < size; i++) {
-            Map<String, dynamic> weekday = jsonObject[i];
-            String weekday_ = weekday["WeekDay"];
-            DateTime date = DateTime.parse(weekday["Date"]);
-            ScheduleModel model = ScheduleModel(
-              weekDay: weekday_,
-              date: date,
-              lessons: [],
+      json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+      json = json.replaceAll("\\\"\")", "\"");
+      List<dynamic> jsonObject = jsonDecode(json);
+      int size = jsonObject.length;
+      if (size > 0) {
+        List<ScheduleModel> scheduleModels = [];
+        for (var i = 0; i < size; i++) {
+          Map<String, dynamic> weekday = jsonObject[i];
+          String weekday_ = weekday["WeekDay"];
+          DateTime date = DateTime.parse(weekday["Date"]);
+          ScheduleModel model = ScheduleModel(
+            weekDay: weekday_,
+            date: date,
+            lessons: [],
+          );
+          List<dynamic> lessons = weekday["Lessons"];
+          log(weekday_);
+          List<ScheduleLessonsModel> lessoonsModels = [];
+          for (int j = 0; j < lessons.length; j++) {
+            Map<String, dynamic> lesson = lessons[j];
+            String subName = "";
+            DateTime timeStart = DateTime.now();
+            DateTime timeEnd = DateTime.now();
+            String room = "";
+            int roomId = -1;
+            String teacher = "";
+            int teacherId = -1;
+            bool current = false;
+            int para = -1;
+            String lessonType = "";
+            try {
+              subName = lesson["Discipline"];
+            } catch (e) {}
+            try {
+              timeStart = DateTime.parse(lesson["TimeBegin"]);
+              timeEnd = DateTime.parse(lesson["TimeEnd"]);
+            } catch (e) {}
+            try {
+              room = lesson["Aud"]["Name"];
+              roomId = lesson["Aud"].getInt["Id"];
+            } catch (e) {}
+            try {
+              teacher = lesson["Teacher"]["Name"];
+              teacherId = lesson["Teacher"]["Id"];
+            } catch (e) {}
+            String group = "";
+            try {
+              para = lesson["PairNumberStart"];
+            } catch (e) {}
+            try {
+              current = lesson["Current"];
+            } catch (e) {}
+            try {
+              int gr_size = lesson["Groups"].length;
+              for (int k = 0; k < gr_size; k++) {
+                group += lesson["Groups"][k]["Name"] +
+                    lesson["Groups"][k]["Subgroup"];
+              }
+            } catch (e) {}
+            try {
+              lessonType = lesson["LessonType"];
+            } catch (e) {}
+            log(subName);
+            lessoonsModels.add(
+              ScheduleLessonsModel(
+                current: current,
+                subName: subName,
+                room: room,
+                roomId: roomId,
+                timeEnd: timeEnd,
+                timeStart: timeStart,
+                lessonType: lessonType,
+                group: group,
+                teacher: teacher,
+                teacherId: teacherId,
+                para: para,
+              ),
             );
-            List<dynamic> lessons = weekday["Lessons"];
-            log(weekday_);
-            List<ScheduleLessonsModel> lessoonsModels = [];
-            for (int j = 0; j < lessons.length; j++) {
-              Map<String, dynamic> lesson = lessons[j];
-              String subName = "";
-              DateTime timeStart = DateTime.now();
-              DateTime timeEnd = DateTime.now();
-              String room = "";
-              int roomId = -1;
-              String teacher = "";
-              int teacherId = -1;
-              bool current = false;
-              int para = -1;
-              String lessonType = "";
-              try {
-                subName = lesson["Discipline"];
-              } catch (e) {}
-              try {
-                timeStart = DateTime.parse(lesson["TimeBegin"]);
-                timeEnd = DateTime.parse(lesson["TimeEnd"]);
-              } catch (e) {}
-              try {
-                room = lesson["Aud"]["Name"];
-                roomId = lesson["Aud"].getInt["Id"];
-              } catch (e) {}
-              try {
-                teacher = lesson["Teacher"]["Name"];
-                teacherId = lesson["Teacher"]["Id"];
-              } catch (e) {}
-              String group = "";
-              try {
-                para = lesson["PairNumberStart"];
-              } catch (e) {}
-              try {
-                current = lesson["Current"];
-              } catch (e) {}
-              try {
-                int gr_size = lesson["Groups"].length;
-                for (int k = 0; k < gr_size; k++) {
-                  group += lesson["Groups"][k]["Name"] +
-                      lesson["Groups"][k]["Subgroup"];
-                }
-              } catch (e) {}
-              try {
-                lessonType = lesson["LessonType"];
-              } catch (e) {}
-              log(subName);
-              lessoonsModels.add(
-                ScheduleLessonsModel(
-                  current: current,
-                  subName: subName,
-                  room: room,
-                  roomId: roomId,
-                  timeEnd: timeEnd,
-                  timeStart: timeStart,
-                  lessonType: lessonType,
-                  group: group,
-                  teacher: teacher,
-                  teacherId: teacherId,
-                  para: para,
-                ),
-              );
-            }
-
-            model.lessons = lessoonsModels;
-            scheduleModels.add(model);
           }
-          return ScheduleResponse(true, "", scheduleModels: scheduleModels);
-        } else {
-          return ScheduleResponse(false, "getSchedule response is empty");
+
+          model.lessons = lessoonsModels;
+          scheduleModels.add(model);
         }
+        return ScheduleResponse(true, "", scheduleModels: scheduleModels);
       } else {
-        return ScheduleResponse(
-            false, "Status code ${response.statusCode}");
+        return ScheduleResponse(false, "getSchedule response is empty");
       }
+    } else {
+      return ScheduleResponse(false, "Status code ${response.statusCode}");
+    }
     // } catch (e) {
     //   return ScheduleResponse(false, e.toString());
     // }

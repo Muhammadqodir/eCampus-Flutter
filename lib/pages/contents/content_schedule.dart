@@ -156,11 +156,11 @@ class _ContentScheduleState extends State<ContentSchedule> {
                     setState(() {
                       selectedIndex = DateTime.now().weekday - 1;
                     });
-                    _pageController =
-                        PageController(initialPage: selectedIndex);
                   } else {
                     selectedIndex = 0;
                   }
+                  _pageController =
+                        PageController(initialPage: selectedIndex);
                   scheduleModels = value.scheduleModels;
                   loading = false;
                 });

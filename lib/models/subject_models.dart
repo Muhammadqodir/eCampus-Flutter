@@ -1,10 +1,11 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -24,7 +25,8 @@ class AcademicYearsModel {
 
   AcademicYearsModel.buildDefault();
 
-  factory AcademicYearsModel.fromJson(Map<String, dynamic> json) => _$AcademicYearsModelFromJson(json);
+  factory AcademicYearsModel.fromJson(Map<String, dynamic> json) =>
+      _$AcademicYearsModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AcademicYearsModelToJson(this);
 }
@@ -42,8 +44,8 @@ class TermModel {
   TermModel(
       this.isCurrent, this.termTypeName, this.name, this.parentId, this.id);
 
-
-  factory TermModel.fromJson(Map<String, dynamic> json) => _$TermModelFromJson(json);
+  factory TermModel.fromJson(Map<String, dynamic> json) =>
+      _$TermModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$TermModelToJson(this);
 }
@@ -92,8 +94,8 @@ class SubjectModel {
     }
   }
 
-
-  factory SubjectModel.fromJson(Map<String, dynamic> json) => _$SubjectModelFromJson(json);
+  factory SubjectModel.fromJson(Map<String, dynamic> json) =>
+      _$SubjectModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SubjectModelToJson(this);
 
@@ -240,27 +242,23 @@ class LessonTypesModel {
     required this.schoolType,
   });
 
-
-  factory LessonTypesModel.fromJson(Map<String, dynamic> json) => _$LessonTypesModelFromJson(json);
+  factory LessonTypesModel.fromJson(Map<String, dynamic> json) =>
+      _$LessonTypesModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LessonTypesModelToJson(this);
 }
 
 @JsonSerializable()
 class LessonItemModel {
-  int attendance = 0,
-      gainedScore = 0,
-      grade = 0,
-      id = 0,
-      kodPr = 0,
-      loadId = 0,
-      lostScore = 0;
+  int id = 0, loadId = 0, attendance = 0, kodPr = 0;
+  double gainedScore = 0, grade = 0, lostScore = 0;
   String subject = "", name = "", room = "", date = "", gradeText = "отлично";
   bool isCheckpoint = false, hasFile = false;
 
   LessonItemModel.buildDefault();
 
-  factory LessonItemModel.fromJson(Map<String, dynamic> json) => _$LessonItemModelFromJson(json);
+  factory LessonItemModel.fromJson(Map<String, dynamic> json) =>
+      _$LessonItemModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LessonItemModelToJson(this);
 
@@ -281,7 +279,7 @@ class LessonItemModel {
       required this.hasFile});
 
   Color getScoreBgColor() {
-    if (gradeText == "отлично") {
+    if (gradeText == "отлично" || gradeText == "зачтено") {
       return CustomColors.perfect;
     } else if (gradeText == "хорошо") {
       return CustomColors.good;
@@ -289,6 +287,114 @@ class LessonItemModel {
       return CustomColors.satisfactorily;
     } else {
       return CustomColors.unsatisfactorily;
+    }
+  }
+
+  String getDate() {
+    log(date);
+    if (date != "") {
+      return DateFormat('dd.MM.yyyy').format(DateTime.parse(date));
+    } else {
+      return "";
+    }
+  }
+
+  bool isKtOpen() {
+    if (date != "") {
+      return DateTime.parse(date) == DateTime.now() ||
+          DateTime.parse(date).isBefore(DateTime.now());
+    } else {
+      return false;
+    }
+  }
+
+  Widget getAttendanceView(BuildContext context) {
+    if (attendance != 1) {
+      return Container(
+        decoration: BoxDecoration(
+          color: attendance == 2 ? CustomColors.warning : CustomColors.error,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        child: Row(
+          children: [
+            const Icon(
+              EcampusIcons.icons8_user_not_found,
+              size: 21,
+              color: Colors.white,
+            ),
+            const SizedBox(
+              width: 3,
+            ),
+            Text(
+              attendance == 2 ? "У" : "Н",
+              style: const TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  Widget getScoreView(BuildContext context) {
+    if (gainedScore > 0) {
+      return Container(
+        margin: const EdgeInsets.only(top: 3),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          color: getScoreBgColor(),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Row(
+            children: [
+              const Icon(
+                EcampusIcons.icons8_star,
+                size: 21,
+                color: Colors.white,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                gradeText,
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(
+                width: 2,
+              ),
+              const Icon(
+                EcampusIcons.icons8_up,
+                size: 21,
+                color: Colors.white,
+              ),
+              const SizedBox(
+                width: 2,
+              ),
+              Text(
+                gainedScore.toString(),
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  Color getKtColor(BuildContext context) {
+    if (isKtOpen()) {
+      if (gainedScore > 0) {
+        return CustomColors.success;
+      } else {
+        return CustomColors.error;
+      }
+    } else {
+      return Theme.of(context).textTheme.bodyMedium!.color ?? Colors.black;
     }
   }
 
@@ -300,117 +406,61 @@ class LessonItemModel {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                '19.08.2001',
-                style: Theme.of(context).textTheme.bodySmall,
-              )
+              getDate() != ""
+                  ? Text(
+                      getDate(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    )
+                  : const SizedBox(),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 3,
           ),
-          Container(
-            child: Row(
-              children: [
-                Icon(
-                  EcampusIcons.icons8_select,
-                  size: 22,
-                  color: Color.fromARGB(255, 10, 119, 14),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Лабораторная работа',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: getScoreBgColor(),
-                      ),
-                      child: Padding(
-                          padding: EdgeInsets.all(3),
-                          child: Row(
-                            children: [
-                              Icon(
-                                EcampusIcons.icons8_star,
-                                size: 21,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'отлично',
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Icon(
-                                EcampusIcons.icons8_up,
-                                size: 21,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Text(
-                                '20',
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
-                            ],
-                          )),
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(50)),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      child: Row(
-                        children: [
-                          Icon(
-                            EcampusIcons.icons8_user_not_found,
-                            size: 21,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text(
-                            'Н',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(child: Container()),
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CupertinoButton(
-                    borderRadius: BorderRadius.circular(50),
-                    padding: const EdgeInsets.all(0),
-                    onPressed: () {},
-                    child: Icon(EcampusIcons.icons8_communication),
-                    color: Theme.of(context).primaryColor,
+          Row(
+            children: [
+              isCheckpoint
+                  ? Row(
+                      children: [
+                        Icon(
+                          EcampusIcons.icons8_select,
+                          size: 22,
+                          color: getKtColor(context),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
-            ),
+                  getScoreView(context),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  getAttendanceView(context),
+                ],
+              ),
+              // SizedBox(
+              //   width: 60,
+              //   height: 60,
+              //   child: CupertinoButton(
+              //     borderRadius: BorderRadius.circular(50),
+              //     padding: const EdgeInsets.all(0),
+              //     onPressed: () {},
+              //     child: Icon(EcampusIcons.icons8_communication),
+              //     color: Theme.of(context).primaryColor,
+              //   ),
+              // ),
+            ],
           )
         ],
       ),
