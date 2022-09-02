@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
@@ -31,7 +33,6 @@ class _ContentScheduleState extends State<ContentSchedule> {
   int selectedIndex = 0;
   late eCampus ecampus;
   bool loading = true;
-
   List<ScheduleWeeksModel> weeks = [];
   String selectedWeek = "";
 
@@ -159,8 +160,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
                   } else {
                     selectedIndex = 0;
                   }
-                  _pageController =
-                        PageController(initialPage: selectedIndex);
+                  _pageController = PageController(initialPage: selectedIndex);
                   scheduleModels = value.scheduleModels;
                   loading = false;
                 });
@@ -262,6 +262,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
 
   @override
   Widget build(BuildContext context) {
+    double dWidth = MediaQuery.of(context).size.width;
     return loading
         ? Center(
             child: Column(
@@ -289,55 +290,84 @@ class _ContentScheduleState extends State<ContentSchedule> {
                 setSelected: setSelected,
               ),
               Expanded(
-                child: PageView(
-                    controller: _pageController,
-                    physics: const BouncingScrollPhysics(),
-                    onPageChanged: (value) => {
-                          setState(() {
-                            selectedIndex = value;
-                          })
-                        },
-                    children: WeekTab.weekDays
-                        .map(
-                          (e) => getScheduleModel(WeekTab.weekAbbrv[e]!) != null
-                              ? ListView(
-                                  children:
-                                      getScheduleModel(WeekTab.weekAbbrv[e]!)!
-                                          .lessons
-                                          .map(
-                                            (lesson) => CrossListElement(
-                                              onPressed: () {},
-                                              child: lesson.getView(context),
-                                            ),
-                                          )
-                                          .toList())
-                              : Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.all(20),
-                                        child: Image(
-                                          image: freeIllustrations[0],
+                child: NotificationListener<ScrollUpdateNotification>(
+                  onNotification: (overscroll) {
+                    if (overscroll.metrics.pixels < dWidth - (dWidth * 1.2)) {
+                      log("left");
+                      if (selectedWeekId > 0) {
+                        setState(() {
+                          selectedWeekId -= 1;
+                          selectedWeek =
+                              "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                          getSchedule(weeks[selectedWeekId].dateBegin);
+                        });
+                      }
+                    }
+                    if (overscroll.metrics.pixels > dWidth * 6.2) {
+                      log("right");
+                      if (selectedIndex < weeks.length) {
+                        setState(() {
+                          selectedWeekId += 1;
+                          selectedWeek =
+                              "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                          getSchedule(weeks[selectedWeekId].dateBegin);
+                        });
+                      }
+                    }
+
+                    return false;
+                  },
+                  child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (value) {
+                        setState(() {
+                          selectedIndex = value;
+                        });
+                      },
+                      children: WeekTab.weekDays
+                          .map(
+                            (e) => getScheduleModel(WeekTab.weekAbbrv[e]!) !=
+                                    null
+                                ? ListView(
+                                    children:
+                                        getScheduleModel(WeekTab.weekAbbrv[e]!)!
+                                            .lessons
+                                            .map(
+                                              (lesson) => CrossListElement(
+                                                onPressed: () {},
+                                                child: lesson.getView(context),
+                                              ),
+                                            )
+                                            .toList())
+                                : Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(20),
+                                          child: Image(
+                                            image: freeIllustrations[0],
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        "Для данного дня рассписание не\nпредоставлено",
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .primaryColor),
-                                      ),
-                                    ],
+                                        Text(
+                                          "Для данного дня рассписание не\nпредоставлено",
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                        )
-                        .toList()),
+                          )
+                          .toList()),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 0, top: 0),
