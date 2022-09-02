@@ -48,6 +48,8 @@ SubjectModel _$SubjectModelFromJson(Map<String, dynamic> json) => SubjectModel(
       id: json['id'] as int,
       parentId: json['parentId'] as int,
       name: json['name'] as String,
+      teacherName: json['teacherName'] as String? ?? "",
+      teacherId: json['teacherId'] as int? ?? -1,
       termsForAtt: json['termsForAtt'] as String,
       subType: json['subType'] as String,
       currentRating: (json['currentRating'] as num).toDouble(),
@@ -65,6 +67,8 @@ SubjectModel _$SubjectModelFromJson(Map<String, dynamic> json) => SubjectModel(
 Map<String, dynamic> _$SubjectModelToJson(SubjectModel instance) =>
     <String, dynamic>{
       'name': instance.name,
+      'teacherName': instance.teacherName,
+      'teacherId': instance.teacherId,
       'termsForAtt': instance.termsForAtt,
       'subType': instance.subType,
       'parentId': instance.parentId,

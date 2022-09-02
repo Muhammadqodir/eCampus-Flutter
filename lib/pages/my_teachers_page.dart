@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
@@ -47,6 +48,7 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
             }),
             ecampus!.getMyTeachers().then((response) {
               if (response.isSuccess) {
+                CacheSystem.saveMyTeachers(response);
                 setState(() {
                   models = response.teachers;
                 });
@@ -108,6 +110,7 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
               return true;
             },
             child: CustomScrollView(
+              physics: BouncingScrollPhysics(),
               slivers: [
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {

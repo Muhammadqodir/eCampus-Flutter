@@ -102,6 +102,11 @@ class CacheSystem {
     await prefs.setString("${prefix}date", "2001-08-06 10:45:00");
   }
 
+  static void invalidateAllCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
   static void saveAcademicYearsResponse(AcademicYearsResponse response) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(

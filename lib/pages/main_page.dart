@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               showConfirmDialog(
                   context, "Выход из профиля", "Подтвердите действие", () {
-                CacheSystem.invalidateStudentCache();
+                CacheSystem.invalidateAllCache();
                 SharedPreferences.getInstance().then((value) => {
                       value.setBool("isLogin", false),
                       value.setString("ecampus", "undefined"),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/NetworkService.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
@@ -345,7 +346,12 @@ class eCampus {
               try {
                 isCurrent = term["IsCurrent"];
                 if (isCurrent) {
-                  subjectsResponse = getSubjectsByJSON(term);
+                  MyTeachersResponse? myTeachersResponse;
+                  try{
+                    myTeachersResponse = await getMyTeachers();
+                    CacheSystem.saveMyTeachers(myTeachersResponse);
+                  }catch(e){}
+                  subjectsResponse = getSubjectsByJSON(term, myTeachersResponse: myTeachersResponse);
                 }
               } catch (e) {}
               if (isCurrent) {
@@ -649,7 +655,7 @@ class eCampus {
     return models;
   }
 
-  SubjectsResponse getSubjectsByJSON(Map<String, dynamic> jsonObject) {
+  SubjectsResponse getSubjectsByJSON(Map<String, dynamic> jsonObject, {MyTeachersResponse? myTeachersResponse}) {
     try {
       if (jsonObject != null) {
         List<dynamic> fileAbleActivities = [];
@@ -673,6 +679,8 @@ class eCampus {
             bool isConfirmDocumentExists = false;
             double maxRating = 0;
             String name = "";
+            String teacher = "";
+            int teacherId = 0;
             int paretId = 0;
             bool locked = false;
             int id = 0;
@@ -705,6 +713,16 @@ class eCampus {
               name = subject["Name"];
               log(name);
             } catch (e) {}
+            try{
+              if(myTeachersResponse != null){
+                for(TeacherModel teach in myTeachersResponse.teachers){
+                  if(teach.subjects.contains(name)){
+                    teacher = teach.fullName;
+                    teacherId = teach.id;
+                  }
+                }
+              }
+            } catch (e){}
             try {
               paretId = subject["ParentId"];
             } catch (e) {}
@@ -763,6 +781,8 @@ class eCampus {
                 parentId: paretId,
                 name: name,
                 termsForAtt: termsForAtt,
+                teacherId: teacherId,
+                teacherName: teacher,
                 subType: subType,
                 currentRating: currentRating,
                 maxRating: maxRating,

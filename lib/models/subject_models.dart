@@ -1,6 +1,7 @@
 import 'dart:developer';
-
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
+import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,6 +54,8 @@ class TermModel {
 @JsonSerializable()
 class SubjectModel {
   String name = "";
+  String teacherName = "";
+  int teacherId = -1;
   String termsForAtt = "";
   String subType = "";
   int parentId = -1;
@@ -72,6 +75,8 @@ class SubjectModel {
     required this.id,
     required this.parentId,
     required this.name,
+    this.teacherName = "",
+    this.teacherId = -1,
     required this.termsForAtt,
     required this.subType,
     required this.currentRating,
@@ -144,7 +149,8 @@ class SubjectModel {
                     const SizedBox(
                       height: 5,
                     ),
-                    hasLectures || hasInstruction || hasUMK
+                    // hasLectures || hasInstruction || hasUMK
+                    false
                         ? CrossButton(
                             wight: 120,
                             height: 32,
@@ -167,6 +173,39 @@ class SubjectModel {
                             ),
                           )
                         : const SizedBox(),
+                    teacherName != ""
+                        ? Row(
+                            children: [
+                              const Icon(
+                                EcampusIcons.icons8_teacher,
+                                size: 18,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                teacherName,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    // teacherName != ""
+                    //     ? Container(
+                    //         decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(12.0),
+                    //           color: getSubTypeColor(),
+                    //         ),
+                    //         child: Padding(
+                    //           padding: EdgeInsets.all(4),
+                    //           child: Text(
+                    //             teacherName,
+                    //             style:
+                    //                 Theme.of(context).textTheme.headlineMedium,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : SizedBox(),
                   ],
                 ),
               ),
