@@ -178,7 +178,7 @@ MyTeachersResponse _$MyTeachersResponseFromJson(Map<String, dynamic> json) =>
     MyTeachersResponse(
       json['isSuccess'] as bool,
       json['error'] as String,
-      scheduleModels: (json['scheduleModels'] as List<dynamic>?)
+      teachers: (json['teachers'] as List<dynamic>?)
               ?.map((e) => TeacherModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
@@ -189,5 +189,5 @@ Map<String, dynamic> _$MyTeachersResponseToJson(MyTeachersResponse instance) =>
       'isSuccess': instance.isSuccess,
       'error': instance.error,
       'data': instance.data,
-      'scheduleModels': instance.scheduleModels,
+      'teachers': instance.teachers,
     };

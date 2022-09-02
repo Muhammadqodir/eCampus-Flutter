@@ -7,6 +7,7 @@ import 'package:ecampus_ncfu/pages/contents/content_main.dart';
 import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
 import 'package:ecampus_ncfu/pages/contents/content_subjects.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
+import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
@@ -64,11 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Icon(EcampusIcons.icons8_notification),
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationsPage(
-                                context: context,
-                              )));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationsPage(
+                        context: context,
+                      ),
+                    ),
+                  );
                 })
           ],
           ContentMain(
@@ -81,7 +84,16 @@ class _MyHomePageState extends State<MyHomePage> {
           "Расписание",
           CupertinoButton(
             child: const Icon(EcampusIcons.icons8_teacher),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyTeachersPage(
+                    context: context,
+                  ),
+                ),
+              );
+            },
           ),
           [
             CupertinoButton(
@@ -102,9 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
           [
             CupertinoButton(
                 child: const Icon(EcampusIcons.icons8_restart),
-                onPressed: () {
-                  
-                })
+                onPressed: () {})
           ],
           ContentSubjects(
             context: context,

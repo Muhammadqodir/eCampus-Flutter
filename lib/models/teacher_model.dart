@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,14 @@ class TeacherModel {
 
   Map<String, dynamic> toJson() => _$TeacherModelToJson(this);
 
+  String getSubjects(){
+    String res = "";
+    for(var s in subjects){
+      res += "-$s\n";
+    }
+    return res.substring(0, res.length-1);
+  }
+
   Widget getView(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(12),
@@ -31,7 +41,7 @@ class TeacherModel {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Трофимова",
+            fullName,
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
@@ -41,7 +51,7 @@ class TeacherModel {
             height: 4,
           ),
           Text(
-            "Трофимова",
+            getSubjects(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(
@@ -52,7 +62,9 @@ class TeacherModel {
               Expanded(
                 child: CrossButton(
                   backgroundColor: Theme.of(context).primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    log("Schedule");
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -77,7 +89,9 @@ class TeacherModel {
               Expanded(
                 child: CrossButton(
                   backgroundColor: Theme.of(context).primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    log("Info");
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

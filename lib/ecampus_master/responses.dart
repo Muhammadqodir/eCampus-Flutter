@@ -170,10 +170,10 @@ class ScheduleResponse extends Response {
 
 @JsonSerializable()
 class MyTeachersResponse extends Response {
-  List<TeacherModel> scheduleModels = [];
+  List<TeacherModel> teachers = [];
 
   MyTeachersResponse(bool isSuccess, String error,
-      {this.scheduleModels = const []})
+      {this.teachers = const []})
       : super(isSuccess, error);
   
   factory MyTeachersResponse.fromJson(Map<String, dynamic> json) => _$MyTeachersResponseFromJson(json);

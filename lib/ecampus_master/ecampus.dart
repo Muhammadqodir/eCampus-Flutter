@@ -868,7 +868,7 @@ class eCampus {
     }
   }
 
-  Future<ScheduleWeeksResponse> getMyTeachers() async {
+  Future<MyTeachersResponse> getMyTeachers() async {
     try {
       http.Response response =
           await client.post('https://ecampus.ncfu.ru/schedule/my/student');
@@ -965,20 +965,19 @@ class eCampus {
                 }
               }
             }
-            return ScheduleWeeksResponse(true, "",
-                id: id, type: type, currentWeek: current, weeks: scheduleWeeks);
+            return MyTeachersResponse(true, "", teachers: teacherModels);
           } else {
-            return ScheduleWeeksResponse(false, "weeks array is empty");
+            return MyTeachersResponse(false, "weeks array is empty");
           }
         } else {
-          return ScheduleWeeksResponse(false, "specialities is empty");
+          return MyTeachersResponse(false, "specialities is empty");
         }
       } else {
-        return ScheduleWeeksResponse(
+        return MyTeachersResponse(
             false, "Status code ${response.statusCode}");
       }
     } catch (e) {
-      return ScheduleWeeksResponse(false, e.toString());
+      return MyTeachersResponse(false, e.toString());
     }
   }
 
