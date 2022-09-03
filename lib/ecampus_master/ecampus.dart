@@ -156,7 +156,7 @@ class eCampus {
                 detalis.forEach((element) {
                   Map<String, dynamic> details_item = element;
                   models.add(RatingModel(
-                      details_item["Name"],
+                      details_item["Name"].replaceAll("  ", ""),
                       double.parse(details_item["SumRating"]) * 100,
                       details_item["PositionInGroup"],
                       details_item["PositionInInstitute"],

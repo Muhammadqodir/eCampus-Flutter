@@ -22,7 +22,8 @@ class RatingModel {
   RatingModel(this.fullName, this.ball, this.ratGroup, this.ratInst,
       this.maxPosGroup, this.maxPosInst, this.isCurrent);
 
-  factory RatingModel.fromJson(Map<String, dynamic> json) => _$RatingModelFromJson(json);
+  factory RatingModel.fromJson(Map<String, dynamic> json) =>
+      _$RatingModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$RatingModelToJson(this);
 
@@ -38,55 +39,65 @@ class RatingModel {
                 height: 25,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(50)),
+                  color: isCurrent
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).dividerColor,
+                  borderRadius: BorderRadius.circular(50),
+                ),
                 child: Text(
-                  '17',
-                  style: TextStyle(color: Colors.white),
+                  ratGroup.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              SizedBox(
-                width: 250,
+              Expanded(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Иванов Иван Иванович',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
+                    Text(
+                      fullName,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
+                        Expanded(
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 EcampusIcons.icons8_star,
-                                size: 21,
+                                size: 22,
+                              ),
+                              const SizedBox(
+                                width: 4,
                               ),
                               Text(
-                                '89.21',
+                                ball.toStringAsFixed(2),
+                                style: Theme.of(context).textTheme.bodyMedium,
                               )
                             ],
                           ),
                         ),
-                        Container(
+                        Expanded(
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 EcampusIcons.icons8_university,
-                                size: 21,
+                                size: 22,
                               ),
-                              Text('280 из 890')
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                '${ratInst} из ${maxPosInst}',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              )
                             ],
                           ),
                         ),
