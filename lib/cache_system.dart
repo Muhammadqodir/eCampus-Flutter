@@ -115,6 +115,12 @@ class CacheSystem {
         '${prefix}AcademicYearsResponse_time', getCurrentDateTime());
   }
 
+  static void invalidateAcademicYearsResponse()async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        '${prefix}AcademicYearsResponse_time', "2001-08-06 10:45:00");
+  }
+
   static void saveScheduleResponse(ScheduleResponse response) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(

@@ -20,10 +20,10 @@ class ContentSubjects extends StatefulWidget {
   final Function setElevation;
 
   @override
-  State<ContentSubjects> createState() => _ContentSubjectsState();
+  State<ContentSubjects> createState() => ContentSubjectsState();
 }
 
-class _ContentSubjectsState extends State<ContentSubjects> {
+class ContentSubjectsState extends State<ContentSubjects> {
   late eCampus ecampus;
   bool loading = true;
   List<AcademicYearsModel> academicYears = [];

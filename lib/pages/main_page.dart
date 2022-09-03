@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/cache_system.dart';
@@ -28,12 +29,104 @@ class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
   Uint8List? captchaImage;
   double elevation = 0;
+  StatefulWidget? content;
+
+  @override
+  void initState() {
+    content = ContentMain(
+      context: context,
+      setElevation: setAppbarElevation,
+    );
+    super.initState();
+  }
 
   void setAppbarElevation(double visibility) {
     setState(() {
       elevation = visibility;
     });
   }
+
+  void updateSubjects() {}
+
+  bool bottomNavShadow = true;
+
+  Container buildCustomBottomNavigaton(
+      BuildContext ctx, List<CustomBottomNavItem> items) {
+    return Container(
+      height: 61,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: lightGray, offset: Offset(0, -0.5)),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            for (var item in items)
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      pageIndex = items.indexOf(item);
+                      content = item.content as StatefulWidget?;
+                      elevation = 0;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.fastOutSlowIn,
+                    decoration: const BoxDecoration(
+                      // color: pageIndex == items.indexOf(item)
+                      //     ? Theme.of(ctx).primaryColor
+                      //     : Theme.of(ctx).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Opacity(
+                        opacity: pageIndex == items.indexOf(item) ? 1 : 0.6,
+                        child: Column(
+                          children: [
+                            Icon(
+                              item.icon,
+                              size: 28,
+                              color: pageIndex == items.indexOf(item)
+                                  ? Theme.of(ctx).primaryColor
+                                  : Theme.of(ctx).textTheme.titleSmall!.color,
+                            ),
+                            Text(
+                              item.label,
+                              maxLines: 1,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              style: pageIndex == items.indexOf(item)
+                                  ? Theme.of(ctx)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                          color: Theme.of(ctx).primaryColor,
+                                          fontWeight: FontWeight.bold)
+                                  : Theme.of(ctx).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  final GlobalKey<ContentSubjectsState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +145,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginPage(
-                                  context: context,
-                                )),
+                          builder: (context) => LoginPage(
+                            context: context,
+                          ),
+                        ),
                       )
                     });
               });
@@ -113,10 +207,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           [
             CupertinoButton(
-                child: const Icon(EcampusIcons.icons8_restart),
-                onPressed: () {})
+              onPressed: () {
+                CacheSystem.invalidateAcademicYearsResponse();
+                _key.currentState!.fillData();
+              },
+              child: const Icon(EcampusIcons.icons8_restart),
+            )
           ],
           ContentSubjects(
+            key: _key,
             context: context,
             setElevation: setAppbarElevation,
           ),
@@ -151,78 +250,9 @@ class _MyHomePageState extends State<MyHomePage> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: bottomNavItems[pageIndex].content,
+      body: content,
       bottomNavigationBar: SafeArea(
         child: buildCustomBottomNavigaton(context, bottomNavItems),
-      ),
-    );
-  }
-
-  bool bottomNavShadow = true;
-  Container buildCustomBottomNavigaton(
-      BuildContext ctx, List<CustomBottomNavItem> items) {
-    return Container(
-      height: 61,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: lightGray, offset: Offset(0, -0.5)),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            for (var item in items)
-              Expanded(
-                  child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    pageIndex = items.indexOf(item);
-                    elevation = 0;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.fastOutSlowIn,
-                  decoration: const BoxDecoration(
-                      // color: pageIndex == items.indexOf(item)
-                      //     ? Theme.of(ctx).primaryColor
-                      //     : Theme.of(ctx).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Opacity(
-                      opacity: pageIndex == items.indexOf(item) ? 1 : 0.6,
-                      child: Column(
-                        children: [
-                          Icon(
-                            item.icon,
-                            size: 28,
-                            color: pageIndex == items.indexOf(item)
-                                ? Theme.of(ctx).primaryColor
-                                : Theme.of(ctx).textTheme.titleSmall!.color,
-                          ),
-                          Text(
-                            item.label,
-                            maxLines: 1,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            style: pageIndex == items.indexOf(item)
-                                ? Theme.of(ctx).textTheme.titleSmall!.copyWith(
-                                    color: Theme.of(ctx).primaryColor,
-                                    fontWeight: FontWeight.bold)
-                                : Theme.of(ctx).textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              )),
-          ],
-        ),
       ),
     );
   }
