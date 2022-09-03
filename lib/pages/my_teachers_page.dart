@@ -12,14 +12,17 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class MyTeachersPage extends StatefulWidget {
-  const MyTeachersPage({
+  MyTeachersPage({
     Key? key,
     required this.context,
   }) : super(key: key);
 
   final BuildContext context;
+  final FirebaseDatabase database = FirebaseDatabase.instance;
+
   @override
   State<MyTeachersPage> createState() => _MyTeachersPageState();
 }
@@ -28,6 +31,16 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
   eCampus? ecampus;
   List<TeacherModel>? models;
   double elevation = 0;
+
+  void getTeacherData(int teacherId) async {
+    final ref = widget.database.ref("teachers/$teacherId");
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      log(snapshot.value.toString());
+    } else {
+      print('No data available.');
+    }
+  }
 
   @override
   void initState() {
@@ -52,6 +65,7 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
                 setState(() {
                   models = response.teachers;
                 });
+                getTeacherData(response.teachers[0].id);
               } else {
                 if (response.error == "Status code 302") {
                   ecampus?.getCaptcha().then((captchaImage) {

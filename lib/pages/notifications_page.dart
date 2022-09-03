@@ -93,64 +93,68 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       body: Center(
         child: NotificationListener<ScrollUpdateNotification>(
-            onNotification: (notification) {
-              if (notification.metrics.pixels > 0 && elevation == 0) {
-                setState(() {
-                  elevation = 0.5;
-                });
-              }
-              if (notification.metrics.pixels <= 0 && elevation != 0) {
-                setState(() {
-                  elevation = 0;
-                });
-              }
-              return true;
-            },
-            child: CustomScrollView(
-              physics: BouncingScrollPhysics(),
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () async {
-                    update();
-                  },
+          onNotification: (notification) {
+            if (notification.metrics.pixels > 0 && elevation == 0) {
+              setState(() {
+                elevation = 0.5;
+              });
+            }
+            if (notification.metrics.pixels <= 0 && elevation != 0) {
+              setState(() {
+                elevation = 0;
+              });
+            }
+            return true;
+          },
+          child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
+            slivers: [
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  update();
+                },
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Column(
+                      children: <Widget>[
+                        notifications != null
+                            ? Column(
+                                children: notifications!
+                                    .map(
+                                      (element) => CrossListElement(
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(element.message),
+                                          ));
+                                        },
+                                        child: element.getView(context),
+                                      ),
+                                    )
+                                    .toList(),
+                              )
+                            : Column(
+                                children: [
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                ],
+                              )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                  ],
                 ),
-                SliverList(
-                    delegate: SliverChildListDelegate([
-                  Column(
-                    children: <Widget>[
-                      notifications != null
-                          ? Column(
-                              children: notifications!
-                                  .map(
-                                    (element) => CrossListElement(
-                                      onPressed: () {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(element.message),
-                                        ));
-                                      },
-                                      child: element.getView(context),
-                                    ),
-                                  )
-                                  .toList(),
-                            )
-                          : Column(
-                              children: [
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                              ],
-                            )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  )
-                ]))
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

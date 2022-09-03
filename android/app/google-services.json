@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "545535659652",
+    "firebase_url": "https://ecampus-21f18.firebaseio.com",
+    "project_id": "ecampus-21f18",
+    "storage_bucket": "ecampus-21f18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545535659652:android:7ea5ed969baff1b8717cd1",
+        "android_client_info": {
+          "package_name": "com.example.ecampus_ncfu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1GTuUuahvxULyxXPdTlCKa1I0D6s-_3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545535659652:android:8060f7d1434cc3d7717cd1",
+        "android_client_info": {
+          "package_name": "ru.mq.ecampusanalitics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545535659652-sibfmflh7pfn7ibtbjs7c0psdnlf7td9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.mq.ecampusanalitics",
+            "certificate_hash": "1af0f28e09d15c7e709643c62a0ef0c711bed1a9"
+          }
+        },
+        {
+          "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1GTuUuahvxULyxXPdTlCKa1I0D6s-_3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545535659652:android:5e2b2365cace9179717cd1",
+        "android_client_info": {
+          "package_name": "uz.mqsoft.ecampusncfu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1GTuUuahvxULyxXPdTlCKa1I0D6s-_3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-4525868919149294~1463230455"
+    }
+  ],
+  "configuration_version": "1"
+}

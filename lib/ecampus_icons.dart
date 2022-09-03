@@ -57,4 +57,7 @@ class EcampusIcons {
   static const IconData icons8_downloads_folder = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_forward = IconData(0xe822, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_up = IconData(0xe823, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData record_book = IconData(0xe824, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_wi_fi = IconData(0xe826, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ncfu_new = IconData(0xe827, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

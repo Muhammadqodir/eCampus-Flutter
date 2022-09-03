@@ -10,4 +10,14 @@ class CustomColors{
   static Color good = HexColor.fromHex("#AEDE1B");
   static Color satisfactorily = HexColor.fromHex("#F67A25");
   static Color unsatisfactorily = HexColor.fromHex("#E51A22");
+
+  static List<Color> colorPalette = [
+    HexColor.fromHex("#009AD1"),
+    HexColor.fromHex("#f77f00"),
+    HexColor.fromHex("#ef233c"),
+    HexColor.fromHex("#ac685d"),
+    HexColor.fromHex("#85888C"),
+    HexColor.fromHex("#324445"),
+    HexColor.fromHex("#009352"),
+  ];
 }
