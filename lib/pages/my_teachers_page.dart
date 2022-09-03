@@ -32,16 +32,6 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
   List<TeacherModel>? models;
   double elevation = 0;
 
-  void getTeacherData(int teacherId) async {
-    final ref = widget.database.ref("teachers/$teacherId");
-    final snapshot = await ref.get();
-    if (snapshot.exists) {
-      log(snapshot.value.toString());
-    } else {
-      print('No data available.');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -65,7 +55,6 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
                 setState(() {
                   models = response.teachers;
                 });
-                getTeacherData(response.teachers[0].id);
               } else {
                 if (response.error == "Status code 302") {
                   ecampus?.getCaptcha().then((captchaImage) {
@@ -141,7 +130,7 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
                                   .map(
                                     (element) => CrossListElement(
                                       onPressed: () {},
-                                      child: element.getView(context),
+                                      child: element.getView(context, ecampus!, widget.database),
                                     ),
                                   )
                                   .toList(),

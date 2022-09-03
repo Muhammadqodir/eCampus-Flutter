@@ -1,9 +1,16 @@
 import 'dart:developer';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
+import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
+import 'package:ecampus_ncfu/pages/contents/content_teacher_info.dart';
+import 'package:ecampus_ncfu/pages/notifications_page.dart';
+import 'package:ecampus_ncfu/utils/utils.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 part 'teacher_model.g.dart';
 
 @JsonSerializable()
@@ -25,17 +32,32 @@ class TeacherModel {
 
   Map<String, dynamic> toJson() => _$TeacherModelToJson(this);
 
-  String getSubjects(){
+  String getSubjects() {
     String res = "";
-    for(var s in subjects){
+    for (var s in subjects) {
       res += "-$s\n";
     }
-    return res.substring(0, res.length-1);
+    return res.substring(0, res.length - 1);
   }
 
-  Widget getView(BuildContext context) {
+  // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoPicker.
+  void showTeacherDialog(BuildContext context, eCampus ecampus, FirebaseDatabase database) {
+    showCupertinoModalBottomSheet(
+      context: context,
+      builder: (context) => ContentTeacherInfo(
+        context: context,
+        ecampus: ecampus,
+        database: database,
+        teacherId: id,
+        teacherName: fullName,
+      ),
+    );
+  }
+
+  Widget getView(
+      BuildContext context, eCampus ecampus, FirebaseDatabase database) {
     return Padding(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +112,7 @@ class TeacherModel {
                 child: CrossButton(
                   backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () {
-                    log("Info");
+                    showTeacherDialog(context, ecampus, database);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -15,6 +15,7 @@ import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -184,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
+              MaterialWithModalsPageRoute(
                 builder: (context) => MyTeachersPage(
                   context: context,
                 ),
