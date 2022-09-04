@@ -87,7 +87,9 @@ class _ContentScheduleState extends State<ContentSchedule> {
               setState(() {
                 loading = false;
                 scheduleModels = schedule!.value.scheduleModels;
-                selectedIndex = DateTime.now().weekday - 1;
+                selectedIndex = DateTime.now().weekday == 7
+                    ? 1
+                    : DateTime.now().weekday - 1;
               });
               _pageController = PageController(initialPage: selectedIndex);
             });
@@ -120,7 +122,6 @@ class _ContentScheduleState extends State<ContentSchedule> {
                   currentWeekDate = weeks[selectedWeekId].dateBegin;
                   selectedWeek =
                       "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                  loading = false;
                   getSchedule(weeks[selectedWeekId].dateBegin);
                 });
               } else {
