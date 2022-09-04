@@ -111,7 +111,9 @@ class _RatingPageState extends State<RatingPage> {
               return true;
             },
             child: CustomScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()
+              ),
               slivers: [
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {

@@ -113,7 +113,9 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
               return true;
             },
             child: CustomScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               slivers: [
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {

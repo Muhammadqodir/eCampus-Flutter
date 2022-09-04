@@ -4,7 +4,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'schedule_models.g.dart';
 
-
 @JsonSerializable()
 class ScheduleModel {
   String weekDay;
@@ -17,11 +16,11 @@ class ScheduleModel {
     required this.lessons,
   });
 
-  factory ScheduleModel.fromJson(Map<String, dynamic> json) => _$ScheduleModelFromJson(json);
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScheduleModelToJson(this);
 }
-
 
 @JsonSerializable()
 class ScheduleWeeksModel {
@@ -33,7 +32,8 @@ class ScheduleWeeksModel {
       required this.dateEnd,
       required this.number});
 
-  factory ScheduleWeeksModel.fromJson(Map<String, dynamic> json) => _$ScheduleWeeksModelFromJson(json);
+  factory ScheduleWeeksModel.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleWeeksModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScheduleWeeksModelToJson(this);
 
@@ -53,7 +53,6 @@ class ScheduleWeeksModel {
     return DateFormat('MM.dd').format(getDateEnd());
   }
 }
-
 
 @JsonSerializable()
 class ScheduleLessonsModel {
@@ -75,8 +74,8 @@ class ScheduleLessonsModel {
       required this.roomId,
       required this.current});
 
-
-  factory ScheduleLessonsModel.fromJson(Map<String, dynamic> json) => _$ScheduleLessonsModelFromJson(json);
+  factory ScheduleLessonsModel.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleLessonsModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScheduleLessonsModelToJson(this);
 
@@ -118,7 +117,8 @@ class ScheduleLessonsModel {
                     width: 5,
                   ),
                   Text(
-                    lessonType,
+                    lessonType.replaceAll("  ", ""),
+                    overflow: TextOverflow.fade,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -163,6 +163,7 @@ class ScheduleLessonsModel {
               const Spacer(),
               Text(
                 group,
+                textAlign: TextAlign.end,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],

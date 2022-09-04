@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:html/dom.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -9,6 +10,7 @@ import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/models/search_schedule_model.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:http/http.dart' as http;
@@ -263,6 +265,45 @@ class eCampus {
     }
   }
 
+  Future<SearchScheduleResponse> searchSchedule(String q) async {
+    final String url =
+        "https://ecampus.ncfu.ru/schedule/search?q=${Uri.encodeComponent(q)}";
+    http.Response response = await client.post(url);
+    if (response.statusCode == 200) {
+      String responseString = response.body;
+      var document = parse(responseString);
+      List<SearchScheduleResult> scheduleSearchResults = [];
+      var resultsParent = document.getElementById("targets-search-result");
+      if (resultsParent != null) {
+        var results = resultsParent.querySelectorAll("a[href]");
+        for (var res in results) {
+          Element element = res;
+          if (element.attributes["class"] == "all-result-link") {
+            continue;
+          }
+          String link = element.attributes["href"] ?? "undefined";
+          int targetType = 0;
+          if (link.contains("teacher")) {
+            targetType = 1;
+          } else if (link.contains("group")) {
+            targetType = 2;
+          } else if (link.contains("room")) {
+            targetType = 3;
+          }
+          SearchScheduleResult scheduleSearchResult = SearchScheduleResult(
+              element.text.replaceAll("  ", ""),
+              "https://ecampus.ncfu.ru$link",
+              targetType);
+          scheduleSearchResults.add(scheduleSearchResult);
+        }
+      }
+      return SearchScheduleResponse(true, "", models: scheduleSearchResults);
+    } else {
+      log("response.isSuccessful=false");
+      return SearchScheduleResponse(false, "searchSchedule::responseFalse");
+    }
+  }
+
   Future<AcademicYearsResponse> getAcademicYears() async {
     try {
       http.Response response =
@@ -347,11 +388,12 @@ class eCampus {
                 isCurrent = term["IsCurrent"];
                 if (isCurrent) {
                   MyTeachersResponse? myTeachersResponse;
-                  try{
+                  try {
                     myTeachersResponse = await getMyTeachers();
                     CacheSystem.saveMyTeachers(myTeachersResponse);
-                  }catch(e){}
-                  subjectsResponse = getSubjectsByJSON(term, myTeachersResponse: myTeachersResponse);
+                  } catch (e) {}
+                  subjectsResponse = getSubjectsByJSON(term,
+                      myTeachersResponse: myTeachersResponse);
                 }
               } catch (e) {}
               if (isCurrent) {
@@ -655,7 +697,8 @@ class eCampus {
     return models;
   }
 
-  SubjectsResponse getSubjectsByJSON(Map<String, dynamic> jsonObject, {MyTeachersResponse? myTeachersResponse}) {
+  SubjectsResponse getSubjectsByJSON(Map<String, dynamic> jsonObject,
+      {MyTeachersResponse? myTeachersResponse}) {
     try {
       if (jsonObject != null) {
         List<dynamic> fileAbleActivities = [];
@@ -713,16 +756,16 @@ class eCampus {
               name = subject["Name"];
               log(name);
             } catch (e) {}
-            try{
-              if(myTeachersResponse != null){
-                for(TeacherModel teach in myTeachersResponse.teachers){
-                  if(teach.subjects.contains(name)){
+            try {
+              if (myTeachersResponse != null) {
+                for (TeacherModel teach in myTeachersResponse.teachers) {
+                  if (teach.subjects.contains(name)) {
                     teacher = teach.fullName;
                     teacherId = teach.id;
                   }
                 }
               }
-            } catch (e){}
+            } catch (e) {}
             try {
               paretId = subject["ParentId"];
             } catch (e) {}
@@ -817,6 +860,80 @@ class eCampus {
     try {
       http.Response response =
           await client.post('https://ecampus.ncfu.ru/schedule/my/student');
+      if (response.statusCode == 200) {
+        String responseString = response.body;
+        int start = responseString.indexOf("var viewModel = ") + 16;
+        String json = responseString.substring(start);
+        start = json.indexOf("</script>") - 3;
+        json = json.substring(0, start);
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        Map<String, dynamic> jsonObject = jsonDecode(json);
+        if (jsonObject.containsKey("weeks")) {
+          int size = jsonObject["weeks"].length;
+          if (size > 0) {
+            List<ScheduleWeeksModel> scheduleWeeks = [];
+            for (var i = 0; i < size; i++) {
+              Map<String, dynamic> weekday = jsonObject["weeks"][i];
+              String weekType = "";
+              String dateBegin = "";
+              String dateEnd = "";
+              String number = "";
+              try {
+                weekType = weekday["WeekType"];
+              } catch (e) {}
+              try {
+                dateBegin = weekday["DateBegin"];
+              } catch (e) {}
+              try {
+                dateEnd = weekday["DateEnd"];
+              } catch (e) {}
+              try {
+                number = weekday["Number"].toString();
+              } catch (e) {}
+
+              scheduleWeeks.add(
+                ScheduleWeeksModel(
+                  weekType: weekType,
+                  dateBegin: dateBegin,
+                  dateEnd: dateEnd,
+                  number: number,
+                ),
+              );
+            }
+
+            int id = 0;
+            int type = 0;
+            int current = 0;
+            try {
+              current = jsonObject["currentWeekIndex"];
+            } catch (e) {}
+            try {
+              type = jsonObject["Model"]["Type"];
+            } catch (e) {}
+            try {
+              id = jsonObject["Model"]["Id"];
+            } catch (e) {}
+            return ScheduleWeeksResponse(true, "",
+                id: id, type: type, currentWeek: current, weeks: scheduleWeeks);
+          } else {
+            return ScheduleWeeksResponse(false, "weeks array is empty");
+          }
+        } else {
+          return ScheduleWeeksResponse(false, "specialities is empty");
+        }
+      } else {
+        return ScheduleWeeksResponse(
+            false, "Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return ScheduleWeeksResponse(false, e.toString());
+    }
+  }
+
+  Future<ScheduleWeeksResponse> getScheduleWeeksFromUrl(String url) async {
+    try {
+      http.Response response = await client.post(url);
       if (response.statusCode == 200) {
         String responseString = response.body;
         int start = responseString.indexOf("var viewModel = ") + 16;
@@ -993,8 +1110,7 @@ class eCampus {
           return MyTeachersResponse(false, "specialities is empty");
         }
       } else {
-        return MyTeachersResponse(
-            false, "Status code ${response.statusCode}");
+        return MyTeachersResponse(false, "Status code ${response.statusCode}");
       }
     } catch (e) {
       return MyTeachersResponse(false, e.toString());

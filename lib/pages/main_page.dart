@@ -11,6 +11,7 @@ import 'package:ecampus_ncfu/pages/contents/content_subjects.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
+import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
@@ -144,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     value.setString("ecampus", "undefined"),
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                         builder: (context) => LoginPage(
                           context: context,
                         ),
@@ -160,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
+                CupertinoPageRoute(
                   builder: (context) => NotificationsPage(
                     context: context,
                   ),
@@ -195,7 +196,14 @@ class _MyHomePageState extends State<MyHomePage> {
           CupertinoButton(
             child: const Icon(EcampusIcons.icons8_search),
             onPressed: () {
-              //do somemthig
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => SearchSchedule(
+                    context: context,
+                  ),
+                ),
+              );
             },
           )
         ],

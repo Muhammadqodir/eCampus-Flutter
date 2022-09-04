@@ -1,6 +1,7 @@
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/models/search_schedule_model.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,8 @@ class RatingResponse extends Response {
     this.items = const [],
   ]) : super(isSuccess, error);
 
-  factory RatingResponse.fromJson(Map<String, dynamic> json) => _$RatingResponseFromJson(json);
+  factory RatingResponse.fromJson(Map<String, dynamic> json) =>
+      _$RatingResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$RatingResponseToJson(this);
 }
@@ -56,7 +58,8 @@ class NotificationsResponse extends Response {
   NotificationsResponse(bool isSuccess, String error, {this.unread, this.read})
       : super(isSuccess, error);
 
-  factory NotificationsResponse.fromJson(Map<String, dynamic> json) => _$NotificationsResponseFromJson(json);
+  factory NotificationsResponse.fromJson(Map<String, dynamic> json) =>
+      _$NotificationsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$NotificationsResponseToJson(this);
 }
@@ -77,7 +80,8 @@ class AcademicYearsResponse extends Response {
       this.currentSubjects})
       : super(isSuccess, error);
 
-  factory AcademicYearsResponse.fromJson(Map<String, dynamic> json) => _$AcademicYearsResponseFromJson(json);
+  factory AcademicYearsResponse.fromJson(Map<String, dynamic> json) =>
+      _$AcademicYearsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$AcademicYearsResponseToJson(this);
 
@@ -109,7 +113,8 @@ class SubjectsResponse extends Response {
   List sciFiles = [];
   List<SubjectModel> models = [];
 
-  factory SubjectsResponse.fromJson(Map<String, dynamic> json) => _$SubjectsResponseFromJson(json);
+  factory SubjectsResponse.fromJson(Map<String, dynamic> json) =>
+      _$SubjectsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$SubjectsResponseToJson(this);
   SubjectsResponse(
@@ -127,13 +132,13 @@ class SubjectsResponse extends Response {
 class LessonItemsResponse extends Response {
   List<LessonItemModel> models = [];
 
-  LessonItemsResponse(bool isSuccess, String error, {this.models = const []}) : super(isSuccess, error);
+  LessonItemsResponse(bool isSuccess, String error, {this.models = const []})
+      : super(isSuccess, error);
 
-
-  factory LessonItemsResponse.fromJson(Map<String, dynamic> json) => _$LessonItemsResponseFromJson(json);
+  factory LessonItemsResponse.fromJson(Map<String, dynamic> json) =>
+      _$LessonItemsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$LessonItemsResponseToJson(this);
-
 }
 
 @JsonSerializable()
@@ -150,9 +155,17 @@ class ScheduleWeeksResponse extends Response {
     this.weeks = const [],
   }) : super(isSuccess, error);
 
-  factory ScheduleWeeksResponse.fromJson(Map<String, dynamic> json) => _$ScheduleWeeksResponseFromJson(json);
+  factory ScheduleWeeksResponse.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleWeeksResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScheduleWeeksResponseToJson(this);
+}
+
+class SearchScheduleResponse extends Response {
+  List<SearchScheduleResult> models;
+
+  SearchScheduleResponse(bool isSuccess, String error, {this.models = const []})
+      : super(isSuccess, error);
 }
 
 @JsonSerializable()
@@ -162,8 +175,9 @@ class ScheduleResponse extends Response {
   ScheduleResponse(bool isSuccess, String error,
       {this.scheduleModels = const []})
       : super(isSuccess, error);
-  
-  factory ScheduleResponse.fromJson(Map<String, dynamic> json) => _$ScheduleResponseFromJson(json);
+
+  factory ScheduleResponse.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScheduleResponseToJson(this);
 }
@@ -172,11 +186,11 @@ class ScheduleResponse extends Response {
 class MyTeachersResponse extends Response {
   List<TeacherModel> teachers = [];
 
-  MyTeachersResponse(bool isSuccess, String error,
-      {this.teachers = const []})
+  MyTeachersResponse(bool isSuccess, String error, {this.teachers = const []})
       : super(isSuccess, error);
-  
-  factory MyTeachersResponse.fromJson(Map<String, dynamic> json) => _$MyTeachersResponseFromJson(json);
+
+  factory MyTeachersResponse.fromJson(Map<String, dynamic> json) =>
+      _$MyTeachersResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$MyTeachersResponseToJson(this);
 }
