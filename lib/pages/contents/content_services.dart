@@ -62,7 +62,7 @@ class _ContentServicesState extends State<ContentServices> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  CupertinoPageRoute(
                     builder: (context) => RatingPage(
                       context: context,
                     ),
@@ -80,7 +80,7 @@ class _ContentServicesState extends State<ContentServices> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  CupertinoPageRoute(
                     builder: (context) => MyTeachersPage(
                       context: context,
                     ),
@@ -108,7 +108,7 @@ class _ContentServicesState extends State<ContentServices> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  CupertinoPageRoute(
                     builder: (context) => MapPage(
                       context: context,
                     ),

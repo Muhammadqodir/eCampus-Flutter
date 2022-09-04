@@ -342,31 +342,26 @@ class _ContentScheduleState extends State<ContentSchedule> {
                                               ),
                                             )
                                             .toList())
-                                : Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(20),
-                                          child: Image(
-                                            image: freeIllustrations[0],
-                                          ),
+                                : ListView(
+                                    shrinkWrap: true,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Image(
+                                          image: freeIllustrations[0],
                                         ),
-                                        Text(
-                                          "Для данного дня рассписание не\nпредоставлено",
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .primaryColor),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                      Text(
+                                        "Для данного дня рассписание не\nпредоставлено",
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                      ),
+                                    ],
                                   ),
                           )
                           .toList()),
