@@ -80,11 +80,11 @@ class ScheduleLessonsModel {
   Map<String, dynamic> toJson() => _$ScheduleLessonsModelToJson(this);
 
   String getTimeStart() {
-    return "${timeStart.hour}:${timeStart.minute}";
+    return "${timeStart.hour}:${timeStart.minute == 0 ? "00" : timeStart.minute}";
   }
 
   String getTimeEnd() {
-    return "${timeEnd.hour}:${timeEnd.minute}";
+    return "${timeEnd.hour}:${timeEnd.minute == 0 ? "00" : timeEnd.minute}";
   }
 
   Widget getView(BuildContext context) {
