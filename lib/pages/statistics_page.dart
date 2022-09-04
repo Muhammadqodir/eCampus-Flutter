@@ -518,6 +518,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 ),
                                 Text(
                                   loadingText,
+                                  textAlign: TextAlign.center,
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   style: Theme.of(context).textTheme.bodyMedium,

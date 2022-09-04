@@ -12,6 +12,7 @@ import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
+import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
@@ -215,7 +216,16 @@ class _MyHomePageState extends State<MyHomePage> {
         "Предметы",
         CupertinoButton(
           child: const Icon(EcampusIcons.icons8_doughnut_chart),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => StatisticsPage(
+                  context: context,
+                ),
+              ),
+            );
+          },
         ),
         [
           CupertinoButton(
