@@ -48,8 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void updateSubjects() {}
-
   bool bottomNavShadow = true;
 
   Container buildCustomBottomNavigaton(

@@ -71,6 +71,7 @@ class _ContentMainState extends State<ContentMain> {
                     ecampus.getCaptcha().then((captchaImage) {
                       showCapchaDialog(context, captchaImage, ecampus, update);
                     });
+                    getCacheData();
                   } else {
                     showOfflineDialog(context);
                   }
