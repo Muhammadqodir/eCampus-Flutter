@@ -110,15 +110,6 @@ class _ContentServicesState extends State<ContentServices> {
               ),
             ),
             CrossListElement(
-              onPressed: () {},
-              child: ServiceItem(
-                icon: EcampusIcons.icons8_wi_fi,
-                backgroundColor: CustomColors.colorPalette[1],
-                title: "Wi-Fi",
-                subTitle: "Сброс пароля от университетского Wi-Fi.",
-              ),
-            ),
-            CrossListElement(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -134,6 +125,17 @@ class _ContentServicesState extends State<ContentServices> {
                 backgroundColor: CustomColors.colorPalette[3],
                 title: "Карта корпусов",
                 subTitle: "Геолокация корпусов, общежитий, мед. пункта и т.д",
+              ),
+            ),
+            CrossListElement(
+              onPressed: () {},
+              enabled: false,
+              child: ServiceItem(
+                commingSoon: true,
+                icon: EcampusIcons.icons8_wi_fi,
+                backgroundColor: CustomColors.colorPalette[1],
+                title: "Wi-Fi",
+                subTitle: "Сброс пароля от университетского Wi-Fi.",
               ),
             ),
             CrossListElement(
