@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
@@ -40,36 +41,28 @@ class _RatingPageState extends State<RatingPage> {
         });
   }
 
-  void update() {
-    isOnline().then(
-      (isOnline) => {
-        if (isOnline)
-          {
-            setState(() {
-              models = null;
-            }),
-            ecampus!.getRating().then((response) {
-              if (response.isSuccess) {
-                setState(() {
-                  models = response.items;
-                });
-              } else {
-                if (response.error == "Status code 302") {
-                  ecampus?.getCaptcha().then((captchaImage) {
-                    showCapchaDialog(context, captchaImage, ecampus!, update);
-                  });
-                } else {
-                  log(response.error);
-                }
-              }
-            }),
-          }
-        else
-          {
-            showOfflineDialog(context),
-          }
-      },
-    );
+  void update() async {
+    if (await isOnline()) {
+      if (await ecampus!.isActualToken()) {
+        setState(() {
+          models = null;
+        });
+        RatingResponse response = await ecampus!.getRating();
+        if (response.isSuccess) {
+          setState(() {
+            models = response.items;
+          });
+        } else {
+          showAlertDialog(context, "Ошибка", response.error);
+        }
+      } else {
+        showCapchaDialog(context, await ecampus!.getCaptcha(), ecampus!, () {
+          update();
+        });
+      }
+    } else {
+      showOfflineDialog(context);
+    }
   }
 
   @override
@@ -112,8 +105,7 @@ class _RatingPageState extends State<RatingPage> {
             },
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()
-              ),
+                  parent: AlwaysScrollableScrollPhysics()),
               slivers: [
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
