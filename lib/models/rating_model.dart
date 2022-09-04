@@ -41,7 +41,7 @@ class RatingModel {
                 decoration: BoxDecoration(
                   color: isCurrent
                       ? Theme.of(context).primaryColor
-                      : Theme.of(context).dividerColor,
+                      : Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.6),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Text(
@@ -59,7 +59,9 @@ class RatingModel {
                   children: [
                     Text(
                       fullName,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(
                       height: 5,
