@@ -1,6 +1,7 @@
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/inc/service_item.dart';
+import 'package:ecampus_ncfu/pages/map_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/rating_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
@@ -104,7 +105,16 @@ class _ContentServicesState extends State<ContentServices> {
               ),
             ),
             CrossListElement(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MapPage(
+                      context: context,
+                    ),
+                  ),
+                );
+              },
               child: ServiceItem(
                 icon: EcampusIcons.icons8_map,
                 backgroundColor: CustomColors.colorPalette[3],

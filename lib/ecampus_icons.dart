@@ -58,6 +58,11 @@ class EcampusIcons {
   static const IconData icons8_forward = IconData(0xe822, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_up = IconData(0xe823, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData record_book = IconData(0xe824, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_hostel = IconData(0xe825, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData icons8_wi_fi = IconData(0xe826, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData ncfu_new = IconData(0xe827, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_gym = IconData(0xe828, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_hospital = IconData(0xe829, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_medical_doctor = IconData(0xe82a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icons8_book_shelf = IconData(0xe82b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
