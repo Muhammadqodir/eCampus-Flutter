@@ -292,29 +292,32 @@ class _ContentScheduleState extends State<ContentSchedule> {
               Expanded(
                 child: NotificationListener<ScrollUpdateNotification>(
                   onNotification: (overscroll) {
-                    if (overscroll.metrics.pixels < dWidth - (dWidth * 1.2)) {
-                      log("left");
-                      if (selectedWeekId > 0) {
-                        setState(() {
-                          selectedWeekId -= 1;
-                          selectedWeek =
-                              "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                          getSchedule(weeks[selectedWeekId].dateBegin);
-                        });
+                    double scWidth = MediaQuery.of(context).size.width;
+                    if (overscroll.metrics.viewportDimension == scWidth) {
+                      double minScroll = dWidth - (dWidth * 1.2);
+                      if (overscroll.metrics.pixels < minScroll) {
+                        log("left");
+                        if (selectedWeekId > 0) {
+                          setState(() {
+                            selectedWeekId -= 1;
+                            selectedWeek =
+                                "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                            getSchedule(weeks[selectedWeekId].dateBegin);
+                          });
+                        }
+                      }
+                      if (overscroll.metrics.pixels > dWidth * 6.2) {
+                        log("right");
+                        if (selectedIndex < weeks.length) {
+                          setState(() {
+                            selectedWeekId += 1;
+                            selectedWeek =
+                                "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                            getSchedule(weeks[selectedWeekId].dateBegin);
+                          });
+                        }
                       }
                     }
-                    if (overscroll.metrics.pixels > dWidth * 6.2) {
-                      log("right");
-                      if (selectedIndex < weeks.length) {
-                        setState(() {
-                          selectedWeekId += 1;
-                          selectedWeek =
-                              "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                          getSchedule(weeks[selectedWeekId].dateBegin);
-                        });
-                      }
-                    }
-
                     return false;
                   },
                   child: PageView(

@@ -888,6 +888,82 @@ class eCampus {
     }
   }
 
+  Future<ScheduleWeeksResponse> getScheduleWeeksFromUrl(String url) async {
+    try {
+      http.Response response =
+          await client.post(url);
+      if (response.statusCode == 200) {
+        String responseString = response.body;
+        int start = responseString.indexOf("var viewModel = ") + 16;
+        String json = responseString.substring(start);
+        start = json.indexOf("</script>") - 3;
+        json = json.substring(0, start);
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        Map<String, dynamic> jsonObject = jsonDecode(json);
+        if (jsonObject.containsKey("weeks")) {
+          int size = jsonObject["weeks"].length;
+          if (size > 0) {
+            List<ScheduleWeeksModel> scheduleWeeks = [];
+            for (var i = 0; i < size; i++) {
+              Map<String, dynamic> weekday = jsonObject["weeks"][i];
+              String weekType = "";
+              String dateBegin = "";
+              String dateEnd = "";
+              String number = "";
+              try {
+                weekType = weekday["WeekType"];
+              } catch (e) {}
+              try {
+                dateBegin = weekday["DateBegin"];
+              } catch (e) {}
+              try {
+                dateEnd = weekday["DateEnd"];
+              } catch (e) {}
+              try {
+                number = weekday["Number"].toString();
+              } catch (e) {}
+
+              scheduleWeeks.add(
+                ScheduleWeeksModel(
+                  weekType: weekType,
+                  dateBegin: dateBegin,
+                  dateEnd: dateEnd,
+                  number: number,
+                ),
+              );
+            }
+
+            int id = 0;
+            int type = 0;
+            int current = 0;
+            try {
+              current = jsonObject["currentWeekIndex"];
+            } catch (e) {}
+            try {
+              type = jsonObject["Model"]["Type"];
+            } catch (e) {}
+            try {
+              id = jsonObject["Model"]["Id"];
+            } catch (e) {}
+            return ScheduleWeeksResponse(true, "",
+                id: id, type: type, currentWeek: current, weeks: scheduleWeeks);
+          } else {
+            return ScheduleWeeksResponse(false, "weeks array is empty");
+          }
+        } else {
+          return ScheduleWeeksResponse(false, "specialities is empty");
+        }
+      } else {
+        return ScheduleWeeksResponse(
+            false, "Status code ${response.statusCode}");
+      }
+    } catch (e) {
+      return ScheduleWeeksResponse(false, e.toString());
+    }
+  }
+
+
   Future<MyTeachersResponse> getMyTeachers() async {
     try {
       http.Response response =

@@ -317,12 +317,6 @@ class _MapPageState extends State<MapPage> {
           }),
           child: const Icon(EcampusIcons.icons8_back),
         ),
-        actions: [
-          CupertinoButton(
-            onPressed: () {},
-            child: const Icon(EcampusIcons.icons8_restart),
-          )
-        ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: elevation,
         title: Text(
