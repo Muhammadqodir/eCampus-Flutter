@@ -48,6 +48,9 @@ class _ContentServicesState extends State<ContentServices> {
           return true;
         },
         child: ListView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           children: [
             CrossListElement(
               onPressed: () {},

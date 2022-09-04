@@ -340,6 +340,9 @@ class _MapPageState extends State<MapPage> {
             return true;
           },
           child: ListView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             children: models
                 .map(
                   (e) => CrossListElement(

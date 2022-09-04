@@ -179,6 +179,9 @@ class ContentSubjectsState extends State<ContentSubjects> {
               return true;
             },
             child: ListView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),

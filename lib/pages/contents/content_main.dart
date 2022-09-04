@@ -151,6 +151,9 @@ class _ContentMainState extends State<ContentMain> {
           return true;
         },
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           slivers: [
             CupertinoSliverRefreshControl(
               onRefresh: () async {
