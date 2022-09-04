@@ -1,7 +1,7 @@
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-class CustomColors{
+class CustomColors {
   static Color success = HexColor.fromHex("#27AE60");
   static Color warning = HexColor.fromHex("#E4B90E");
   static Color error = HexColor.fromHex("#E74C3C");
@@ -10,6 +10,8 @@ class CustomColors{
   static Color good = HexColor.fromHex("#AEDE1B");
   static Color satisfactorily = HexColor.fromHex("#F67A25");
   static Color unsatisfactorily = HexColor.fromHex("#E51A22");
+
+  static List<Color> grades = [perfect, good, satisfactorily, unsatisfactorily];
 
   static List<Color> colorPalette = [
     HexColor.fromHex("#009AD1"),
