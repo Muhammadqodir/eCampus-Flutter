@@ -128,234 +128,236 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: loading
-            ? Column(
-                children: [
-                  CrossActivityIndicator(
-                    radius: 12,
-                    color: Theme.of(context).dividerColor,
-                  ),
-                  Text(
-                    "Загрузка...",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  )
-                ],
-              )
-            : !notFound
-                ? ListView(
+      child: loading
+          ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CrossActivityIndicator(
+                  radius: 12,
+                  color: Theme.of(context).dividerColor,
+                ),
+                Text(
+                  "Загрузка...",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )
+              ],
+            )
+          : !notFound
+              ? ListView(
                   physics: ClampingScrollPhysics(),
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(12),
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.network(
-                                  picUrl,
-                                  width: 150,
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        widget.teacherName,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        contactInfo,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              info,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "Способность донести материал:",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ),
-                                Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                picUrl,
+                                width: 150,
+                              ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Expanded(
+                                child: Column(
                                   children: [
-                                    RatingBar.builder(
-                                      initialRating: 0,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      glow: false,
-                                      itemCount: 5,
-                                      itemSize: 28,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        size: 12,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    ),
                                     Text(
-                                      getTeachSkills() > 0
-                                          ? "${getTeachSkills().toStringAsFixed(2)} из 5"
-                                          : "Без рейтинга",
+                                      widget.teacherName,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodySmall!
+                                          .bodyMedium!
                                           .copyWith(
                                               fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "Сложность сдачи экзамена:",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    RatingBar.builder(
-                                      initialRating: 0,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      glow: false,
-                                      itemCount: 5,
-                                      itemSize: 28,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        size: 12,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
                                     ),
                                     Text(
-                                      getExamRating() > 0
-                                          ? "${getExamRating().toStringAsFixed(2)} из 5"
-                                          : "Без рейтинга",
+                                      contactInfo,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
+                                          .bodyMedium,
                                     )
                                   ],
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "Чувство юмора:",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
                                 ),
-                                Column(
-                                  children: [
-                                    RatingBar.builder(
-                                      initialRating: 0,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      glow: false,
-                                      itemCount: 5,
-                                      itemSize: 28,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        size: 12,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            info,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Способность донести материал:",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  RatingBar.builder(
+                                    initialRating: 0,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    glow: false,
+                                    itemCount: 5,
+                                    itemSize: 28,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      size: 12,
+                                      color: Theme.of(context).primaryColor,
                                     ),
-                                    Text(
-                                      getHumorRating() > 0
-                                          ? "${getHumorRating().toStringAsFixed(2)} из 5"
-                                          : "Без рейтинга",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            CrossButton(
-                              wight: double.infinity,
-                              onPressed: () async {
-                                String url = employeePageUrl;
-                                if (await canLaunchUrlString(url)) {
-                                  await launchUrlString(url);
-                                } else {
-                                  throw "Could not launch $url";
-                                }
-                              },
-                              backgroundColor: Theme.of(context).primaryColor,
-                              child: Text("Подробнее"),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                : Text("Not found"));
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                  Text(
+                                    getTeachSkills() > 0
+                                        ? "${getTeachSkills().toStringAsFixed(2)} из 5"
+                                        : "Без рейтинга",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Сложность сдачи экзамена:",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  RatingBar.builder(
+                                    initialRating: 0,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    glow: false,
+                                    itemCount: 5,
+                                    itemSize: 28,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      size: 12,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                  Text(
+                                    getExamRating() > 0
+                                        ? "${getExamRating().toStringAsFixed(2)} из 5"
+                                        : "Без рейтинга",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Чувство юмора:",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  RatingBar.builder(
+                                    initialRating: 0,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    glow: false,
+                                    itemCount: 5,
+                                    itemSize: 28,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      size: 12,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                  Text(
+                                    getHumorRating() > 0
+                                        ? "${getHumorRating().toStringAsFixed(2)} из 5"
+                                        : "Без рейтинга",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          CrossButton(
+                            wight: double.infinity,
+                            onPressed: () async {
+                              String url = employeePageUrl;
+                              if (await canLaunchUrlString(url)) {
+                                await launchUrlString(url);
+                              } else {
+                                throw "Could not launch $url";
+                              }
+                            },
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Text("Подробнее"),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                )
+              : Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Image.asset("images/not_found.png"),
+                  ),
+                ),
+    );
   }
 }

@@ -7,6 +7,7 @@ import 'package:ecampus_ncfu/pages/rating_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ContentServices extends StatefulWidget {
   const ContentServices(
@@ -80,7 +81,7 @@ class _ContentServicesState extends State<ContentServices> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  CupertinoPageRoute(
+                  MaterialWithModalsPageRoute(
                     builder: (context) => MyTeachersPage(
                       context: context,
                     ),

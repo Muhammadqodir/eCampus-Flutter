@@ -31,7 +31,7 @@ class SearchSchedule extends StatefulWidget {
 
 class _SearchScheduleState extends State<SearchSchedule> {
   eCampus? ecampus;
-  List<SearchScheduleResult> models = [];
+  List<SearchScheduleResult>? models;
   @override
   void initState() {
     super.initState();
@@ -60,7 +60,7 @@ class _SearchScheduleState extends State<SearchSchedule> {
             placeholder: "Поиск",
             style: Theme.of(context).textTheme.bodyMedium,
             onChanged: (value) {
-              if (value.length >= 3) {
+              if (value.length >= 2) {
                 ecampus!.searchSchedule(value).then((response) {
                   if (response.isSuccess) {
                     setState(() {
@@ -72,7 +72,7 @@ class _SearchScheduleState extends State<SearchSchedule> {
                 });
               } else {
                 setState(() {
-                  models = [];
+                  models = null;
                 });
               }
             },
@@ -80,29 +80,43 @@ class _SearchScheduleState extends State<SearchSchedule> {
         ),
       ),
       body: Center(
-        child: models.isNotEmpty
-            ? ListView(
-                children: models
-                    .map(
-                      (e) => CrossListElement(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => SchedulePage(
-                                context: context,
-                                url: e.url,
-                                title: e.title,
-                              ),
-                            ),
-                          );
-                        },
-                        child: e.getView(context),
-                      ),
-                    )
-                    .toList())
+        child: models != null
+            ? models!.isNotEmpty
+                ? ListView(
+                    children: models!
+                        .map(
+                          (e) => CrossListElement(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => SchedulePage(
+                                    context: context,
+                                    url: e.url,
+                                    title: e.title,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: e.getView(context),
+                          ),
+                        )
+                        .toList())
+                : Center(
+                    child: Image.asset("images/not_found.png"),
+                  )
             : Center(
-                child: Image.asset("images/not_found.png"),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    "Для поиска расписания введите фамилию преподавателя, название группы или номер аудитории, например Петров, ИС-011, 9-317.",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Theme.of(context).primaryColor),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
       ),
     );
