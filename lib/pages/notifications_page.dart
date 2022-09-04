@@ -88,7 +88,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
         elevation: elevation,
         title: Text(
           "Уведомления",
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: Center(

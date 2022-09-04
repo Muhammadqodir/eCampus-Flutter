@@ -265,7 +265,10 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: elevation,
         title: Text(
           bottomNavItems[pageIndex].title,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: content,

@@ -85,7 +85,10 @@ class _RatingPageState extends State<RatingPage> {
         elevation: elevation,
         title: Text(
           "Рейтинг",
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: Center(

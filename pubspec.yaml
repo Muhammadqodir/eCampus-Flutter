@@ -47,8 +47,8 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   url_launcher: ^6.1.5
   map_launcher: ^2.3.0+1
-  flutter_svg: ^1.1.4
   flutter_native_splash: ^2.2.8
+  fl_chart: ^0.55.1
 
 dev_dependencies:
   build_runner: ^2.2.0

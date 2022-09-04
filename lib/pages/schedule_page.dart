@@ -15,7 +15,6 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -185,10 +184,10 @@ class _SchedulePageState extends State<SchedulePage> {
               CupertinoButton(
                 child: Text(
                   "Выбрать",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Theme.of(context).primaryColor),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 onPressed: () {
                   setState(() {
@@ -227,7 +226,10 @@ class _SchedulePageState extends State<SchedulePage> {
         elevation: 0,
         title: Text(
           widget.title,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: loading

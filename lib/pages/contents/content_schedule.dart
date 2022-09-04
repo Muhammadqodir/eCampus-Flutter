@@ -233,10 +233,10 @@ class _ContentScheduleState extends State<ContentSchedule> {
               CupertinoButton(
                 child: Text(
                   "Выбрать",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Theme.of(context).primaryColor),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 onPressed: () {
                   setState(() {

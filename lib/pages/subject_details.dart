@@ -87,7 +87,10 @@ class _SubjectDetailsPageState extends State<SubjectDetailsPage> {
             title: Text(
               widget.subName,
               overflow: TextOverflow.fade,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             bottom: TabBar(

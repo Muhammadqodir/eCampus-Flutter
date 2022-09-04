@@ -94,66 +94,74 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
         elevation: elevation,
         title: Text(
           "Мои преподаватели",
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: Center(
         child: NotificationListener<ScrollUpdateNotification>(
-            onNotification: (notification) {
-              if (notification.metrics.pixels > 0 && elevation == 0) {
-                setState(() {
-                  elevation = 0.5;
-                });
-              }
-              if (notification.metrics.pixels <= 0 && elevation != 0) {
-                setState(() {
-                  elevation = 0;
-                });
-              }
-              return true;
-            },
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
+          onNotification: (notification) {
+            if (notification.metrics.pixels > 0 && elevation == 0) {
+              setState(() {
+                elevation = 0.5;
+              });
+            }
+            if (notification.metrics.pixels <= 0 && elevation != 0) {
+              setState(() {
+                elevation = 0;
+              });
+            }
+            return true;
+          },
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
+            slivers: [
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  update();
+                },
               ),
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () async {
-                    update();
-                  },
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Column(
+                      children: <Widget>[
+                        models != null
+                            ? Column(
+                                children: models!
+                                    .map(
+                                      (element) => CrossListElement(
+                                        onPressed: () {},
+                                        child: element.getView(
+                                            context, ecampus!, widget.database),
+                                      ),
+                                    )
+                                    .toList(),
+                              )
+                            : Column(
+                                children: [
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                  getNotificationSkeleton(context),
+                                ],
+                              )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    )
+                  ],
                 ),
-                SliverList(
-                    delegate: SliverChildListDelegate([
-                  Column(
-                    children: <Widget>[
-                      models != null
-                          ? Column(
-                              children: models!
-                                  .map(
-                                    (element) => CrossListElement(
-                                      onPressed: () {},
-                                      child: element.getView(context, ecampus!, widget.database),
-                                    ),
-                                  )
-                                  .toList(),
-                            )
-                          : Column(
-                              children: [
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                                getNotificationSkeleton(context),
-                              ],
-                            )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  )
-                ]))
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
