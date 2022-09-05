@@ -4,10 +4,13 @@ import 'dart:typed_data';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
+import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
@@ -48,10 +51,10 @@ class _ContentMainState extends State<ContentMain> {
     });
   }
 
-  void update({bool showCaptchaDialog = false}) {
+  void update({bool showCaptchaDialog = false, bool useCache = true}) {
     CacheSystem.isActualCache().then(
       (value) {
-        if (value) {
+        if (value && useCache) {
           getCacheData();
         } else {
           setState(() {
@@ -89,13 +92,28 @@ class _ContentMainState extends State<ContentMain> {
     );
   }
 
-  void getCacheData() {
-    CacheSystem.getStudentCache().then((value) {
+  void getCacheData() async {
+    CacheResult? scheduleCache = await CacheSystem.getCurrentSchedule();
+    if (scheduleCache != null) {
+      if (scheduleCache.value != null) {
+        setState(() {
+          schedule = (scheduleCache.value as ScheduleResponse).scheduleModels;
+        });
+      } else {
+        log("update");
+        update(useCache: false);
+      }
+    } else {
       setState(() {
-        userName = value.userName;
-        userPic = value.userPic;
-        ratingModel = value.ratingModel;
+        log("update");
+        update(useCache: false);
       });
+    }
+    StudentCache studentCache = await CacheSystem.getStudentCache();
+    setState(() {
+      userName = studentCache.userName;
+      userPic = studentCache.userPic;
+      ratingModel = studentCache.ratingModel;
     });
   }
 
@@ -119,6 +137,14 @@ class _ContentMainState extends State<ContentMain> {
         },
       );
     });
+    ecampus.getCurrentSchedule().then((scheduleResponse) {
+      if (scheduleResponse.isSuccess) {
+        CacheSystem.saveCurrentScheduleWeek(scheduleResponse);
+        setState(() {
+          schedule = scheduleResponse.scheduleModels;
+        });
+      }
+    });
     ecampus.getRating().then((ratingResponse) {
       if (ratingResponse.isSuccess) {
         CacheSystem.saveRating(getMyRating(ratingResponse.items));
@@ -129,6 +155,17 @@ class _ContentMainState extends State<ContentMain> {
         print(ratingResponse.error);
       }
     });
+  }
+
+  List<ScheduleModel> schedule = [];
+
+  List<ScheduleLessonsModel> getLessonModels() {
+    for (ScheduleModel model in schedule) {
+      if (model.date.weekday == DateTime.now().weekday) {
+        return model.lessons;
+      }
+    }
+    return [];
   }
 
   @override
@@ -231,10 +268,10 @@ class _ContentMainState extends State<ContentMain> {
                             Radius.circular(12),
                           ),
                         ),
+                        padding: EdgeInsets.symmetric(vertical: 12),
                         width: double.infinity,
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Column(children: [
+                        child: Column(
+                          children: [
                             Text(
                               "Расписание",
                               style: Theme.of(context)
@@ -245,7 +282,12 @@ class _ContentMainState extends State<ContentMain> {
                             const SizedBox(
                               height: 12,
                             ),
-                          ]),
+                            Column(
+                              children: getLessonModels()
+                                  .map((e) => e.getView(context))
+                                  .toList(),
+                            )
+                          ],
                         ),
                       ),
                     )

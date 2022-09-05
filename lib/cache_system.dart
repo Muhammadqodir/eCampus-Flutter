@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:ecampus_ncfu/utils/config.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
@@ -129,6 +130,14 @@ class CacheSystem {
         '${prefix}ScheduleResponse_time', getCurrentDateTime());
   }
 
+  static void saveCurrentScheduleWeek(ScheduleResponse response) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        '${prefix}CurrentSchedule', jsonEncode(response.toJson()));
+    await prefs.setString(
+        '${prefix}CurrentSchedule_time', getCurrentDateTime());
+  }
+
   static void saveMyTeachers(MyTeachersResponse response) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
@@ -179,6 +188,20 @@ class CacheSystem {
         "2001-08-06 10:45:00";
     String dataStr =
         prefs.getString('${prefix}ScheduleResponse') ?? "empty";
+    if (dataStr != "empty") {
+      Map<String, dynamic> data = jsonDecode(dataStr);
+      return CacheResult(date, ScheduleResponse.fromJson(data));
+    } else {
+      return null;
+    }
+  }
+
+  static Future<CacheResult?> getCurrentSchedule() async {
+    final prefs = await SharedPreferences.getInstance();
+    String date = prefs.getString('${prefix}CurrentSchedule_time') ??
+        "2001-08-06 10:45:00";
+    String dataStr =
+        prefs.getString('${prefix}CurrentSchedule') ?? "empty";
     if (dataStr != "empty") {
       Map<String, dynamic> data = jsonDecode(dataStr);
       return CacheResult(date, ScheduleResponse.fromJson(data));

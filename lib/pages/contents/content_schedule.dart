@@ -158,8 +158,6 @@ class _ContentScheduleState extends State<ContentSchedule> {
                     setState(() {
                       selectedIndex = DateTime.now().weekday - 1;
                     });
-                  } else {
-                    selectedIndex = 0;
                   }
                   _pageController = PageController(initialPage: selectedIndex);
                   scheduleModels = value.scheduleModels;
@@ -221,14 +219,17 @@ class _ContentScheduleState extends State<ContentSchedule> {
                           "${weeks[selectedItem].number} неделя - c ${weeks[selectedItem].getStrDateBegin()} по ${weeks[selectedItem].getStrDateEnd()}";
                     });
                   },
-                  children: List<Widget>.generate(weeks.length, (int index) {
-                    return Center(
-                      child: Text(
-                        "${weeks[index].number} неделя - c ${weeks[index].getStrDateBegin()} по ${weeks[index].getStrDateEnd()}",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    );
-                  }),
+                  children: List<Widget>.generate(
+                    weeks.length,
+                    (int index) {
+                      return Center(
+                        child: Text(
+                          "${weeks[index].number} неделя - c ${weeks[index].getStrDateBegin()} по ${weeks[index].getStrDateEnd()}",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               CupertinoButton(
@@ -300,10 +301,11 @@ class _ContentScheduleState extends State<ContentSchedule> {
                         log("left");
                         if (selectedWeekId > 0) {
                           setState(() {
+                            getSchedule(weeks[selectedWeekId - 1].dateBegin);
                             selectedWeekId -= 1;
+                            selectedIndex = 6;
                             selectedWeek =
                                 "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                            getSchedule(weeks[selectedWeekId].dateBegin);
                           });
                         }
                       }
@@ -311,10 +313,11 @@ class _ContentScheduleState extends State<ContentSchedule> {
                         log("right");
                         if (selectedIndex < weeks.length) {
                           setState(() {
+                            getSchedule(weeks[selectedWeekId + 1].dateBegin);
                             selectedWeekId += 1;
+                            selectedIndex = 0;
                             selectedWeek =
                                 "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                            getSchedule(weeks[selectedWeekId].dateBegin);
                           });
                         }
                       }
