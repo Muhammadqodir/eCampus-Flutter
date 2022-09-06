@@ -88,11 +88,7 @@ class _SchedulePageState extends State<SchedulePage> {
           if (value.isSuccess) {
             setState(() {
               if (date == currentWeekDate) {
-                setState(() {
-                  selectedIndex = DateTime.now().weekday - 1;
-                });
-              } else {
-                selectedIndex = 0;
+                selectedIndex = DateTime.now().weekday - 1;
               }
               _pageController = PageController(initialPage: selectedIndex);
               scheduleModels = value.scheduleModels;
@@ -210,7 +206,7 @@ class _SchedulePageState extends State<SchedulePage> {
     const AssetImage("images/free_3.png"),
     const AssetImage("images/free_4.png"),
   ];
-
+  DateTime lastPageChange = DateTime.now();
   @override
   Widget build(BuildContext context) {
     double dWidth = MediaQuery.of(context).size.width;
@@ -265,25 +261,35 @@ class _SchedulePageState extends State<SchedulePage> {
                         double scWidth = MediaQuery.of(context).size.width;
                         if (overscroll.metrics.viewportDimension == scWidth) {
                           double minScroll = dWidth - (dWidth * 1.2);
-                          if (overscroll.metrics.pixels < minScroll) {
+                          if (overscroll.metrics.pixels < minScroll &&
+                              DateTime.now().isAfter(lastPageChange
+                                  .add(const Duration(seconds: 1)))) {
+                            lastPageChange = DateTime.now();
                             log("left");
                             if (selectedWeekId > 0) {
                               setState(() {
+                                getSchedule(
+                                    weeks[selectedWeekId - 1].dateBegin);
                                 selectedWeekId -= 1;
+                                selectedIndex = 6;
                                 selectedWeek =
                                     "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                                getSchedule(weeks[selectedWeekId].dateBegin);
                               });
                             }
                           }
-                          if (overscroll.metrics.pixels > dWidth * 6.2) {
+                          if (overscroll.metrics.pixels > dWidth * 6.2 &&
+                              DateTime.now().isAfter(lastPageChange
+                                  .add(const Duration(seconds: 1)))) {
+                            lastPageChange = DateTime.now();
                             log("right");
                             if (selectedIndex < weeks.length) {
                               setState(() {
+                                getSchedule(
+                                    weeks[selectedWeekId + 1].dateBegin);
                                 selectedWeekId += 1;
+                                selectedIndex = 0;
                                 selectedWeek =
                                     "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                                getSchedule(weeks[selectedWeekId].dateBegin);
                               });
                             }
                           }

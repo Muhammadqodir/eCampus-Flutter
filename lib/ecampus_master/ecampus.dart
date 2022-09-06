@@ -1147,7 +1147,6 @@ class eCampus {
               lessons: [],
             );
             List<dynamic> lessons = weekday["Lessons"];
-            log(weekday_);
             List<ScheduleLessonsModel> lessoonsModels = [];
             for (int j = 0; j < lessons.length; j++) {
               Map<String, dynamic> lesson = lessons[j];
@@ -1193,7 +1192,6 @@ class eCampus {
               try {
                 lessonType = lesson["LessonType"];
               } catch (e) {}
-              log(subName);
               lessoonsModels.add(
                 ScheduleLessonsModel(
                   current: current,

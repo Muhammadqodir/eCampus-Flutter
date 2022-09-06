@@ -155,9 +155,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
                 setState(() {
                   if (date == currentWeekDate) {
                     CacheSystem.saveScheduleResponse(value);
-                    setState(() {
-                      selectedIndex = DateTime.now().weekday - 1;
-                    });
+                    selectedIndex = DateTime.now().weekday - 1;
                   }
                   _pageController = PageController(initialPage: selectedIndex);
                   scheduleModels = value.scheduleModels;
@@ -262,6 +260,8 @@ class _ContentScheduleState extends State<ContentSchedule> {
     const AssetImage("images/free_4.png"),
   ];
 
+  DateTime lastPageChange = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     double dWidth = MediaQuery.of(context).size.width;
@@ -297,7 +297,10 @@ class _ContentScheduleState extends State<ContentSchedule> {
                     double scWidth = MediaQuery.of(context).size.width;
                     if (overscroll.metrics.viewportDimension == scWidth) {
                       double minScroll = dWidth - (dWidth * 1.2);
-                      if (overscroll.metrics.pixels < minScroll) {
+                      if (overscroll.metrics.pixels < minScroll &&
+                          DateTime.now().isAfter(
+                              lastPageChange.add(const Duration(seconds: 1)))) {
+                        lastPageChange = DateTime.now();
                         log("left");
                         if (selectedWeekId > 0) {
                           setState(() {
@@ -309,7 +312,10 @@ class _ContentScheduleState extends State<ContentSchedule> {
                           });
                         }
                       }
-                      if (overscroll.metrics.pixels > dWidth * 6.2) {
+                      if (overscroll.metrics.pixels > dWidth * 6.2 &&
+                          DateTime.now().isAfter(
+                              lastPageChange.add(const Duration(seconds: 1)))) {
+                        lastPageChange = DateTime.now();
                         log("right");
                         if (selectedIndex < weeks.length) {
                           setState(() {
