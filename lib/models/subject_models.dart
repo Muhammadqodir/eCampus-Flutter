@@ -475,6 +475,17 @@ class LessonItemModel {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  subject != ""
+                      ? Text(
+                          subject,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      : const SizedBox(),
                   Text(
                     name,
                     style: Theme.of(context).textTheme.bodyMedium,

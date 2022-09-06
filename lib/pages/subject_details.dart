@@ -78,6 +78,7 @@ class _SubjectDetailsPageState extends State<SubjectDetailsPage> {
       length: widget.lessonTypes.length,
       child: Scaffold(
         appBar: AppBar(
+            elevation: 0.5,
             leading: CupertinoButton(
               onPressed: (() {
                 Navigator.pop(context);

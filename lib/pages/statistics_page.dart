@@ -6,6 +6,7 @@ import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
+import 'package:ecampus_ncfu/pages/statistics_details_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
@@ -462,7 +463,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         .copyWith(color: Theme.of(context).primaryColor),
                   ),
                 )
-              : SizedBox()
+              : const SizedBox()
         ],
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: elevation,
@@ -578,7 +579,32 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       title: "Закрытые КТ",
                                       count: fillKT.length,
                                       color: CustomColors.success,
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                StatisticsDetailsPage(
+                                              context: context,
+                                              title: "Контрольные точки",
+                                              tabs: [
+                                                StatisticsDetailsTab(
+                                                  "Открытые КТ",
+                                                  openKT.length,
+                                                  CustomColors.error,
+                                                  openKT,
+                                                ),
+                                                StatisticsDetailsTab(
+                                                  "Закрытые КТ",
+                                                  fillKT.length,
+                                                  CustomColors.warning,
+                                                  fillKT,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -588,7 +614,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   aspectRatio: 1,
                                   child: Padding(
                                     padding: const EdgeInsets.all(12),
-                                    child: fillKT.length > 0
+                                    child: fillKT.isNotEmpty
                                         ? PieChart(
                                             PieChartData(
                                               sectionsSpace: 1,
@@ -644,7 +670,32 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   title: "\"Н\"ки",
                                   count: nki.length,
                                   color: CustomColors.error,
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            StatisticsDetailsPage(
+                                          context: context,
+                                          title: "Посещение",
+                                          tabs: [
+                                            StatisticsDetailsTab(
+                                              "\"Н\"ки",
+                                              nki.length,
+                                              CustomColors.error,
+                                              nki,
+                                            ),
+                                            StatisticsDetailsTab(
+                                              "\"У\"шки",
+                                              ushki.length,
+                                              CustomColors.warning,
+                                              ushki,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
@@ -655,7 +706,32 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   title: "\"У\"шки",
                                   count: ushki.length,
                                   color: CustomColors.warning,
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            StatisticsDetailsPage(
+                                          context: context,
+                                          title: "Посещение",
+                                          tabs: [
+                                            StatisticsDetailsTab(
+                                              "\"Н\"ки",
+                                              nki.length,
+                                              CustomColors.error,
+                                              nki,
+                                            ),
+                                            StatisticsDetailsTab(
+                                              "\"У\"шки",
+                                              ushki.length,
+                                              CustomColors.warning,
+                                              ushki,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ],
