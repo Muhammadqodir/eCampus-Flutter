@@ -44,8 +44,12 @@ class _ContentLessonTypeState extends State<ContentLessonType> {
           )
         : ListView(
             children: widget.models
-                .map((e) => CrossListElement(
-                    onPressed: () {}, child: e.getView(context)))
+                .map(
+                  (e) => CrossListElement(
+                    onPressed: () {},
+                    child: e.getView(context),
+                  ),
+                )
                 .toList(),
           );
   }

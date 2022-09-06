@@ -274,7 +274,7 @@ class ContentSubjectsState extends State<ContentSubjects> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) => SubjectDetailsPage(
                                       context: context,
                                       subName: element.name,

@@ -247,6 +247,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       loading = true;
       dataCollection = false;
+
+      ushki = [];
+      nki = [];
+      fillKT = [];
+      openKT = [];
+
+      exams = [];
+      dif = [];
+      credits = [];
     });
     if (await isOnline()) {
       if (await ecampus!.isActualToken()) {
@@ -294,11 +303,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           lessonItems[l_pos].gradeText == "отлично" ||
                           lessonItems[l_pos].gradeText ==
                               "неудовлетворительно") {
+                        lessonItems[l_pos].subject = subjectStr;
                         fillKT.add(lessonItems[l_pos]);
-                        fillKT[fillKT.length - 1].subject == subjectStr;
                       } else {
+                        lessonItems[l_pos].subject = subjectStr;
                         openKT.add(lessonItems[l_pos]);
-                        openKT[openKT.length - 1].subject = subjectStr;
                       }
                     }
                   }
@@ -570,7 +579,32 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       title: "Открытые КТ",
                                       count: openKT.length,
                                       color: CustomColors.error,
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                StatisticsDetailsPage(
+                                              context: context,
+                                              title: "Контрольные точки",
+                                              tabs: [
+                                                StatisticsDetailsTab(
+                                                  "Открытые КТ",
+                                                  openKT.length,
+                                                  CustomColors.error,
+                                                  openKT,
+                                                ),
+                                                StatisticsDetailsTab(
+                                                  "Закрытые КТ",
+                                                  fillKT.length,
+                                                  CustomColors.warning,
+                                                  fillKT,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                     const SizedBox(
                                       height: 8,

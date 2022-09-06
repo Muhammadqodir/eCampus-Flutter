@@ -438,21 +438,19 @@ class LessonItemModel {
   }
 
   Widget getView(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(12),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              getDate() != ""
-                  ? Text(
-                      getDate(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    )
-                  : const SizedBox(),
-            ],
-          ),
+          getDate() != ""
+              ? Text(
+                  getDate(),
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
+              : const SizedBox(),
           const SizedBox(
             height: 3,
           ),
@@ -472,32 +470,41 @@ class LessonItemModel {
                       ],
                     )
                   : const SizedBox(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  subject != ""
-                      ? Text(
-                          subject,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      : const SizedBox(),
-                  Text(
-                    name,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  getScoreView(context),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  getAttendanceView(context),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    subject != ""
+                        ? Text(
+                            subject,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          )
+                        : const SizedBox(),
+                    Text(
+                      name,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      overflow: TextOverflow.fade,
+                    ),
+                    Row(
+                      children: [
+                        getScoreView(context),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: [
+                        getAttendanceView(context),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               // SizedBox(
               //   width: 60,

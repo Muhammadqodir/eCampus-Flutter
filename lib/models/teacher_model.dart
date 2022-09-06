@@ -89,7 +89,7 @@ class TeacherModel {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialWithModalsPageRoute(
+                      CupertinoPageRoute(
                         builder: (context) => SchedulePage(
                           context: context,
                           url: "https://ecampus.ncfu.ru/Schedule/teacher/$id",
