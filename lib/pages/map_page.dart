@@ -11,6 +11,7 @@ import 'package:ecampus_ncfu/utils/gui_utils.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -277,7 +278,7 @@ class _MapPageState extends State<MapPage> {
                             padding: EdgeInsets.all(12),
                             child: Row(
                               children: [
-                                Image.asset(
+                                SvgPicture.asset(
                                   map.icon,
                                   height: 30.0,
                                   width: 30.0,
