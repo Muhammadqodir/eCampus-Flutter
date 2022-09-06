@@ -113,10 +113,16 @@ class _ContentMainState extends State<ContentMain> {
     setState(() {
       userName = studentCache.userName;
       userPic = studentCache.userPic;
-      ratingModel = studentCache.ratingModel;
+      if (studentCache.ratingModel.fullName != "undefined") {
+        ratingModel = studentCache.ratingModel;
+        rating = true;
+      } else {
+        rating = false;
+      }
     });
   }
 
+  bool rating = true;
   void getFreshData() {
     setState(() {
       userName = null;
@@ -149,10 +155,14 @@ class _ContentMainState extends State<ContentMain> {
       if (ratingResponse.isSuccess) {
         CacheSystem.saveRating(getMyRating(ratingResponse.items));
         setState(() {
+          rating = true;
           ratingModel = getMyRating(ratingResponse.items);
         });
       } else {
         print(ratingResponse.error);
+        setState(() {
+          rating = false;
+        });
       }
     });
   }
@@ -220,17 +230,21 @@ class _ContentMainState extends State<ContentMain> {
                         userName != null
                             ? MainInfoView().getUserNameView(context, userName!)
                             : MainInfoView().getUserNameViewSkeleton(context),
-                        ratingModel != null
-                            ? MainInfoView().getRatingBarView(
-                                context,
-                                averageRating: ratingModel!.ball,
-                                groupRating: ratingModel!.ratGroup,
-                                instituteRating: ratingModel!.ratInst,
-                                studentsNumberInGroup: ratingModel!.maxPosGroup,
-                                studentsNumberInInstitute:
-                                    ratingModel!.maxPosInst,
-                              )
-                            : MainInfoView().getRatingBarViewSkeleton(context)
+                        rating
+                            ? ratingModel != null
+                                ? MainInfoView().getRatingBarView(
+                                    context,
+                                    averageRating: ratingModel!.ball,
+                                    groupRating: ratingModel!.ratGroup,
+                                    instituteRating: ratingModel!.ratInst,
+                                    studentsNumberInGroup:
+                                        ratingModel!.maxPosGroup,
+                                    studentsNumberInInstitute:
+                                        ratingModel!.maxPosInst,
+                                  )
+                                : MainInfoView()
+                                    .getRatingBarViewSkeleton(context)
+                            : SizedBox(),
                       ],
                     ),
                     Padding(
@@ -262,13 +276,14 @@ class _ContentMainState extends State<ContentMain> {
                     Padding(
                       padding: const EdgeInsets.only(left: 12, right: 12),
                       child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
                         decoration: const BoxDecoration(
                           color: Color(0xFFDDF1EF),
                           borderRadius: BorderRadius.all(
                             Radius.circular(12),
                           ),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         width: double.infinity,
                         child: Column(
                           children: [
@@ -284,7 +299,20 @@ class _ContentMainState extends State<ContentMain> {
                             ),
                             Column(
                               children: getLessonModels()
-                                  .map((e) => e.getView(context))
+                                  .map(
+                                    (e) => Column(
+                                      children: [
+                                        e.getView(context),
+                                        getLessonModels().indexOf(e) !=
+                                                getLessonModels().length - 1
+                                            ? const Divider(
+                                                indent: 12,
+                                                endIndent: 12,
+                                              )
+                                            : const SizedBox()
+                                      ],
+                                    ),
+                                  )
                                   .toList(),
                             )
                           ],
