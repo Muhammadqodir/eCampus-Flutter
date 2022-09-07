@@ -100,8 +100,8 @@ class _CupertinoInkWellState extends State<CupertinoInkWell> {
 
 Widget getNotificationSkeleton(BuildContext context) {
   return Shimmer.fromColors(
-      baseColor: Colors.black26,
-      highlightColor: Colors.black87,
+      baseColor: Theme.of(context).dividerColor.withAlpha(100),
+      highlightColor: Theme.of(context).dividerColor,
       child: Column(
         children: [
           Padding(

@@ -14,9 +14,11 @@ import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
+import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,10 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
       BuildContext ctx, List<CustomBottomNavItem> items) {
     return Container(
       height: 61,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
-          BoxShadow(color: lightGray, offset: Offset(0, -0.5)),
+          BoxShadow(
+              color: Theme.of(context).dividerColor, offset: Offset(0, -0.5)),
         ],
       ),
       child: Padding(
@@ -129,14 +132,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final GlobalKey<ContentSubjectsState> _key = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Theme.of(context).primaryColor;
     List<CustomBottomNavItem> bottomNavItems = [
       CustomBottomNavItem(
         "eCampus",
         CupertinoButton(
-          child: const Icon(EcampusIcons.icons8_logout_rounded_left),
+          child: Icon(
+            EcampusIcons.icons8_logout_rounded_left,
+            color: primaryColor,
+          ),
           onPressed: () {
             showConfirmDialog(
                 context, "Выход из профиля", "Подтвердите действие", () {
@@ -158,7 +164,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         [
           CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_notification),
+            child: Icon(
+              EcampusIcons.icons8_notification,
+              color: primaryColor,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -181,7 +190,10 @@ class _MyHomePageState extends State<MyHomePage> {
       CustomBottomNavItem(
         "Расписание",
         CupertinoButton(
-          child: const Icon(EcampusIcons.icons8_teacher),
+          child: Icon(
+            EcampusIcons.icons8_teacher,
+            color: primaryColor,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -195,7 +207,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         [
           CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_search),
+            child: Icon(
+              EcampusIcons.icons8_search,
+              color: primaryColor,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -215,7 +230,10 @@ class _MyHomePageState extends State<MyHomePage> {
       CustomBottomNavItem(
         "Предметы",
         CupertinoButton(
-          child: const Icon(EcampusIcons.icons8_doughnut_chart),
+          child: Icon(
+            EcampusIcons.icons8_doughnut_chart,
+            color: primaryColor,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -233,7 +251,10 @@ class _MyHomePageState extends State<MyHomePage> {
               CacheSystem.invalidateAcademicYearsResponse();
               _key.currentState!.fillData();
             },
-            child: const Icon(EcampusIcons.icons8_restart),
+            child: Icon(
+              EcampusIcons.icons8_restart,
+              color: primaryColor,
+            ),
           )
         ],
         ContentSubjects(
@@ -247,12 +268,18 @@ class _MyHomePageState extends State<MyHomePage> {
       CustomBottomNavItem(
         "Сервисы",
         CupertinoButton(
-          child: const Icon(EcampusIcons.icons8_buy_upgrade),
+          child: Icon(
+            EcampusIcons.icons8_buy_upgrade,
+            color: primaryColor,
+          ),
           onPressed: () {},
         ),
         [
           CupertinoButton(
-            child: const Icon(EcampusIcons.icons8_notification),
+            child: Icon(
+              EcampusIcons.icons8_notification,
+              color: primaryColor,
+            ),
             onPressed: () {
               //do somemthig
             },
@@ -273,12 +300,47 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: bottomNavItems[pageIndex].actions,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: elevation,
-        title: Text(
-          bottomNavItems[pageIndex].title,
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(fontWeight: FontWeight.bold),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Text(
+            //   bottomNavItems[pageIndex].title,
+            //   textAlign: TextAlign.center,
+            //   style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            // ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 4,
+                vertical: 3,
+              ),
+              decoration: BoxDecoration(
+                // color: primaryColor,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "images/lovestar_1.svg",
+                    color: primaryColor,
+                    width: 24,
+                  ),
+                  Text(
+                    "Limited 1 of 1",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontFamily: "LimitedEditionFont",
+                          fontWeight: FontWeight.bold,
+                          color: primaryColor,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
       body: content,

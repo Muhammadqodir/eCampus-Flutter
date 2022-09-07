@@ -303,13 +303,22 @@ class _ContentScheduleState extends State<ContentSchedule> {
                         lastPageChange = DateTime.now();
                         log("left");
                         if (selectedWeekId > 0) {
-                          setState(() {
-                            getSchedule(weeks[selectedWeekId - 1].dateBegin);
-                            selectedWeekId -= 1;
-                            selectedIndex = 6;
-                            selectedWeek =
-                                "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                          });
+                          isOnline().then(
+                            (value) {
+                              if (value) {
+                                setState(() {
+                                  getSchedule(
+                                      weeks[selectedWeekId - 1].dateBegin);
+                                  selectedWeekId -= 1;
+                                  selectedIndex = 6;
+                                  selectedWeek =
+                                      "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                                });
+                              } else {
+                                showOfflineDialog(context);
+                              }
+                            },
+                          );
                         }
                       }
                       if (overscroll.metrics.pixels > dWidth * 6.2 &&
@@ -318,13 +327,22 @@ class _ContentScheduleState extends State<ContentSchedule> {
                         lastPageChange = DateTime.now();
                         log("right");
                         if (selectedIndex < weeks.length) {
-                          setState(() {
-                            getSchedule(weeks[selectedWeekId + 1].dateBegin);
-                            selectedWeekId += 1;
-                            selectedIndex = 0;
-                            selectedWeek =
-                                "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-                          });
+                          isOnline().then(
+                            (value) {
+                              if (value) {
+                                setState(() {
+                                  getSchedule(
+                                      weeks[selectedWeekId + 1].dateBegin);
+                                  selectedWeekId += 1;
+                                  selectedIndex = 0;
+                                  selectedWeek =
+                                      "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+                                });
+                              } else {
+                                showOfflineDialog(context);
+                              }
+                            },
+                          );
                         }
                       }
                     }
@@ -332,6 +350,9 @@ class _ContentScheduleState extends State<ContentSchedule> {
                   },
                   child: PageView(
                       controller: _pageController,
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
+                      ),
                       onPageChanged: (value) {
                         setState(() {
                           selectedIndex = value;
@@ -342,6 +363,9 @@ class _ContentScheduleState extends State<ContentSchedule> {
                             (e) => getScheduleModel(WeekTab.weekAbbrv[e]!) !=
                                     null
                                 ? ListView(
+                                    physics: const BouncingScrollPhysics(
+                                      parent: AlwaysScrollableScrollPhysics(),
+                                    ),
                                     children:
                                         getScheduleModel(WeekTab.weekAbbrv[e]!)!
                                             .lessons
@@ -353,6 +377,9 @@ class _ContentScheduleState extends State<ContentSchedule> {
                                             )
                                             .toList())
                                 : ListView(
+                                    physics: const BouncingScrollPhysics(
+                                      parent: AlwaysScrollableScrollPhysics(),
+                                    ),
                                     shrinkWrap: true,
                                     children: [
                                       Padding(

@@ -277,9 +277,9 @@ class _ContentMainState extends State<ContentMain> {
                       padding: const EdgeInsets.only(left: 12, right: 12),
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 12),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFDDF1EF),
-                          borderRadius: BorderRadius.all(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(12),
                           ),
                         ),

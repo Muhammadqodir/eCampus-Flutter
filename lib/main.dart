@@ -28,6 +28,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'eCampus',
       theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
       home: LoginPage(context: context),
     );
   }

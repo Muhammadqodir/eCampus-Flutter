@@ -29,9 +29,10 @@ class MainInfoView {
 
   Widget getAvaterViewSkeleton(BuildContext context) {
     return Shimmer.fromColors(
-        child: CircleSkeleton(radius: 45),
-        baseColor: Colors.black26,
-        highlightColor: Colors.black87);
+      child: CircleSkeleton(radius: 45),
+      baseColor: Theme.of(context).dividerColor.withAlpha(100),
+      highlightColor: Theme.of(context).dividerColor.withAlpha(100),
+    );
   }
 
   Widget getUserNameView(BuildContext context, String userName) {
@@ -39,7 +40,10 @@ class MainInfoView {
       padding: EdgeInsets.only(top: 12, bottom: 12),
       child: Text(
         userName,
-        style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium!
+            .copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }

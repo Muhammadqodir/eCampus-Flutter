@@ -55,17 +55,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void updateCapcha() {
-    isOnline().then((isOnline) => {
-      setState(() {
-        captchaImage = null;
-      }),
-      ecampus.getCaptcha().then((value) => {
-            setState(() {
-              captchaImage = value;
-              captcha.text = "";
-            })
-          }),
-    },);
+    isOnline().then(
+      (isOnline) => {
+        setState(() {
+          captchaImage = null;
+        }),
+        ecampus.getCaptcha().then((value) => {
+              setState(() {
+                captchaImage = value;
+                captcha.text = "";
+              })
+            }),
+      },
+    );
   }
 
   void _showAlertDialog(
@@ -192,7 +194,14 @@ class _LoginPageState extends State<LoginPage> {
                                     CupertinoTextField(
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium,
+                                          .bodyMedium!
+                                          .copyWith(color: Colors.black87),
+                                      placeholderStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Colors.black87
+                                                  .withAlpha(100)),
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
@@ -215,7 +224,14 @@ class _LoginPageState extends State<LoginPage> {
                                     CupertinoTextField(
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium,
+                                          .bodyMedium!
+                                          .copyWith(color: Colors.black87),
+                                      placeholderStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Colors.black87
+                                                  .withAlpha(100)),
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
@@ -303,7 +319,16 @@ class _LoginPageState extends State<LoginPage> {
                                               CupertinoTextField(
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .bodyMedium,
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                        color: Colors.black87),
+                                                placeholderStyle: Theme.of(
+                                                        context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                        color: Colors.black87
+                                                            .withAlpha(100)),
                                                 padding:
                                                     const EdgeInsets.all(10),
                                                 decoration: BoxDecoration(
@@ -348,7 +373,10 @@ class _LoginPageState extends State<LoginPage> {
                                                   "Войти",
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .bodyMedium,
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                          color:
+                                                              Colors.black87),
                                                 ),
                                                 const SizedBox(
                                                   width: 4,
