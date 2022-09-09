@@ -304,42 +304,44 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Text(
-            //   bottomNavItems[pageIndex].title,
-            //   textAlign: TextAlign.center,
-            //   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            // ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 4,
-                vertical: 3,
-              ),
-              decoration: BoxDecoration(
-                // color: primaryColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "images/lovestar_1.svg",
-                    color: primaryColor,
-                    width: 24,
-                  ),
-                  Text(
-                    "Limited 1 of 1",
+            bottomNavItems[pageIndex].title != "eCampus" || true
+                ? Text(
+                    bottomNavItems[pageIndex].title,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontFamily: "LimitedEditionFont",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: primaryColor,
                         ),
+                  )
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      // color: primaryColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // SvgPicture.asset(
+                        //   "images/lovestar_1.svg",
+                        //   color: primaryColor,
+                        //   width: 24,
+                        // ),
+                        Text(
+                          "Limited 1 of 1",
+                          textAlign: TextAlign.center,
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    fontFamily: "LimitedEditionFont",
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor,
+                                  ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
