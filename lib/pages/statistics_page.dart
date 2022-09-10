@@ -545,6 +545,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             ),
                           )
                         : const SizedBox(),
+                    const AppodealBanner(
+                      adSize: AppodealBannerSize.MEDIUM_RECTANGLE,
+                    ),
                   ],
                 )
               : ListView(

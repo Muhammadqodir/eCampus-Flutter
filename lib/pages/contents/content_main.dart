@@ -249,7 +249,8 @@ class _ContentMainState extends State<ContentMain> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
+                      padding:
+                          const EdgeInsets.only(top: 12, left: 12, right: 12),
                       child: SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -278,7 +279,9 @@ class _ContentMainState extends State<ContentMain> {
                       adSize: AppodealBannerSize.BANNER,
                       placement: "default",
                     ),
-                    SizedBox(height: 8,),
+                    SizedBox(
+                      height: 8,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 12, right: 12),
                       child: Container(
@@ -303,24 +306,47 @@ class _ContentMainState extends State<ContentMain> {
                             const SizedBox(
                               height: 12,
                             ),
-                            Column(
-                              children: getLessonModels()
-                                  .map(
-                                    (e) => Column(
-                                      children: [
-                                        e.getView(context),
-                                        getLessonModels().indexOf(e) !=
-                                                getLessonModels().length - 1
-                                            ? const Divider(
-                                                indent: 12,
-                                                endIndent: 12,
-                                              )
-                                            : const SizedBox()
-                                      ],
-                                    ),
+                            getLessonModels().length > 0
+                                ? Column(
+                                    children: getLessonModels()
+                                        .map(
+                                          (e) => Column(
+                                            children: [
+                                              e.getView(context),
+                                              getLessonModels().indexOf(e) !=
+                                                      getLessonModels().length -
+                                                          1
+                                                  ? const Divider(
+                                                      indent: 12,
+                                                      endIndent: 12,
+                                                    )
+                                                  : const SizedBox()
+                                            ],
+                                          ),
+                                        )
+                                        .toList(),
                                   )
-                                  .toList(),
-                            )
+                                : Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(4),
+                                        child: Image.asset(
+                                          "images/empty.png",
+                                          height: 100,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Для данного дня рассписание не\nпредоставлено",
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                      ),
+                                    ],
+                                  )
                           ],
                         ),
                       ),

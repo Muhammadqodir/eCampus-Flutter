@@ -10,6 +10,7 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 class ContentSubjects extends StatefulWidget {
   const ContentSubjects(
@@ -158,7 +159,10 @@ class ContentSubjectsState extends State<ContentSubjects> {
                 Text(
                   "Загрузка...",
                   style: Theme.of(context).textTheme.bodyMedium,
-                )
+                ),
+                const AppodealBanner(
+                  adSize: AppodealBannerSize.MEDIUM_RECTANGLE,
+                ),
               ],
             ),
           )

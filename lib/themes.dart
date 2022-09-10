@@ -6,7 +6,7 @@ const colorAccent = Color(0xFFE1F2F0);
 const lightGray = Color(0xFFcccccc);
 
 BoxShadow shadow = BoxShadow(
-  color: Colors.grey.withOpacity(0.5),
+  color: Colors.grey.withOpacity(0.2),
   spreadRadius: 0.4,
   blurRadius: 1,
   offset: const Offset(0, 1),
