@@ -54,7 +54,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        minSdkVersion 19
+        minSdkVersion 21
     }
 
     buildTypes {
@@ -72,4 +72,10 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation ('com.appodeal.ads:sdk:3.0.0.+') {
+        exclude group: 'com.appodeal.ads.sdk.services', module: 'adjust'
+        exclude group: 'com.appodeal.ads.sdk.services', module: 'appsflyer'
+        exclude group: 'com.appodeal.ads.sdk.services', module: 'firebase'
+        exclude group: 'com.appodeal.ads.sdk.services', module: 'facebook_analytics'
+    }
 }

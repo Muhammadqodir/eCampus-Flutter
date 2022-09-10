@@ -16,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -53,6 +54,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   void initState() {
     super.initState();
+    Appodeal.show(AppodealAdType.Interstitial);
     SharedPreferences.getInstance().then(
       (sPref) {
         ecampus = eCampus(sPref.getString("token")!);

@@ -1,4 +1,81 @@
 PODS:
+  - Ads-Global (4.3.1.9):
+    - Ads-Global/BUAdSDK (= 4.3.1.9)
+  - Ads-Global/APM (4.3.1.9):
+    - RangersAPM-Pangle/Crash (= 2.3.2-pangle)
+    - RangersAPM-Pangle/Global (= 2.3.2-pangle)
+    - RangersAPM-Pangle/SessionTracker (= 2.3.2-pangle)
+  - Ads-Global/BUAdSDK (4.3.1.9):
+    - Ads-Global/BUFoundation
+    - Ads-Global/International
+  - Ads-Global/BUFoundation (4.3.1.9):
+    - BURelyFoundation_Global (= 0.0.1.57)
+  - Ads-Global/International (4.3.1.9):
+    - Ads-Global/APM
+    - Ads-Global/BUFoundation
+  - AmazonPublisherServicesSDK (4.4.3)
+  - APDBidMachineAdapter (3.0.0.4):
+    - Appodeal (= 3.0.0)
+    - BidMachine (= 1.9.4.5)
+  - APDIABAdapter (3.0.0.1):
+    - Appodeal (= 3.0.0)
+  - APDStackAnalyticsAdapter (3.0.0.2):
+    - Appodeal (= 3.0.0)
+    - StackAnalytics (~> 1.3.1)
+    - StackIAB (~> 1.7.0)
+    - StackModules (~> 1.2.0)
+  - APDYandexAdapter (3.0.0.1):
+    - Appodeal (= 3.0.0)
+    - YandexMobileAds (= 5.0.2)
+  - Appodeal (3.0.0):
+    - Protobuf
+    - StackConsentManager (~> 1.2.0)
+    - StackIAB (~> 1.7.0)
+    - StackModules (~> 1.2.0)
+    - StackProtobuf (~> 0.8.0)
+  - BDMAmazonAdapter (1.9.4.2):
+    - AmazonPublisherServicesSDK (= 4.4.3)
+    - BidMachine (~> 1.9.4.0)
+  - BDMCriteoAdapter (1.9.4.1):
+    - BidMachine (~> 1.9.4.0)
+    - CriteoPublisherSdk (= 4.5.0)
+  - BDMIABAdapter (1.9.4.0):
+    - BDMIABAdapter/IAB (= 1.9.4.0)
+  - BDMIABAdapter/IAB (1.9.4.0):
+    - BDMIABAdapter/MRAID
+    - BDMIABAdapter/NAST
+    - BDMIABAdapter/VAST
+  - BDMIABAdapter/MRAID (1.9.4.0):
+    - BidMachine (~> 1.9.4.0)
+    - StackIAB (~> 1.7.1)
+  - BDMIABAdapter/NAST (1.9.4.0):
+    - BidMachine (~> 1.9.4.0)
+    - StackIAB (~> 1.7.1)
+  - BDMIABAdapter/VAST (1.9.4.0):
+    - BidMachine (~> 1.9.4.0)
+    - StackIAB (~> 1.7.1)
+  - BDMPangleAdapter (1.9.4.2):
+    - Ads-Global (= 4.3.1.9)
+    - BidMachine (~> 1.9.4.0)
+  - BDMSmaatoAdapter (1.9.4.1):
+    - BidMachine (~> 1.9.4.0)
+    - smaato-ios-sdk (= 21.7.5)
+    - smaato-ios-sdk/Modules/UnifiedBidding (= 21.7.5)
+  - BDMTapjoyAdapter (1.9.4.1):
+    - BidMachine (~> 1.9.4.0)
+    - TapjoySDK (= 12.10.0)
+  - BidMachine (1.9.4.5):
+    - BidMachine/Core (= 1.9.4.5)
+  - BidMachine/Core (1.9.4.5):
+    - Protobuf (~> 3.9)
+    - StackModules (~> 1.2.1)
+    - StackProtobuf (~> 0.8.1)
+  - BURelyFoundation_Global (0.0.1.57):
+    - BURelyFoundation_Global/NETWork (= 0.0.1.57)
+  - BURelyFoundation_Global/NETWork (0.0.1.57)
+  - CriteoPublisherSdk (4.5.0):
+    - CriteoPublisherSdk/Sdk (= 4.5.0)
+  - CriteoPublisherSdk/Sdk (4.5.0)
   - Firebase/CoreOnly (9.4.0):
     - FirebaseCore (= 9.4.0)
   - Firebase/Database (9.4.0):
@@ -46,23 +123,199 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - OMSDK_Appodeal (1.3.27)
+  - OneKit-Pangle/BaseKit (1.1.21-pangle)
+  - OneKit-Pangle/Database (1.1.21-pangle):
+    - OneKit-Pangle/Service
+  - OneKit-Pangle/Service (1.1.21-pangle)
   - PromisesObjC (2.1.1)
+  - Protobuf (3.21.5)
+  - RangersAPM-Pangle/Core (2.3.2-pangle):
+    - OneKit-Pangle/BaseKit (= 1.1.21-pangle)
+  - RangersAPM-Pangle/Crash (2.3.2-pangle):
+    - RangersAPM-Pangle/Core
+    - RangersAPM-Pangle/HMD
+    - RangersAPM-Pangle/Public
+  - RangersAPM-Pangle/Global (2.3.2-pangle):
+    - RangersAPM-Pangle/Core
+    - RangersAPM-Pangle/Public
+  - RangersAPM-Pangle/HMD (2.3.2-pangle):
+    - OneKit-Pangle/Database (= 1.1.21-pangle)
+    - RangersAPM-Pangle/Core
+  - RangersAPM-Pangle/Public (2.3.2-pangle):
+    - RangersAPM-Pangle/Core
+  - RangersAPM-Pangle/SessionTracker (2.3.2-pangle):
+    - RangersAPM-Pangle/Core
+    - RangersAPM-Pangle/HMD
+    - RangersAPM-Pangle/Public
   - shared_preferences_ios (0.0.1):
     - Flutter
+  - smaato-ios-sdk (21.7.5):
+    - smaato-ios-sdk/Full (= 21.7.5)
+  - smaato-ios-sdk/Banner (21.7.5):
+    - smaato-ios-sdk/Modules/Banner
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/RichMedia
+  - smaato-ios-sdk/Full (21.7.5):
+    - smaato-ios-sdk/Banner
+    - smaato-ios-sdk/Interstitial
+    - smaato-ios-sdk/Native
+    - smaato-ios-sdk/Outstream
+    - smaato-ios-sdk/RewardedAds
+  - smaato-ios-sdk/Interstitial (21.7.5):
+    - smaato-ios-sdk/Modules/Interstitial
+    - smaato-ios-sdk/Modules/RichMedia
+    - smaato-ios-sdk/Modules/Video
+  - smaato-ios-sdk/Modules/Banner (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/Core (21.7.5)
+  - smaato-ios-sdk/Modules/Interstitial (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/Native (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/OpenMeasurement (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/Outstream (21.7.5):
+    - smaato-ios-sdk/Modules/Banner
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/RichMedia
+  - smaato-ios-sdk/Modules/RewardedAds (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/RichMedia (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/OpenMeasurement
+  - smaato-ios-sdk/Modules/UnifiedBidding (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+  - smaato-ios-sdk/Modules/Video (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/OpenMeasurement
+  - smaato-ios-sdk/Native (21.7.5):
+    - smaato-ios-sdk/Modules/Core
+    - smaato-ios-sdk/Modules/Native
+  - smaato-ios-sdk/Outstream (21.7.5):
+    - smaato-ios-sdk/Modules/Outstream
+  - smaato-ios-sdk/RewardedAds (21.7.5):
+    - smaato-ios-sdk/Modules/RewardedAds
+    - smaato-ios-sdk/Modules/Video
+  - stack_appodeal_flutter (3.0.0):
+    - Appodeal (= 3.0.0)
+    - Flutter
+  - StackAnalytics (1.3.2):
+    - StackAnalytics/Full (= 1.3.2)
+    - StackModules (~> 1.2.0)
+  - StackAnalytics/Base (1.3.2):
+    - StackModules (~> 1.2.0)
+  - StackAnalytics/Crashes (1.3.2):
+    - StackModules (~> 1.2.0)
+  - StackAnalytics/Full (1.3.2):
+    - StackAnalytics/Base
+    - StackAnalytics/Crashes
+    - StackModules (~> 1.2.0)
+  - StackConsentManager (1.2.2)
+  - StackIAB (1.7.4):
+    - StackIAB/StackIABAssets (= 1.7.4)
+    - StackIAB/StackMRAIDKit (= 1.7.4)
+    - StackIAB/StackNASTKit (= 1.7.4)
+    - StackIAB/StackOpenMeasure (= 1.7.4)
+    - StackIAB/StackRichMedia (= 1.7.4)
+    - StackIAB/StackVASTAssets (= 1.7.4)
+    - StackIAB/StackVASTKit (= 1.7.4)
+    - StackIAB/StackVideoPlayer (= 1.7.4)
+    - StackIAB/StackXML (= 1.7.4)
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackIABAssets (1.7.4):
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackMRAIDKit (1.7.4):
+    - StackIAB/StackIABAssets
+    - StackIAB/StackOpenMeasure
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackNASTKit (1.7.4):
+    - StackIAB/StackVASTKit
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackOpenMeasure (1.7.4):
+    - OMSDK_Appodeal (~> 1.3.27)
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackRichMedia (1.7.4):
+    - StackIAB/StackIABAssets
+    - StackIAB/StackVASTAssets
+    - StackIAB/StackVideoPlayer
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackVASTAssets (1.7.4):
+    - StackIAB/StackIABAssets
+    - StackIAB/StackXML
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackVASTKit (1.7.4):
+    - StackIAB/StackMRAIDKit
+    - StackIAB/StackVASTAssets
+    - StackIAB/StackVideoPlayer
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackVideoPlayer (1.7.4):
+    - StackModules (~> 1.2.1)
+  - StackIAB/StackXML (1.7.4):
+    - StackModules (~> 1.2.1)
+  - StackModules (1.2.5):
+    - StackModules/StackProductPresentation (= 1.2.5)
+  - StackModules/StackFoundation (1.2.5)
+  - StackModules/StackProductPresentation (1.2.5):
+    - StackModules/StackUIKit
+  - StackModules/StackUIKit (1.2.5):
+    - StackModules/StackFoundation
+  - StackProtobuf (0.8.3):
+    - Protobuf (~> 3.13)
+  - TapjoySDK (12.10.0)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - YandexMobileAds (5.0.2):
+    - YandexMobileAds/Static (= 5.0.2)
+  - YandexMobileAds/Static (5.0.2):
+    - YandexMobileMetrica (< 5.0.0, >= 4.0.0)
+  - YandexMobileMetrica (4.2.0):
+    - YandexMobileMetrica/Static (= 4.2.0)
+  - YandexMobileMetrica/Static (4.2.0):
+    - YandexMobileMetrica/Static/Core (= 4.2.0)
+    - YandexMobileMetrica/Static/Crashes (= 4.2.0)
+  - YandexMobileMetrica/Static/Core (4.2.0)
+  - YandexMobileMetrica/Static/Crashes (4.2.0):
+    - YandexMobileMetrica/Static/Core
 
 DEPENDENCIES:
+  - APDBidMachineAdapter (= 3.0.0.4)
+  - APDIABAdapter (= 3.0.0.1)
+  - APDStackAnalyticsAdapter (= 3.0.0.2)
+  - APDYandexAdapter (= 3.0.0.1)
+  - BDMAmazonAdapter (~> 1.9.4.2)
+  - BDMCriteoAdapter (~> 1.9.4)
+  - BDMIABAdapter (~> 1.9.4)
+  - BDMPangleAdapter (~> 1.9.4.2)
+  - BDMSmaatoAdapter (~> 1.9.4)
+  - BDMTapjoyAdapter (~> 1.9.4)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - Flutter (from `Flutter`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - stack_appodeal_flutter (from `.symlinks/plugins/stack_appodeal_flutter/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
+    - Ads-Global
+    - AmazonPublisherServicesSDK
+    - APDBidMachineAdapter
+    - APDIABAdapter
+    - APDStackAnalyticsAdapter
+    - APDYandexAdapter
+    - Appodeal
+    - BDMAmazonAdapter
+    - BDMCriteoAdapter
+    - BDMIABAdapter
+    - BDMPangleAdapter
+    - BDMSmaatoAdapter
+    - BDMTapjoyAdapter
+    - BidMachine
+    - BURelyFoundation_Global
+    - CriteoPublisherSdk
     - Firebase
     - FirebaseCore
     - FirebaseCoreDiagnostics
@@ -72,7 +325,20 @@ SPEC REPOS:
     - GoogleUtilities
     - leveldb-library
     - nanopb
+    - OMSDK_Appodeal
+    - OneKit-Pangle
     - PromisesObjC
+    - Protobuf
+    - RangersAPM-Pangle
+    - smaato-ios-sdk
+    - StackAnalytics
+    - StackConsentManager
+    - StackIAB
+    - StackModules
+    - StackProtobuf
+    - TapjoySDK
+    - YandexMobileAds
+    - YandexMobileMetrica
 
 EXTERNAL SOURCES:
   firebase_core:
@@ -87,10 +353,28 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/map_launcher/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  stack_appodeal_flutter:
+    :path: ".symlinks/plugins/stack_appodeal_flutter/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
+  Ads-Global: 167ddabcf74a82c41f7074dc286697418ee22b60
+  AmazonPublisherServicesSDK: cd88ef55d5afaa6483bcb04b977e1585a95f9211
+  APDBidMachineAdapter: c402485e23e01486a4e2cc02c55f91632ab53e57
+  APDIABAdapter: 1877fddceb4eb9b32e3e58631b3c868776586708
+  APDStackAnalyticsAdapter: f570da8a4162a7dd126e6a7840b652feb6cecfb5
+  APDYandexAdapter: 54b20d07779a02f418b905bb0fcfd7a03238b1a9
+  Appodeal: b1940db7eaae7b1ed7ca425a56b3fd76e0588f5a
+  BDMAmazonAdapter: 25fda309314a7f99c9d4859ab6ab1a2b1412b0c2
+  BDMCriteoAdapter: 1fa46727e5036de4503eb962ee7a2353ad572d5f
+  BDMIABAdapter: 4c217223431ae85b96eecfd42c4d776e8298c6fb
+  BDMPangleAdapter: 14dd92196e49435bd84d5a51ff1d07ed0b5f260f
+  BDMSmaatoAdapter: bbcfd0b7209dd14dc27202cbfe5cc742ec2cafcb
+  BDMTapjoyAdapter: d96ff18a485e0cb2e4277453eca7382fb488b433
+  BidMachine: bf2fa4b768a1dbf49373f08946155b8661ac05a7
+  BURelyFoundation_Global: 5b03b5340630fa62fb9cd6eac52c5f57d4b0c17b
+  CriteoPublisherSdk: 26f16f975d6c0392ee7060626268e2f2d7ed2d82
   Firebase: 7703fc4022824b6d6db1bf7bea58d13b8e17ec46
   firebase_core: 8e500850dd138c269d197c8dfca3ae886fa3b6f2
   firebase_database: 31aebb8797cd59eb881375aa0debe33eba5a1c2a
@@ -98,17 +382,31 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: 17cbf4e72b1dbd64bfdc33d4b1f07bce4f16f1d8
   FirebaseCoreInternal: 50a8e39cae8abf72d5145d07ea34c3244f70862b
   FirebaseDatabase: e93f5441b549ea4492a8d8a0c7d612ac46c1b12a
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   map_launcher: e325db1261d029ff33e08e03baccffe09593ffea
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  OMSDK_Appodeal: f0d5df63dd9a2cadf30b3e0a4f5bfd498375baa3
+  OneKit-Pangle: 68a778c39d36ed8feffd667a6b49225427bcf286
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  Protobuf: 7504b04fffcf6662ad629694db8231f5e744327f
+  RangersAPM-Pangle: 97c8fe91af08574a739cc72a714b735efb6c891f
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  smaato-ios-sdk: bc1f78e079ac0ef88f9cdbe29205db0af405ce61
+  stack_appodeal_flutter: 084c2e276c754daa1f092adec5607fb9a34c0b6a
+  StackAnalytics: a4daa915bd8bba9eabf40ef6331a46afbbb94f93
+  StackConsentManager: db10f9ab43a91440049886c7f09a6ce8114b5f37
+  StackIAB: f1e1e0313f4b65c3152a47517e92ac0741743cf0
+  StackModules: 2132d737caceb3142351583a890b1ba22da93745
+  StackProtobuf: 4ce3cf175993834536fbb7260a278400cabeb463
+  TapjoySDK: 3dcd899e69eb3e36f231390c95c7105730619bcb
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  YandexMobileAds: 761e7844016da8f391d16e485640d828d48c3672
+  YandexMobileMetrica: f5f9c605eaaba33ff6ab2b6bc3259035ca60ed87
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: e336fa8b2727d367c6cb22165b17cf8c03bc2750
 
 COCOAPODS: 1.11.3

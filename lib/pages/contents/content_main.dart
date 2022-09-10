@@ -18,6 +18,7 @@ import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 import '../../utils/gui_utils.dart';
 import '../../utils/utils.dart';
@@ -248,7 +249,7 @@ class _ContentMainState extends State<ContentMain> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
                       child: SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -273,6 +274,11 @@ class _ContentMainState extends State<ContentMain> {
                         ),
                       ),
                     ),
+                    const AppodealBanner(
+                      adSize: AppodealBannerSize.BANNER,
+                      placement: "default",
+                    ),
+                    SizedBox(height: 8,),
                     Padding(
                       padding: const EdgeInsets.only(left: 12, right: 12),
                       child: Container(
