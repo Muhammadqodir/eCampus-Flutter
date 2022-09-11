@@ -91,7 +91,14 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage,
                 height: 4,
               ),
               CupertinoTextField(
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.black87),
+                placeholderStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.black87.withAlpha(100)),
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     color: Colors.white,
