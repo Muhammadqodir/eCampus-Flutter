@@ -88,7 +88,7 @@ class _ContentScheduleState extends State<ContentSchedule> {
                 loading = false;
                 scheduleModels = schedule!.value.scheduleModels;
                 selectedIndex = DateTime.now().weekday == 7
-                    ? 1
+                    ? 0
                     : DateTime.now().weekday - 1;
               });
               _pageController = PageController(initialPage: selectedIndex);

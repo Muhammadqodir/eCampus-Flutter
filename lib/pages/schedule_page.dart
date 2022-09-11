@@ -65,7 +65,6 @@ class _SchedulePageState extends State<SchedulePage> {
               currentWeekDate = weeks[selectedWeekId].dateBegin;
               selectedWeek =
                   "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
-              loading = false;
               getSchedule(weeks[selectedWeekId].dateBegin);
             });
           } else {
@@ -88,7 +87,9 @@ class _SchedulePageState extends State<SchedulePage> {
           if (value.isSuccess) {
             setState(() {
               if (date == currentWeekDate) {
-                selectedIndex = DateTime.now().weekday - 1;
+                selectedIndex = DateTime.now().weekday == 7
+                    ? 0
+                    : DateTime.now().weekday - 1;
               }
               _pageController = PageController(initialPage: selectedIndex);
               scheduleModels = value.scheduleModels;

@@ -12,7 +12,9 @@ import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
+import 'package:ecampus_ncfu/pages/contents/content_epass.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
+import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
@@ -260,7 +262,7 @@ class _ContentMainState extends State<ContentMain> {
                           disabledColor: Theme.of(context).dividerColor,
                           color: Theme.of(context).primaryColor,
                           child: Text(
-                            "Электронный пропуск",
+                            "Статистика",
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium!
@@ -270,16 +272,28 @@ class _ContentMainState extends State<ContentMain> {
                             // SharedPreferences.getInstance().then((value) => {
                             //       value.setString("token", "invalid"),
                             //     });
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => StatisticsPage(
+                                  context: context,
+                                ),
+                              ),
+                            );
                             log(ratingModel!.toJson().toString());
                           },
                         ),
                       ),
                     ),
+
+                    const SizedBox(
+                      height: 8,
+                    ),
                     const AppodealBanner(
                       adSize: AppodealBannerSize.BANNER,
                       placement: "default",
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     Padding(

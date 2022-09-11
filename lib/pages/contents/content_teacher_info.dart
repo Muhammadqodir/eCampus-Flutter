@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
@@ -44,9 +45,16 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
   Map<String, dynamic> humorRating = {};
   Map<String, dynamic> examRating = {};
   Map<String, dynamic> teachSkills = {};
+  int initTeach = 0;
+  int initExam = 0;
+  int initHumor = 0;
+  String userId = "undefined";
 
   @override
   void initState() {
+    CacheSystem.getUserId().then((value) {
+      userId = value;
+    });
     getTeacherInfo();
     super.initState();
   }
@@ -71,8 +79,27 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
               employeePageUrl = data["employeePageUrl"];
               try {
                 humorRating = data["rating"]["humorRating"];
+                for (String key in humorRating.keys) {
+                  if (key == userId) {
+                    initHumor = humorRating[key].toInt();
+                  }
+                }
+              } catch (e) {}
+              try {
                 examRating = data["rating"]["examRating"];
+                for (String key in examRating.keys) {
+                  if (key == userId) {
+                    initExam = examRating[key].toInt();
+                  }
+                }
+              } catch (e) {}
+              try {
                 teachSkills = data["rating"]["teachSkills"];
+                for (String key in teachSkills.keys) {
+                  if (key == userId) {
+                    initTeach = teachSkills[key].toInt();
+                  }
+                }
               } catch (e) {}
             });
           } else {
@@ -125,13 +152,21 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
     }
   }
 
+  void setRating(String rType, int value) async {
+    String userId = await CacheSystem.getUserId();
+    DatabaseReference tRef = widget.database
+        .ref("teachers/${widget.teacherId}/rating/$rType/$userId");
+    print("teachers/${widget.teacherId}/rating/$rType/$userId");
+    tRef.set(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: loading
           ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CrossActivityIndicator(
                   radius: 12,
@@ -209,8 +244,8 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                               Column(
                                 children: [
                                   RatingBar.builder(
-                                    initialRating: 0,
-                                    minRating: 1,
+                                    initialRating: initTeach.toDouble(),
+                                    minRating: 0,
                                     direction: Axis.horizontal,
                                     glow: false,
                                     itemCount: 5,
@@ -223,7 +258,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     onRatingUpdate: (rating) {
-                                      print(rating);
+                                      setRating("teachSkills", rating.toInt());
                                     },
                                   ),
                                   Text(
@@ -255,7 +290,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                               Column(
                                 children: [
                                   RatingBar.builder(
-                                    initialRating: 0,
+                                    initialRating: initExam.toDouble(),
                                     minRating: 1,
                                     direction: Axis.horizontal,
                                     glow: false,
@@ -269,7 +304,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     onRatingUpdate: (rating) {
-                                      print(rating);
+                                      setRating("examRating", rating.toInt());
                                     },
                                   ),
                                   Text(
@@ -301,7 +336,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                               Column(
                                 children: [
                                   RatingBar.builder(
-                                    initialRating: 0,
+                                    initialRating: initHumor.toDouble(),
                                     minRating: 1,
                                     direction: Axis.horizontal,
                                     glow: false,
@@ -315,7 +350,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     onRatingUpdate: (rating) {
-                                      print(rating);
+                                      setRating("humorRating", rating.toInt());
                                     },
                                   ),
                                   Text(

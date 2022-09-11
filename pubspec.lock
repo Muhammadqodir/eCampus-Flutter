@@ -632,11 +632,25 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  simple_animations:
+    dependency: transitive
+    description:
+      name: simple_animations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.99"
+  snowfall:
+    dependency: "direct main"
+    description:
+      name: snowfall
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   source_gen:
     dependency: transitive
     description:

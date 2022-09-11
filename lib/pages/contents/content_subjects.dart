@@ -161,7 +161,7 @@ class ContentSubjectsState extends State<ContentSubjects> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const AppodealBanner(
-                  adSize: AppodealBannerSize.MEDIUM_RECTANGLE,
+                  adSize: AppodealBannerSize.BANNER,
                 ),
               ],
             ),

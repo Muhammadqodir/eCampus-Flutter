@@ -66,6 +66,11 @@ class CacheSystem {
         "${prefix}rating", jsonEncode(cache.ratingModel.toJson()));
   }
 
+  static Future<String> getUserId() async{
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("login") ?? "undefined";
+  }
+
   static Future<StudentCache> getStudentCache() async {
     final prefs = await SharedPreferences.getInstance();
     String userPic = prefs.getString("${prefix}userPic") ?? "empty";
