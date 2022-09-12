@@ -40,8 +40,11 @@ class CrossListElement extends StatelessWidget {
                   ),
                 ),
               ),
-        const Divider(
-          height: 1,
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).dividerColor,
+          ),
+          height: 0.6,
         )
       ],
     );

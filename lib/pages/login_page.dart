@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                                           borderRadius:
                                               BorderRadius.circular(12)),
                                       padding: const EdgeInsets.all(10),
-                                      placeholder: "Имя пользователья",
+                                      placeholder: "Имя пользователя",
                                       textInputAction: TextInputAction.next,
                                       controller: username,
                                       prefix: const Padding(
