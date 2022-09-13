@@ -32,6 +32,8 @@ void main() async {
       log("AppodealError" + errors.toString());
     },
   );
+  Appodeal.setAutoCache(AppodealAdType.Banner, true);
+  Appodeal.setAutoCache(AppodealAdType.Interstitial, true);
   Appodeal.setBannerCallbacks(
       onBannerLoaded: (isPrecache) => {},
       onBannerFailedToLoad: () {

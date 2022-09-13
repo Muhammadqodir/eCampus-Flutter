@@ -267,13 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       CustomBottomNavItem(
         "Сервисы",
-        CupertinoButton(
-          child: Icon(
-            EcampusIcons.icons8_buy_upgrade,
-            color: primaryColor,
-          ),
-          onPressed: () {},
-        ),
+        const SizedBox(),
         [
           CupertinoButton(
             child: Icon(
@@ -281,7 +275,14 @@ class _MyHomePageState extends State<MyHomePage> {
               color: primaryColor,
             ),
             onPressed: () {
-              //do somemthig
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => NotificationsPage(
+                    context: context,
+                  ),
+                ),
+              );
             },
           )
         ],
@@ -345,7 +346,26 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: content,
+      body: IndexedStack(
+        index: pageIndex,
+        children: [
+          ContentMain(
+            context: context,
+            setElevation: setAppbarElevation,
+          ),
+          ContentSchedule(
+            context: context,
+          ),
+          ContentSubjects(
+            context: context,
+            setElevation: setAppbarElevation,
+          ),
+          ContentServices(
+            context: context,
+            setElevation: setAppbarElevation,
+          ),
+        ],
+      ),
       bottomNavigationBar: SafeArea(
         child: buildCustomBottomNavigaton(context, bottomNavItems),
       ),

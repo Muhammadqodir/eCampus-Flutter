@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -16,15 +16,22 @@
                         <viewControllerLayoutGuide type="bottom" id="xbc-2k-c8Z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="IconWhite" translatesAutoresizingMaskIntoConstraints="NO" id="Rlr-XP-ZTi">
-                                <rect key="frame" x="139" y="380" width="137" height="137"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconWhite" translatesAutoresizingMaskIntoConstraints="NO" id="Rlr-XP-ZTi">
+                                <rect key="frame" x="97.666666666666686" y="316" width="180" height="180"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="VDa-et-d1D"/>
+                                    <constraint firstAttribute="width" constant="180" id="tIy-yD-yq9"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.066666666669999999" green="0.58039215690000001" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Rlr-XP-ZTi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="dVm-PM-w41"/>
+                            <constraint firstItem="Rlr-XP-ZTi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="osQ-qT-XoI"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -33,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="IconWhite" width="1024" height="1024"/>
+        <image name="IconWhite" width="341.33334350585938" height="341.33334350585938"/>
     </resources>
 </document>
