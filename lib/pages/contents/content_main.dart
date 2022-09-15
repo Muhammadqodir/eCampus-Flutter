@@ -261,12 +261,20 @@ class _ContentMainState extends State<ContentMain> {
                               const BorderRadius.all(Radius.circular(12)),
                           disabledColor: Theme.of(context).dividerColor,
                           color: Theme.of(context).primaryColor,
-                          child: Text(
-                            "Статистика",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(fontWeight: FontWeight.bold),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Icon(EcampusIcons.icons8_doughnut_chart),
+                              const SizedBox(width: 12,),
+                              Text(
+                                "Статистика",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
                           onPressed: () {
                             // SharedPreferences.getInstance().then((value) => {
@@ -285,7 +293,6 @@ class _ContentMainState extends State<ContentMain> {
                         ),
                       ),
                     ),
-
                     const SizedBox(
                       height: 8,
                     ),

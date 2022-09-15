@@ -62,7 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-              color: Theme.of(context).dividerColor, offset: Offset(0, -0.5)),
+            color: Theme.of(context).dividerColor,
+            offset: const Offset(0, -0.5),
+          ),
         ],
       ),
       child: Padding(
