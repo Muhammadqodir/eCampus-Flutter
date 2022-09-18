@@ -54,7 +54,10 @@ class _ContentMainState extends State<ContentMain> {
     });
   }
 
-  void update({bool showCaptchaDialog = false, bool useCache = true}) {
+  void update({bool showCaptchaDialog = false, bool useCache = true}) async {
+    if(showCaptchaDialog){
+      ecampus = eCampus((await SharedPreferences.getInstance()).getString("token") ?? "undefined");
+    }
     CacheSystem.isActualCache().then(
       (value) {
         if (value && useCache) {
