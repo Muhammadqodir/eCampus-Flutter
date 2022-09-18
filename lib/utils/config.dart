@@ -1,1 +1,1 @@
-const int cacheLifetime = 60; //minutes
+const int cacheLifetime = 100; //minutes
