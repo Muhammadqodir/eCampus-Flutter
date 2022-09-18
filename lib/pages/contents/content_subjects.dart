@@ -13,19 +13,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 class ContentSubjects extends StatefulWidget {
-  const ContentSubjects(
-      {Key? key, required this.context, required this.setElevation})
-      : super(key: key);
+  const ContentSubjects({
+    Key? key,
+    required this.context,
+    required this.setElevation,
+    required this.getIndex,
+    required this.ecampus,
+  }) : super(key: key);
 
   final BuildContext context;
   final Function setElevation;
+  final Function getIndex;
+  final eCampus ecampus;
 
   @override
   State<ContentSubjects> createState() => ContentSubjectsState();
 }
 
 class ContentSubjectsState extends State<ContentSubjects> {
-  late eCampus ecampus;
   bool loading = true;
   List<AcademicYearsModel> academicYears = [];
   int selectedCourseIndex = 0;
@@ -34,20 +39,27 @@ class ContentSubjectsState extends State<ContentSubjects> {
   double elevation = 0;
   int studentId = 0;
   int kodCart = 0;
+  bool isDataLoaded = true;
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) {
-      ecampus = eCampus(value.getString("token") ?? "undefined");
-      isOnline().then((isOnline) {
-        if (isOnline) {
-          fillData();
-        } else {
-          showOfflineDialog(context);
-        }
-      });
+    isOnline().then((isOnline) {
+      if (isOnline) {
+        fillData();
+      } else {
+        showOfflineDialog(context);
+      }
     });
+  }
+
+  void onPageActive(){
+    if(!isDataLoaded){
+      SharedPreferences.getInstance().then((value) {
+        widget.ecampus.setToken(value.getString("token") ?? 'undefined');
+        fillData();
+      });
+    }
   }
 
   void fillData() {
@@ -88,9 +100,9 @@ class ContentSubjectsState extends State<ContentSubjects> {
   }
 
   void getFreshData() {
-    ecampus.isActualToken().then((isActualToken) {
+    widget.ecampus.isActualToken().then((isActualToken) {
       if (isActualToken) {
-        ecampus.getAcademicYears().then((value) {
+        widget.ecampus.getAcademicYears().then((value) {
           if (value.isSuccess) {
             CacheSystem.saveAcademicYearsResponse(value);
             setState(() {
@@ -100,17 +112,22 @@ class ContentSubjectsState extends State<ContentSubjects> {
               subjectModels = value.currentSubjects!.models;
               studentId = value.studentId!;
               loading = false;
+              isDataLoaded = true;
             });
           } else {
             showAlertDialog(context, "Ошибка", value.error);
           }
         });
       } else {
-        ecampus.getCaptcha().then((captcha) {
-          showCapchaDialog(context, captcha, ecampus, () {
-            getFreshData();
+        if (widget.getIndex() == 2) {
+          widget.ecampus.getCaptcha().then((captcha) {
+            showCapchaDialog(context, captcha, widget.ecampus, () {
+              getFreshData();
+            });
           });
-        });
+        }else{
+          isDataLoaded = false;
+        }
       }
     });
   }
@@ -119,9 +136,9 @@ class ContentSubjectsState extends State<ContentSubjects> {
     setState(() {
       loading = true;
     });
-    ecampus.isActualToken().then((isActualToken) {
+    widget.ecampus.isActualToken().then((isActualToken) {
       if (isActualToken) {
-        ecampus.getSubjects(studentId, termId).then((value) {
+        widget.ecampus.getSubjects(studentId, termId).then((value) {
           if (value.isSuccess) {
             setState(() {
               selectedTermId = termId;
@@ -133,11 +150,13 @@ class ContentSubjectsState extends State<ContentSubjects> {
           }
         });
       } else {
-        ecampus.getCaptcha().then((captcha) {
-          showCapchaDialog(context, captcha, ecampus, () {
-            getsubjects(termId);
+        if (widget.getIndex() == 2) {
+          widget.ecampus.getCaptcha().then((captcha) {
+            showCapchaDialog(context, captcha, widget.ecampus, () {
+              getsubjects(termId);
+            });
           });
-        });
+        }
       }
     });
   }

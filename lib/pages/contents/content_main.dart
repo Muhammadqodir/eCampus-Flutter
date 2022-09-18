@@ -72,6 +72,9 @@ class _ContentMainState extends State<ContentMain> {
               getFreshData();
             } else {
               if (showCaptchaDialog) {
+                setState(() {
+                  isUnActualToken = true;
+                });
                 isOnline().then((isOnline) {
                   if (isOnline) {
                     ecampus.getCaptcha().then((captchaImage) {

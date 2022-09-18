@@ -21,28 +21,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 const double _kItemExtent = 32.0;
 
 class ContentSchedule extends StatefulWidget {
-  const ContentSchedule({Key? key, required this.context}) : super(key: key);
+  const ContentSchedule(
+      {Key? key, required this.context, required this.getIndex, required this.ecampus})
+      : super(key: key);
 
   final BuildContext context;
+  final Function getIndex;
+  final eCampus ecampus;
 
   @override
-  State<ContentSchedule> createState() => _ContentScheduleState();
+  State<ContentSchedule> createState() => ContentScheduleState();
 }
 
-class _ContentScheduleState extends State<ContentSchedule> {
+class ContentScheduleState extends State<ContentSchedule> {
   int selectedIndex = 0;
-  late eCampus ecampus;
   bool loading = true;
   List<ScheduleWeeksModel> weeks = [];
   String selectedWeek = "";
+  bool isDataLoaded = true;
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) {
-      ecampus = eCampus(value.getString("token") ?? "undefined");
-      fillData();
-    });
+    fillData();
   }
 
   PageController _pageController = PageController();
@@ -68,6 +69,15 @@ class _ContentScheduleState extends State<ContentSchedule> {
       }
     }
     return null;
+  }
+
+  void onPageActive(){
+    if(!isDataLoaded){
+      SharedPreferences.getInstance().then((value) {
+        widget.ecampus.setToken(value.getString("token") ?? 'undefined');
+        fillData();
+      });
+    }
   }
 
   void fillData() {
@@ -109,9 +119,9 @@ class _ContentScheduleState extends State<ContentSchedule> {
         setState(() {
           loading = true;
         });
-        ecampus.isActualToken().then((isActualToken) {
+        widget.ecampus.isActualToken().then((isActualToken) {
           if (isActualToken) {
-            ecampus.getScheduleWeeks().then((value) {
+            widget.ecampus.getScheduleWeeks().then((value) {
               if (value.isSuccess) {
                 setState(() {
                   CacheSystem.saveScheduleWeeksResponse(value);
@@ -129,11 +139,15 @@ class _ContentScheduleState extends State<ContentSchedule> {
               }
             });
           } else {
-            ecampus.getCaptcha().then((captcha) {
-              showCapchaDialog(context, captcha, ecampus, () {
-                getWeeks();
+            if (widget.getIndex() == 1) {
+              widget.ecampus.getCaptcha().then((captcha) {
+                showCapchaDialog(context, captcha, widget.ecampus, () {
+                  getWeeks();
+                });
               });
-            });
+            }else{
+              isDataLoaded = false;
+            }
           }
         });
       } else {
@@ -148,9 +162,9 @@ class _ContentScheduleState extends State<ContentSchedule> {
         setState(() {
           loading = true;
         });
-        ecampus.isActualToken().then((isActualToken) {
+        widget.ecampus.isActualToken().then((isActualToken) {
           if (isActualToken) {
-            ecampus.getSchedule(date, scheduleId, targetType).then((value) {
+            widget.ecampus.getSchedule(date, scheduleId, targetType).then((value) {
               if (value.isSuccess) {
                 setState(() {
                   if (date == currentWeekDate) {
@@ -160,17 +174,20 @@ class _ContentScheduleState extends State<ContentSchedule> {
                   _pageController = PageController(initialPage: selectedIndex);
                   scheduleModels = value.scheduleModels;
                   loading = false;
+                  isDataLoaded = true;
                 });
               } else {
                 showAlertDialog(context, "Ошибка", value.error);
               }
             });
           } else {
-            ecampus.getCaptcha().then((captcha) {
-              showCapchaDialog(context, captcha, ecampus, () {
-                getSchedule(date);
+            if (widget.getIndex() == 1) {
+              widget.ecampus.getCaptcha().then((captcha) {
+                showCapchaDialog(context, captcha, widget.ecampus, () {
+                  getSchedule(date);
+                });
               });
-            });
+            }
           }
         });
       } else {

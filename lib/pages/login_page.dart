@@ -31,27 +31,27 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     String cookie;
-    SharedPreferences.getInstance().then((value) => {
-          cookie = value.getString("token") ?? 'undefined',
-          if (value.getBool("isLogin") ?? false)
-            {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const MyHomePage(
-                          title: 'eCampus',
-                        )),
-              )
-            }
-          else
-            {
-              setState(() {
-                isLogined = false;
-              }),
-              ecampus = eCampus("undefined"),
-              updateCapcha(),
-            },
+    SharedPreferences.getInstance().then((value) {
+      cookie = value.getString("token") ?? 'undefined';
+      ecampus = eCampus(cookie);
+      if (value.getBool("isLogin") ?? false) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(
+              title: 'eCampus',
+              ecampus: ecampus,
+            ),
+          ),
+        );
+      } else {
+        setState(() {
+          isLogined = false;
         });
+        ecampus = eCampus("undefined");
+        updateCapcha();
+      }
+    });
   }
 
   void updateCapcha() {
@@ -118,9 +118,11 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MyHomePage(
-                                      title: 'eCampus',
-                                    )),
+                              builder: (context) => MyHomePage(
+                                title: 'eCampus',
+                                ecampus: ecampus,
+                              ),
+                            ),
                           )
                         }
                       else

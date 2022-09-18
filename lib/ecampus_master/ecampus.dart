@@ -28,6 +28,11 @@ class eCampus {
     client.addCookie("ecampus", ecampusToken);
   }
 
+  void setToken(String ecampusToken){
+    this.ecampusToken = ecampusToken;
+    client.addCookie("ecampus", ecampusToken);
+  }
+
   Future<String> getToken() async {
     http.Response response =
         await client.get('https://ecampus.ncfu.ru/account/login');

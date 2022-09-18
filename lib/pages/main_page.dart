@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
+import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
 import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
@@ -16,6 +17,7 @@ import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
+import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,9 +25,14 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({
+    Key? key,
+    required this.title,
+    required this.ecampus,
+  }) : super(key: key);
 
   final String title;
+  final eCampus ecampus;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -36,6 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Uint8List? captchaImage;
   double elevation = 0;
   StatefulWidget? content;
+  bool isActialToken = false;
+  int getPageIndex() {
+    return pageIndex;
+  }
 
   @override
   void initState() {
@@ -43,6 +54,13 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       setElevation: setAppbarElevation,
     );
+    isOnline().then((value) {
+        if (value) {
+          widget.ecampus.isActualToken().then((value) {
+            isActialToken = value;
+          });
+        }
+      });
     super.initState();
   }
 
@@ -80,6 +98,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       pageIndex = items.indexOf(item);
                       content = item.content as StatefulWidget?;
                       elevation = 0;
+                      if (pageIndex == 1) {
+                        scheduleKey.currentState!.onPageActive();
+                      } else if (pageIndex == 2) {
+                        subjectsKey.currentState!.onPageActive();
+                      }
                     });
                   },
                   child: AnimatedContainer(
@@ -133,7 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  final GlobalKey<ContentSubjectsState> _key = GlobalKey();
+  final GlobalKey<ContentSubjectsState> subjectsKey = GlobalKey();
+  final GlobalKey<ContentScheduleState> scheduleKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     Color primaryColor = Theme.of(context).primaryColor;
@@ -225,7 +250,12 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           )
         ],
-        ContentSchedule(context: context),
+        ContentSchedule(
+          key: scheduleKey,
+          context: context,
+          getIndex: getPageIndex,
+          ecampus: widget.ecampus,
+        ),
         EcampusIcons.icons8_schedule,
         'Расписание',
       ),
@@ -251,7 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
           CupertinoButton(
             onPressed: () {
               CacheSystem.invalidateAcademicYearsResponse();
-              _key.currentState!.fillData();
+              subjectsKey.currentState!.fillData();
             },
             child: Icon(
               EcampusIcons.icons8_restart,
@@ -260,9 +290,11 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
         ContentSubjects(
-          key: _key,
+          key: subjectsKey,
           context: context,
           setElevation: setAppbarElevation,
+          getIndex: getPageIndex,
+          ecampus: widget.ecampus,
         ),
         EcampusIcons.icons8_books,
         'Предметы',
@@ -351,21 +383,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: IndexedStack(
         index: pageIndex,
         children: [
-          ContentMain(
-            context: context,
-            setElevation: setAppbarElevation,
-          ),
-          ContentSchedule(
-            context: context,
-          ),
-          ContentSubjects(
-            context: context,
-            setElevation: setAppbarElevation,
-          ),
-          ContentServices(
-            context: context,
-            setElevation: setAppbarElevation,
-          ),
+          bottomNavItems[0].content,
+          bottomNavItems[1].content,
+          bottomNavItems[2].content,
+          bottomNavItems[3].content,
         ],
       ),
       bottomNavigationBar: SafeArea(
