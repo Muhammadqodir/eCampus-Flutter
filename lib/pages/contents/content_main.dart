@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
@@ -55,8 +56,10 @@ class _ContentMainState extends State<ContentMain> {
   }
 
   void update({bool showCaptchaDialog = false, bool useCache = true}) async {
-    if(showCaptchaDialog){
-      ecampus = eCampus((await SharedPreferences.getInstance()).getString("token") ?? "undefined");
+    if (showCaptchaDialog) {
+      ecampus = eCampus(
+          (await SharedPreferences.getInstance()).getString("token") ??
+              "undefined");
     }
     CacheSystem.isActualCache().then(
       (value) {
@@ -272,7 +275,9 @@ class _ContentMainState extends State<ContentMain> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const Icon(EcampusIcons.icons8_doughnut_chart),
-                              const SizedBox(width: 12,),
+                              const SizedBox(
+                                width: 12,
+                              ),
                               Text(
                                 "Статистика",
                                 style: Theme.of(context)
@@ -286,15 +291,23 @@ class _ContentMainState extends State<ContentMain> {
                             // SharedPreferences.getInstance().then((value) => {
                             //       value.setString("token", "invalid"),
                             //     });
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => StatisticsPage(
-                                  context: context,
-                                ),
-                              ),
-                            );
-                            log(ratingModel!.toJson().toString());
+
+                            // Navigator.push(
+                            //   context,
+                            //   CupertinoPageRoute(
+                            //     builder: (context) => StatisticsPage(
+                            //       context: context,
+                            //     ),
+                            //   ),
+                            // );
+
+                            // log(ratingModel!.toJson().toString());
+                            AwesomeNotifications().createNotification(
+                                content: NotificationContent(
+                                    id: 10,
+                                    channelKey: 'basic_channel',
+                                    title: 'Simple Notification',
+                                    body: 'Simple body'));
                           },
                         ),
                       ),

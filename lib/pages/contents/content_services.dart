@@ -80,6 +80,24 @@ class _ContentServicesState extends State<ContentServices> {
               );
             },
             child: ServiceItem(
+              icon: EcampusIcons.icons8_notification,
+              backgroundColor: CustomColors.colorPalette[1],
+              title: "Уведомления",
+              subTitle: "Список ваших одногруппников и их рейтинг",
+            ),
+          ),
+          CrossListElement(
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => RatingPage(
+                    context: context,
+                  ),
+                ),
+              );
+            },
+            child: ServiceItem(
               icon: EcampusIcons.icons8_leaderboard,
               backgroundColor: CustomColors.colorPalette[1],
               title: "Рейтинг",

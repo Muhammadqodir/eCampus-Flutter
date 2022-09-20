@@ -30,6 +30,13 @@
             {
               "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "545535659652-fofeaegcshb5tbgovps4jto638c98fb8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecampusNcfu"
+              }
             }
           ]
         }
@@ -67,6 +74,13 @@
             {
               "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "545535659652-fofeaegcshb5tbgovps4jto638c98fb8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecampusNcfu"
+              }
             }
           ]
         }
@@ -96,6 +110,13 @@
             {
               "client_id": "545535659652-bdh1a0oguva5n8n9qj2ep0ac328j7t33.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "545535659652-fofeaegcshb5tbgovps4jto638c98fb8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecampusNcfu"
+              }
             }
           ]
         }

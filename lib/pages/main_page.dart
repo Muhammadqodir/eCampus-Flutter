@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
@@ -54,13 +55,21 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       setElevation: setAppbarElevation,
     );
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        // This is just a basic example. For real apps, you must show some
+        // friendly dialog box before call the request method.
+        // This is very important to not harm the user experience
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
     isOnline().then((value) {
-        if (value) {
-          widget.ecampus.isActualToken().then((value) {
-            isActialToken = value;
-          });
-        }
-      });
+      if (value) {
+        widget.ecampus.isActualToken().then((value) {
+          isActialToken = value;
+        });
+      }
+    });
     super.initState();
   }
 
