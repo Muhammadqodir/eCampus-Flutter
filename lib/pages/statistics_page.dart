@@ -195,35 +195,35 @@ class _StatisticsPageState extends State<StatisticsPage> {
               if (lessons.isSuccess) {
                 List<LessonItemModel> lessonItems = lessons.models;
                 for (int k = 0; k < lessonItems.length; k++) {
-                  final int l_pos = k;
+                  final int lPos = k;
 
-                  if (lessonItems[l_pos].date.isNotEmpty &&
-                      DateTime.parse(lessonItems[l_pos].date)
+                  if (lessonItems[lPos].date.isNotEmpty &&
+                      DateTime.parse(lessonItems[lPos].date)
                           .isBefore(DateTime.now())) {
-                    if (lessonItems[l_pos].isCheckpoint) {
-                      if (lessonItems[l_pos].gradeText == "хорошо" ||
-                          lessonItems[l_pos].gradeText == "удовлетворительно" ||
-                          lessonItems[l_pos].gradeText == "отлично" ||
-                          lessonItems[l_pos].gradeText ==
+                    if (lessonItems[lPos].isCheckpoint) {
+                      if (lessonItems[lPos].gradeText == "хорошо" ||
+                          lessonItems[lPos].gradeText == "удовлетворительно" ||
+                          lessonItems[lPos].gradeText == "отлично" ||
+                          lessonItems[lPos].gradeText ==
                               "неудовлетворительно") {
-                        fillKT.add(lessonItems[l_pos]);
+                        fillKT.add(lessonItems[lPos]);
                         fillKT[fillKT.length - 1].subject == subjectStr;
                       } else {
-                        openKT.add(lessonItems[l_pos]);
+                        openKT.add(lessonItems[lPos]);
                         openKT[openKT.length - 1].subject = subjectStr;
                       }
                     }
                   }
-                  if (lessonItems[l_pos].attendance == 0) {
-                    nki.add(lessonItems[l_pos]);
+                  if (lessonItems[lPos].attendance == 0) {
+                    nki.add(lessonItems[lPos]);
                     nki[nki.length - 1].subject = subjectStr;
                   }
-                  if (lessonItems[l_pos].attendance == 2) {
-                    ushki.add(lessonItems[l_pos]);
+                  if (lessonItems[lPos].attendance == 2) {
+                    ushki.add(lessonItems[lPos]);
                     ushki[ushki.length - 1].subject = subjectStr;
                   }
                   setState(() {
-                    loadingText = "$subjectStr(${lessonItems[l_pos].name})";
+                    loadingText = "$subjectStr(${lessonItems[lPos].name})";
                   });
                 }
               }
@@ -294,35 +294,35 @@ class _StatisticsPageState extends State<StatisticsPage> {
               if (lessons.isSuccess) {
                 List<LessonItemModel> lessonItems = lessons.models;
                 for (int k = 0; k < lessonItems.length; k++) {
-                  final int l_pos = k;
+                  final int lPos = k;
 
-                  if (lessonItems[l_pos].date.isNotEmpty &&
-                      DateTime.parse(lessonItems[l_pos].date)
+                  if (lessonItems[lPos].date.isNotEmpty &&
+                      DateTime.parse(lessonItems[lPos].date)
                           .isBefore(DateTime.now())) {
-                    if (lessonItems[l_pos].isCheckpoint) {
-                      if (lessonItems[l_pos].gradeText == "хорошо" ||
-                          lessonItems[l_pos].gradeText == "удовлетворительно" ||
-                          lessonItems[l_pos].gradeText == "отлично" ||
-                          lessonItems[l_pos].gradeText ==
+                    if (lessonItems[lPos].isCheckpoint) {
+                      if (lessonItems[lPos].gradeText == "хорошо" ||
+                          lessonItems[lPos].gradeText == "удовлетворительно" ||
+                          lessonItems[lPos].gradeText == "отлично" ||
+                          lessonItems[lPos].gradeText ==
                               "неудовлетворительно") {
-                        lessonItems[l_pos].subject = subjectStr;
-                        fillKT.add(lessonItems[l_pos]);
+                        lessonItems[lPos].subject = subjectStr;
+                        fillKT.add(lessonItems[lPos]);
                       } else {
-                        lessonItems[l_pos].subject = subjectStr;
-                        openKT.add(lessonItems[l_pos]);
+                        lessonItems[lPos].subject = subjectStr;
+                        openKT.add(lessonItems[lPos]);
                       }
                     }
                   }
-                  if (lessonItems[l_pos].attendance == 0) {
-                    nki.add(lessonItems[l_pos]);
+                  if (lessonItems[lPos].attendance == 0) {
+                    nki.add(lessonItems[lPos]);
                     nki[nki.length - 1].subject = subjectStr;
                   }
-                  if (lessonItems[l_pos].attendance == 2) {
-                    ushki.add(lessonItems[l_pos]);
+                  if (lessonItems[lPos].attendance == 2) {
+                    ushki.add(lessonItems[lPos]);
                     ushki[ushki.length - 1].subject = subjectStr;
                   }
                   setState(() {
-                    loadingText = "$subjectStr(${lessonItems[l_pos].name})";
+                    loadingText = "$subjectStr(${lessonItems[lPos].name})";
                   });
                 }
               }

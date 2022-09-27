@@ -56,16 +56,16 @@ class _LoginPageState extends State<LoginPage> {
 
   void updateCapcha() {
     isOnline().then(
-      (isOnline) => {
+      (isOnline) {
         setState(() {
           captchaImage = null;
-        }),
-        ecampus.getCaptcha().then((value) => {
-              setState(() {
-                captchaImage = value;
-                captcha.text = "";
-              })
-            }),
+        });
+        ecampus.getCaptcha().then((value) {
+          setState(() {
+            captchaImage = value;
+            captcha.text = "";
+          });
+        });
       },
     );
   }
@@ -97,56 +97,47 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = true;
     });
-    isOnline().then((isOnline) => {
-          if (isOnline)
-            {
-              ecampus
-                  .authenticate(username.text, password.text, captcha.text)
-                  .then(
-                    (response) => {
-                      if (response.isSuccess)
-                        {
-                          SharedPreferences.getInstance().then(
-                            (value) => {
-                              value.setBool("isLogin", true),
-                              value.setString("login", username.text),
-                              value.setString("password", password.text),
-                              value.setString("token", response.cookie),
-                              value.setString("userName", response.userName)
-                            },
-                          ),
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyHomePage(
-                                title: 'eCampus',
-                                ecampus: ecampus,
-                              ),
-                            ),
-                          )
-                        }
-                      else
-                        {
-                          password.text = "",
-                          _showAlertDialog(context, "eCampus", response.error,
-                              "Попробовать снова")
-                        },
-                      ecampus.client.clearCookies(),
-                      updateCapcha(),
-                      setState(() {
-                        loading = false;
-                      })
-                    },
-                  )
-            }
-          else
-            {
-              showOfflineDialog(context),
-              setState(() {
-                loading = false;
-              }),
-            }
+    isOnline().then((isOnline) {
+      if (isOnline) {
+        ecampus
+            .authenticate(username.text, password.text, captcha.text)
+            .then((response) {
+          if (response.isSuccess) {
+            SharedPreferences.getInstance().then((value) {
+              value.setBool("isLogin", true);
+              value.setString("login", username.text);
+              value.setString("password", password.text);
+              value.setString("token", response.cookie);
+              value.setString("userName", response.userName);
+            });
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyHomePage(
+                  title: 'eCampus',
+                  ecampus: ecampus,
+                ),
+              ),
+            );
+          } else {
+            password.text = "";
+            _showAlertDialog(
+                context, "eCampus", response.error, "Попробовать снова");
+          }
+          ;
+          ecampus.client.clearCookies();
+          updateCapcha();
+          setState(() {
+            loading = false;
+          });
         });
+      } else {
+        showOfflineDialog(context);
+        setState(() {
+          loading = false;
+        });
+      }
+    });
   }
 
   @override

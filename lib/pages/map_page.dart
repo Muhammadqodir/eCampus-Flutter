@@ -1,19 +1,13 @@
 import 'dart:developer';
 
 import 'package:ecampus_ncfu/ecampus_icons.dart';
-import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/map_marker_model.dart';
-import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
-import 'package:ecampus_ncfu/utils/dialogs.dart';
-import 'package:ecampus_ncfu/utils/gui_utils.dart';
-import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:map_launcher/map_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({
@@ -260,7 +254,7 @@ class _MapPageState extends State<MapPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     child: Text(
                       "Открыть с помощью:",
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -275,7 +269,7 @@ class _MapPageState extends State<MapPage> {
                             title: title,
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
                                 SvgPicture.asset(
@@ -303,7 +297,7 @@ class _MapPageState extends State<MapPage> {
         },
       );
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 

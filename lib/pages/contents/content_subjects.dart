@@ -252,7 +252,7 @@ class ContentSubjectsState extends State<ContentSubjects> {
                           .map(
                             (element) => Expanded(
                               child: Padding(
-                                padding: EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(4),
                                 child: CrossButton(
                                   onPressed: () {
                                     if (element.id != selectedTermId) {
@@ -309,7 +309,7 @@ class ContentSubjectsState extends State<ContentSubjects> {
                                 );
                               },
                               child: Padding(
-                                padding: EdgeInsets.all(12),
+                                padding: const EdgeInsets.all(12),
                                 child: element.getView(context),
                               ),
                             ),

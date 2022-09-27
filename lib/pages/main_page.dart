@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -15,13 +14,10 @@ import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
-import 'package:ecampus_ncfu/themes.dart';
-import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -105,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () {
                     setState(() {
                       pageIndex = items.indexOf(item);
-                      content = item.content as StatefulWidget?;
+                      content = item.content;
                       elevation = 0;
                       if (pageIndex == 1) {
                         scheduleKey.currentState!.onPageActive();

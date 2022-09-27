@@ -1,19 +1,10 @@
-import 'dart:developer';
-
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
-import 'package:ecampus_ncfu/models/map_marker_model.dart';
-import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/search_schedule_model.dart';
 import 'package:ecampus_ncfu/pages/schedule_page.dart';
-import 'package:ecampus_ncfu/utils/colors.dart';
-import 'package:ecampus_ncfu/utils/dialogs.dart';
-import 'package:ecampus_ncfu/utils/gui_utils.dart';
-import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:map_launcher/map_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchSchedule extends StatefulWidget {
@@ -53,7 +44,7 @@ class _SearchScheduleState extends State<SearchSchedule> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0.5,
         title: Padding(
-          padding: EdgeInsets.only(right: 12),
+          padding: const EdgeInsets.only(right: 12),
           child: CupertinoSearchTextField(
             autofocus: true,
             placeholder: "Поиск",

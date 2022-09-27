@@ -1,15 +1,9 @@
-import 'dart:developer';
-
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
-import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
-import 'package:ecampus_ncfu/inc/cross_list_element.dart';
-import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/pages/contents/content_lesson_type.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
-import 'package:ecampus_ncfu/utils/gui_utils.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +102,7 @@ class _SubjectDetailsPageState extends State<SubjectDetailsPage> {
                   .toList(),
             )),
         body: TabBarView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             children: widget.lessonTypes
                 .map((e) => ContentLessonType(
                       context: context,

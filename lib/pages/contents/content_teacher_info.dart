@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:ecampus_ncfu/cache_system.dart';
-import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
@@ -9,7 +8,6 @@ import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/utils.dart';
@@ -84,7 +82,9 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                     initHumor = humorRating[key].toInt();
                   }
                 }
-              } catch (e) {}
+              } catch (e) {
+                log("Can not load HumorRating for ${data["fullName"]}");
+              }
               try {
                 examRating = data["rating"]["examRating"];
                 for (String key in examRating.keys) {
@@ -92,7 +92,9 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                     initExam = examRating[key].toInt();
                   }
                 }
-              } catch (e) {}
+              } catch (e) {
+                log("Can not load ExamRating for ${data["fullName"]}");
+              }
               try {
                 teachSkills = data["rating"]["teachSkills"];
                 for (String key in teachSkills.keys) {
@@ -100,7 +102,9 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                     initTeach = teachSkills[key].toInt();
                   }
                 }
-              } catch (e) {}
+              } catch (e) {
+                log("Can not load TeachSlikks for ${data["fullName"]}");
+              }
             });
           } else {
             setState(() {
@@ -156,7 +160,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
     String userId = await CacheSystem.getUserId();
     DatabaseReference tRef = widget.database
         .ref("teachers/${widget.teacherId}/rating/$rType/$userId");
-    print("teachers/${widget.teacherId}/rating/$rType/$userId");
+    log("teachers/${widget.teacherId}/rating/$rType/$userId");
     tRef.set(value);
   }
 
@@ -180,10 +184,10 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
             )
           : !notFound
               ? ListView(
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   children: [
                     Container(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: Column(
                         children: [
                           Row(
@@ -193,7 +197,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                 picUrl,
                                 width: 150,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 12,
                               ),
                               Expanded(
@@ -228,7 +232,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                 .bodyMedium!
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Row(
@@ -380,7 +384,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                               }
                             },
                             backgroundColor: Theme.of(context).primaryColor,
-                            child: Text("Подробнее"),
+                            child: const Text("Подробнее"),
                           ),
                         ],
                       ),
@@ -389,7 +393,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                 )
               : Center(
                   child: Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Image.asset("images/not_found.png"),
                   ),
                 ),

@@ -6,24 +6,14 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
-import 'package:ecampus_ncfu/inc/bottom_nav.dart';
-import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
-import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
-import 'package:ecampus_ncfu/models/teacher_model.dart';
-import 'package:ecampus_ncfu/pages/contents/content_epass.dart';
-import 'package:ecampus_ncfu/pages/login_page.dart';
-import 'package:ecampus_ncfu/pages/statistics_page.dart';
-import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
-
-import '../../utils/gui_utils.dart';
 import '../../utils/utils.dart';
 
 class ContentMain extends StatefulWidget {
@@ -171,7 +161,7 @@ class _ContentMainState extends State<ContentMain> {
           ratingModel = getMyRating(ratingResponse.items);
         });
       } else {
-        print(ratingResponse.error);
+        log(ratingResponse.error);
         setState(() {
           rating = false;
         });
@@ -226,15 +216,13 @@ class _ContentMainState extends State<ContentMain> {
                     Column(
                       children: [
                         isUnActualToken
-                            ? Container(
-                                child: Text(
-                                  "Данные могут быть неактуальными!",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: Colors.red),
-                                ),
-                              )
+                            ? Text(
+                              "Данные могут быть неактуальными!",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(color: Colors.red),
+                            )
                             : const SizedBox(),
                         userPic != null
                             ? MainInfoView().getAvaterView(userPic!)
@@ -256,7 +244,7 @@ class _ContentMainState extends State<ContentMain> {
                                   )
                                 : MainInfoView()
                                     .getRatingBarViewSkeleton(context)
-                            : SizedBox(),
+                            : const SizedBox(),
                       ],
                     ),
                     Padding(
@@ -346,7 +334,7 @@ class _ContentMainState extends State<ContentMain> {
                             const SizedBox(
                               height: 12,
                             ),
-                            getLessonModels().length > 0
+                            getLessonModels().isNotEmpty
                                 ? Column(
                                     children: getLessonModels()
                                         .map(

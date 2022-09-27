@@ -4,7 +4,6 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
-import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/gui_utils.dart';
