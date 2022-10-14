@@ -378,7 +378,7 @@ class LessonItemModel {
   }
 
   Widget getScoreView(BuildContext context) {
-    if (gainedScore > 0) {
+    if (gradeText != "") {
       return Container(
         margin: const EdgeInsets.only(top: 3),
         decoration: BoxDecoration(
@@ -389,6 +389,7 @@ class LessonItemModel {
           padding: const EdgeInsets.all(3),
           child: Row(
             children: [
+              const SizedBox(width: 4),
               const Icon(
                 EcampusIcons.icons8_star,
                 size: 21,
@@ -401,21 +402,28 @@ class LessonItemModel {
                 gradeText,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              const SizedBox(
-                width: 2,
-              ),
-              const Icon(
-                EcampusIcons.icons8_up,
-                size: 21,
-                color: Colors.white,
-              ),
-              const SizedBox(
-                width: 2,
-              ),
-              Text(
-                gainedScore.toString(),
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
+              gainedScore > 0
+                  ? Row(
+                      children: [
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        const Icon(
+                          EcampusIcons.icons8_up,
+                          size: 21,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Text(
+                          gainedScore.toString(),
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
+              const SizedBox(width: 4)
             ],
           ),
         ),

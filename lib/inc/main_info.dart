@@ -1,17 +1,14 @@
 import 'dart:typed_data';
-import 'dart:ui';
-
 import 'package:ecampus_ncfu/utils/gui_utils.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../ecampus_icons.dart';
 
 class MainInfoView {
   Widget getAvaterView(Uint8List userPic) {
     return Padding(
-      padding: EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 8),
       child: Container(
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -29,15 +26,15 @@ class MainInfoView {
 
   Widget getAvaterViewSkeleton(BuildContext context) {
     return Shimmer.fromColors(
-      child: CircleSkeleton(radius: 45),
       baseColor: Theme.of(context).dividerColor.withAlpha(100),
       highlightColor: Theme.of(context).dividerColor.withAlpha(100),
+      child: CircleSkeleton(radius: 45),
     );
   }
 
   Widget getUserNameView(BuildContext context, String userName) {
     return Padding(
-      padding: EdgeInsets.only(top: 12, bottom: 12),
+      padding: const EdgeInsets.only(top: 12, bottom: 12),
       child: Text(
         userName,
         style: Theme.of(context)
@@ -50,11 +47,15 @@ class MainInfoView {
 
   Widget getUserNameViewSkeleton(BuildContext context) {
     return Shimmer.fromColors(
-        child: Padding(
-            padding: EdgeInsets.only(top: 12, bottom: 12),
-            child: TextSkeleton(width: getWidthPercent(context, 80))),
-        baseColor: Colors.black26,
-        highlightColor: Colors.black87);
+      baseColor: Colors.black26,
+      highlightColor: Colors.black87,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 12, bottom: 12),
+        child: TextSkeleton(
+          width: getWidthPercent(context, 80),
+        ),
+      ),
+    );
   }
 
   Widget getRatingBarView(BuildContext context,
@@ -71,9 +72,9 @@ class MainInfoView {
           Expanded(
             child: Column(
               children: [
-                Icon(EcampusIcons.icons8_star),
+                const Icon(EcampusIcons.icons8_star),
                 Padding(
-                  padding: EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: 4),
                   child: Text(
                     averageRating.toStringAsFixed(2),
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -113,7 +114,7 @@ class MainInfoView {
               children: [
                 const Icon(EcampusIcons.icons8_university),
                 Padding(
-                  padding: EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: 4),
                   child: Text(
                     "$instituteRating из $studentsNumberInInstitute",
                     style: Theme.of(context).textTheme.bodyMedium,
