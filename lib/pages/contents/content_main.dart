@@ -62,6 +62,8 @@ class _ContentMainState extends State<ContentMain> {
             userPic = null;
             isUnActualToken = false;
           });
+          //Always load from cache
+          getCacheData();
           ecampus.isActualToken().then((value) {
             if (value) {
               isUnActualToken = false;

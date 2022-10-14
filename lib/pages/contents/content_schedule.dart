@@ -102,6 +102,27 @@ class ContentScheduleState extends State<ContentSchedule> {
             });
           });
         } else {
+          //Always load from cache(until setState)
+          ScheduleWeeksResponse value = weeksResponse.value;
+          setState(() {
+            weeks = value.weeks;
+            scheduleId = value.id;
+            targetType = value.type;
+            selectedWeekId = value.currentWeek;
+            currentWeekDate = weeks[selectedWeekId].dateBegin;
+            selectedWeek =
+                "${weeks[selectedWeekId].number} неделя - c ${weeks[selectedWeekId].getStrDateBegin()} по ${weeks[selectedWeekId].getStrDateEnd()}";
+            CacheSystem.getScheduleResponse().then((schedule) {
+              setState(() {
+                loading = false;
+                scheduleModels = schedule!.value.scheduleModels;
+                selectedIndex = DateTime.now().weekday == 7
+                    ? 0
+                    : DateTime.now().weekday - 1;
+              });
+              _pageController = PageController(initialPage: selectedIndex);
+            });
+          });
           getWeeks();
         }
       } else {
