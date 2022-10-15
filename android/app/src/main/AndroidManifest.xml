@@ -1,10 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ecampus_ncfu">
+    package="uz.mqsoft.ecampusncfu">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="ecampus_ncfu"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-4525868919149294~1463230455" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

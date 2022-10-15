@@ -35,8 +35,10 @@ class RecordBookItem {
     }
   }
 
-  Color getScoreBgColor(BuildContext context){
-    if (mark == "неудовлетворительно" || mark == "не зачтено" || mark == "неявка") {
+  Color getScoreBgColor(BuildContext context) {
+    if (mark == "неудовлетворительно" ||
+        mark == "не зачтено" ||
+        mark == "неявка") {
       return CustomColors.unsatisfactorily;
     } else {
       return Theme.of(context).textTheme.bodyMedium!.color!;
@@ -82,9 +84,14 @@ class RecordBookItem {
                     const SizedBox(
                       width: 4,
                     ),
-                    Text(
-                      "Преподаватель",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Flexible(
+                      child: Text(
+                        "Преподаватель",
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        maxLines: 1,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     )
                   ],
                 ),
@@ -106,7 +113,6 @@ class RecordBookItem {
               ),
             ],
           ),
-          
           const SizedBox(
             height: 4,
           ),
@@ -124,9 +130,14 @@ class RecordBookItem {
                     const SizedBox(
                       width: 4,
                     ),
-                    Text(
-                      "Оценка",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Flexible(
+                      child: Text(
+                        "Оценка",
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        maxLines: 1,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     )
                   ],
                 ),
@@ -138,17 +149,15 @@ class RecordBookItem {
                   children: [
                     Text(
                       mark,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold, color: getScoreBgColor(context)),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: getScoreBgColor(context)),
                     )
                   ],
                 ),
               ),
             ],
           ),
-          
           const SizedBox(
             height: 4,
           ),
@@ -166,9 +175,14 @@ class RecordBookItem {
                     const SizedBox(
                       width: 4,
                     ),
-                    Text(
-                      "Общее кол-во часов",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Flexible(
+                      child: Text(
+                        "Общее кол-во часов",
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        maxLines: 1,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     )
                   ],
                 ),
@@ -190,7 +204,6 @@ class RecordBookItem {
               ),
             ],
           ),
-          
           const SizedBox(
             height: 4,
           ),
@@ -208,9 +221,14 @@ class RecordBookItem {
                     const SizedBox(
                       width: 4,
                     ),
-                    Text(
-                      "Дата сдачи",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Flexible(
+                      child: Text(
+                        "Дата сдачи",
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        maxLines: 1,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     )
                   ],
                 ),
@@ -232,7 +250,6 @@ class RecordBookItem {
               ),
             ],
           ),
-          
         ],
       ),
     );

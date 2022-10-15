@@ -326,10 +326,9 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
         ContentServices(
-          context: context,
-          setElevation: setAppbarElevation,
-          ecampus: widget.ecampus
-        ),
+            context: context,
+            setElevation: setAppbarElevation,
+            ecampus: widget.ecampus),
         EcampusIcons.icons8_circled_menu,
         'Сервисы',
       ),
@@ -346,12 +345,15 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             bottomNavItems[pageIndex].title != "eCampus" || true
-                ? Text(
-                    bottomNavItems[pageIndex].title,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                ? SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      bottomNavItems[pageIndex].title,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
                   )
                 : Container(
                     padding: const EdgeInsets.symmetric(

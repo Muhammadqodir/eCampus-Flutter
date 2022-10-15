@@ -1,4 +1,4 @@
-package com.example.ecampus_ncfu
+package uz.mqsoft.ecampusncfu
 
 import io.flutter.embedding.android.FlutterActivity
 
