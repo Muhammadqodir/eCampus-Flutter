@@ -328,6 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ContentServices(
           context: context,
           setElevation: setAppbarElevation,
+          ecampus: widget.ecampus
         ),
         EcampusIcons.icons8_circled_menu,
         'Сервисы',

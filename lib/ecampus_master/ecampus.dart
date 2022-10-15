@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:ecampus_ncfu/models/record_book_models.dart';
 import 'package:html/dom.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -28,7 +29,7 @@ class eCampus {
     client.addCookie("ecampus", ecampusToken);
   }
 
-  void setToken(String ecampusToken){
+  void setToken(String ecampusToken) {
     this.ecampusToken = ecampusToken;
     client.addCookie("ecampus", ecampusToken);
   }
@@ -1231,108 +1232,173 @@ class eCampus {
 
   Future<ScheduleResponse> getCurrentSchedule() async {
     try {
-    http.Response response = await client
-        .post('https://ecampus.ncfu.ru/schedule/my/student');
+      http.Response response =
+          await client.post('https://ecampus.ncfu.ru/schedule/my/student');
 
-    if (response.statusCode == 200) {
-      String responseString = response.body;
-      int start = responseString.indexOf("var viewModel = ") + 16;
-      String json = responseString.substring(start);
-      start = json.indexOf("</script>") - 3;
-      json = json.substring(0, start);
-      json = json.replaceAll("JSON.parse(\"\\\"", "\"");
-      json = json.replaceAll("\\\"\")", "\"");
-      List<dynamic> jsonObject = jsonDecode(json)["weekdays"];
+      if (response.statusCode == 200) {
+        String responseString = response.body;
+        int start = responseString.indexOf("var viewModel = ") + 16;
+        String json = responseString.substring(start);
+        start = json.indexOf("</script>") - 3;
+        json = json.substring(0, start);
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        List<dynamic> jsonObject = jsonDecode(json)["weekdays"];
 
-      int size = jsonObject.length;
-      if (size > 0) {
-        List<ScheduleModel> scheduleModels = [];
-        for (var i = 0; i < size; i++) {
-          Map<String, dynamic> weekday = jsonObject[i];
-          String weekday_ = weekday["WeekDay"];
-          DateTime date = DateTime.parse(weekday["Date"]);
-          ScheduleModel model = ScheduleModel(
-            weekDay: weekday_,
-            date: date,
-            lessons: [],
-          );
-          List<dynamic> lessons = weekday["Lessons"];
-          log(weekday_);
-          List<ScheduleLessonsModel> lessoonsModels = [];
-          for (int j = 0; j < lessons.length; j++) {
-            Map<String, dynamic> lesson = lessons[j];
-            String subName = "";
-            DateTime timeStart = DateTime.now();
-            DateTime timeEnd = DateTime.now();
-            String room = "";
-            int roomId = -1;
-            String teacher = "";
-            int teacherId = -1;
-            bool current = false;
-            int para = -1;
-            String lessonType = "";
-            try {
-              subName = lesson["Discipline"];
-            } catch (e) {}
-            try {
-              timeStart = DateTime.parse(lesson["TimeBegin"]);
-              timeEnd = DateTime.parse(lesson["TimeEnd"]);
-            } catch (e) {}
-            try {
-              room = lesson["Aud"]["Name"];
-              roomId = lesson["Aud"].getInt["Id"];
-            } catch (e) {}
-            try {
-              teacher = lesson["Teacher"]["Name"];
-              teacherId = lesson["Teacher"]["Id"];
-            } catch (e) {}
-            String group = "";
-            try {
-              para = lesson["PairNumberStart"];
-            } catch (e) {}
-            try {
-              current = lesson["Current"];
-            } catch (e) {}
-            try {
-              int gr_size = lesson["Groups"].length;
-              for (int k = 0; k < gr_size; k++) {
-                group += lesson["Groups"][k]["Name"] +
-                    lesson["Groups"][k]["Subgroup"];
-              }
-            } catch (e) {}
-            try {
-              lessonType = lesson["LessonType"];
-            } catch (e) {}
-            log(subName);
-            lessoonsModels.add(
-              ScheduleLessonsModel(
-                current: current,
-                subName: subName,
-                room: room,
-                roomId: roomId,
-                timeEnd: timeEnd,
-                timeStart: timeStart,
-                lessonType: lessonType,
-                group: group,
-                teacher: teacher,
-                teacherId: teacherId,
-                para: para,
-              ),
+        int size = jsonObject.length;
+        if (size > 0) {
+          List<ScheduleModel> scheduleModels = [];
+          for (var i = 0; i < size; i++) {
+            Map<String, dynamic> weekday = jsonObject[i];
+            String weekday_ = weekday["WeekDay"];
+            DateTime date = DateTime.parse(weekday["Date"]);
+            ScheduleModel model = ScheduleModel(
+              weekDay: weekday_,
+              date: date,
+              lessons: [],
             );
-          }
+            List<dynamic> lessons = weekday["Lessons"];
+            log(weekday_);
+            List<ScheduleLessonsModel> lessoonsModels = [];
+            for (int j = 0; j < lessons.length; j++) {
+              Map<String, dynamic> lesson = lessons[j];
+              String subName = "";
+              DateTime timeStart = DateTime.now();
+              DateTime timeEnd = DateTime.now();
+              String room = "";
+              int roomId = -1;
+              String teacher = "";
+              int teacherId = -1;
+              bool current = false;
+              int para = -1;
+              String lessonType = "";
+              try {
+                subName = lesson["Discipline"];
+              } catch (e) {}
+              try {
+                timeStart = DateTime.parse(lesson["TimeBegin"]);
+                timeEnd = DateTime.parse(lesson["TimeEnd"]);
+              } catch (e) {}
+              try {
+                room = lesson["Aud"]["Name"];
+                roomId = lesson["Aud"].getInt["Id"];
+              } catch (e) {}
+              try {
+                teacher = lesson["Teacher"]["Name"];
+                teacherId = lesson["Teacher"]["Id"];
+              } catch (e) {}
+              String group = "";
+              try {
+                para = lesson["PairNumberStart"];
+              } catch (e) {}
+              try {
+                current = lesson["Current"];
+              } catch (e) {}
+              try {
+                int gr_size = lesson["Groups"].length;
+                for (int k = 0; k < gr_size; k++) {
+                  group += lesson["Groups"][k]["Name"] +
+                      lesson["Groups"][k]["Subgroup"];
+                }
+              } catch (e) {}
+              try {
+                lessonType = lesson["LessonType"];
+              } catch (e) {}
+              log(subName);
+              lessoonsModels.add(
+                ScheduleLessonsModel(
+                  current: current,
+                  subName: subName,
+                  room: room,
+                  roomId: roomId,
+                  timeEnd: timeEnd,
+                  timeStart: timeStart,
+                  lessonType: lessonType,
+                  group: group,
+                  teacher: teacher,
+                  teacherId: teacherId,
+                  para: para,
+                ),
+              );
+            }
 
-          model.lessons = lessoonsModels;
-          scheduleModels.add(model);
+            model.lessons = lessoonsModels;
+            scheduleModels.add(model);
+          }
+          return ScheduleResponse(true, "", scheduleModels: scheduleModels);
+        } else {
+          return ScheduleResponse(false, "getSchedule response is empty");
         }
-        return ScheduleResponse(true, "", scheduleModels: scheduleModels);
       } else {
-        return ScheduleResponse(false, "getSchedule response is empty");
+        return ScheduleResponse(false, "Status code ${response.statusCode}");
       }
-    } else {
-      return ScheduleResponse(false, "Status code ${response.statusCode}");
-    }
     } catch (e) {
       return ScheduleResponse(false, e.toString());
     }
+  }
+
+  Future<RecordBookResponse> getRecordBook() async {
+    // try {
+      http.Response response =
+          await client.post('https://ecampus.ncfu.ru/details/zachetka');
+
+      if (response.statusCode == 200) {
+        String responseString = response.body;
+        int start = responseString.indexOf("var viewModel = ") + 16;
+        String json = responseString.substring(start);
+        start = json.indexOf("</script>") - 3;
+        json = json.substring(0, start);
+        json = json.replaceAll("JSON.parse(\"\\\"", "\"");
+        json = json.replaceAll("\\\"\")", "\"");
+        Map<String, dynamic> jsonObject = jsonDecode(json);
+        if (jsonObject.containsKey("EducationDetails")) {
+          List<dynamic> educationDetails = jsonObject["EducationDetails"];
+          Map<String, dynamic> educationDetail =
+              educationDetails[educationDetails.length - 1];
+          List<dynamic> studyYears = educationDetail["StudyYears"];
+          List<RecordBookCourseModel> courseModels = [];
+          for (int i = 0; i < studyYears.length; i++) {
+            Map<String, dynamic> studyYear = studyYears[i];
+            String title = studyYear["Name"];
+            log(title);
+            List<dynamic> terms = studyYear["Terms"];
+            List<RecordBookTermModel> termModels = [];
+            for (int j = 0; j < terms.length; j++) {
+              Map<String, dynamic> term = terms[j];
+              String termTitle = term["Name"];
+              log(termTitle);
+              List<RecordBookItem> recordBookItems = [];
+              List<String> listIndexes = ["Exams", "Zachets", "Other"];
+              for (int k = 0; k < listIndexes.length; k++) {
+                List<dynamic> list = term[listIndexes[k]];
+                for (int d = 0; d < list.length; d++) {
+                  Map<String, dynamic> li = list[d];
+                  String disc = li["Discipline"]??"".replaceAll("  ", " ");
+                  String hours = li["Hours"].toString();
+                  String type = li["Kod_v_name"]??"".replaceAll("  ", " ");
+                  String mark = li["Mark"]??"".replaceAll(" ", "");
+                  String teacher = li["Teacher"]??"".replaceAll("  ", " ");
+                  String date = li["Date"].replaceAll("  ", " ");
+                  RecordBookItem item = RecordBookItem(
+                      disc, hours, mark, date, teacher, type, false);
+                  recordBookItems.add(item);
+                }
+              }
+              termModels.add(RecordBookTermModel(termTitle, recordBookItems));
+            }
+            RecordBookCourseModel courseModel =
+                RecordBookCourseModel(title, termModels);
+            courseModels.add(courseModel);
+          }
+          return RecordBookResponse(true, "", models: courseModels);
+        } else {
+          return RecordBookResponse(true, "EducationDetails not has json", models: []);
+        }
+      } else {
+        return RecordBookResponse(false, "response.isSuccessful=false",  models: []);
+      }
+    // } catch (e) {
+    //   return RecordBookResponse(false, e.toString(), []);
+    // }
   }
 }

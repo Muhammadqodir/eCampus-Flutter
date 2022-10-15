@@ -1,5 +1,6 @@
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/record_book_models.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/search_schedule_model.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
@@ -193,4 +194,9 @@ class MyTeachersResponse extends Response {
       _$MyTeachersResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$MyTeachersResponseToJson(this);
+}
+
+class RecordBookResponse extends Response {
+  List<RecordBookCourseModel> models = [];
+  RecordBookResponse(bool isSuccess, String error, {this.models = const []}) : super(isSuccess, error);
 }

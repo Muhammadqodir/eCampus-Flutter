@@ -1,9 +1,11 @@
 import 'package:ecampus_ncfu/ecampus_icons.dart';
+import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/inc/service_item.dart';
 import 'package:ecampus_ncfu/pages/map_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/rating_page.dart';
+import 'package:ecampus_ncfu/pages/record_book_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,11 +13,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ContentServices extends StatefulWidget {
   const ContentServices(
-      {Key? key, required this.context, required this.setElevation})
+      {Key? key, required this.context, required this.setElevation, required this.ecampus})
       : super(key: key);
 
   final BuildContext context;
   final Function setElevation;
+  final eCampus ecampus;
 
   @override
   State<ContentServices> createState() => _ContentServicesState();
@@ -152,7 +155,17 @@ class _ContentServicesState extends State<ContentServices> {
             ),
           ),
           CrossListElement(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => RecordBookPage(
+                    context: context,
+                    ecampus: widget.ecampus,
+                  ),
+                ),
+              );
+            },
             enabled: false,
             child: ServiceItem(
               commingSoon: true,

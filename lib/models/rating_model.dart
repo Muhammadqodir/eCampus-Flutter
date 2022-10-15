@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:ecampus_ncfu/ecampus_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
