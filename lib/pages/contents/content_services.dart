@@ -166,9 +166,9 @@ class _ContentServicesState extends State<ContentServices> {
                 ),
               );
             },
-            enabled: false,
+            enabled: true,
             child: ServiceItem(
-              commingSoon: true,
+              commingSoon: false,
               icon: EcampusIcons.record_book,
               backgroundColor: CustomColors.colorPalette[4],
               title: "Зачётная книжка",

@@ -12,6 +12,9 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+const double _kItemExtent = 32.0;
 
 class RecordBookPage extends StatefulWidget {
   const RecordBookPage({Key? key, required this.context, required this.ecampus})
@@ -129,6 +132,72 @@ class _RecordBookPageState extends State<RecordBookPage> {
     ];
   }
 
+  void showSelectTermDialog() {
+    FixedExtentScrollController extentScrollController =
+        FixedExtentScrollController(initialItem: selectedCourse);
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 250,
+        padding: const EdgeInsets.only(top: 6.0),
+        // The Bottom margin is provided to align the popup above the system navigation bar.
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        // Provide a background color for the popup.
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        // Use a SafeArea widget to avoid system overlaps.
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 150,
+                child: CupertinoPicker(
+                  scrollController: extentScrollController,
+                  magnification: 1.22,
+                  squeeze: 1.2,
+                  useMagnifier: false,
+                  looping: false,
+                  itemExtent: _kItemExtent,
+                  // This is called when selected item is changed.
+                  onSelectedItemChanged: (int selectedItem) {
+                    SystemSound.play(SystemSoundType.click);
+                    HapticFeedback.mediumImpact();
+                  },
+                  children:
+                      List<Widget>.generate(models.length, (int index) {
+                    return Center(
+                      child: Text(
+                        models[index].title,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              CupertinoButton(
+                child: Text(
+                  "Выбрать",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    selectedCourse = extentScrollController.selectedItem;
+                  });
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return !loading
@@ -151,6 +220,20 @@ class _RecordBookPageState extends State<RecordBookPage> {
                       .titleMedium!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
+                actions: [
+                  CupertinoButton(
+                    onPressed: () {
+                      showSelectTermDialog();
+                    },
+                    child: Text(
+                      models[selectedCourse].title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Theme.of(context).primaryColor),
+                    ),
+                  )
+                ],
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 bottom: TabBar(
                   tabs: models[selectedCourse]

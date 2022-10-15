@@ -36,7 +36,7 @@ class RecordBookItem {
   }
 
   Color getScoreBgColor(BuildContext context){
-    if (mark == "неудовлетворительно" || mark == "не зачтено") {
+    if (mark == "неудовлетворительно" || mark == "не зачтено" || mark == "неявка") {
       return CustomColors.unsatisfactorily;
     } else {
       return Theme.of(context).textTheme.bodyMedium!.color!;
