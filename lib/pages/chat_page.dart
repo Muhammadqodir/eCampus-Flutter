@@ -77,14 +77,41 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Theme.of(context).secondaryHeaderColor,
               ),
-              child: CupertinoTextField(),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: CupertinoTextField(
+                      cursorRadius: Radius.circular(15),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CupertinoButton(
+                      borderRadius: BorderRadius.circular(15),
+                      padding: const EdgeInsets.all(0),
+                      color: Theme.of(context).primaryColor,
+                      child: Icon(EcampusIcons.icons8_up, size: 28,),
+                      onPressed: () {},
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).secondaryHeaderColor,
+        ),
+        child: SizedBox(),
       ),
     );
   }
