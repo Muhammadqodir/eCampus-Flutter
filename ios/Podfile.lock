@@ -163,6 +163,8 @@ PODS:
   - OneKit-Pangle/Database (1.1.21-pangle):
     - OneKit-Pangle/Service
   - OneKit-Pangle/Service (1.1.21-pangle)
+  - package_info_plus (0.4.5):
+    - Flutter
   - PromisesObjC (2.1.1)
   - Protobuf (3.21.5)
   - RangersAPM-Pangle/Core (2.3.2-pangle):
@@ -331,6 +333,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - stack_appodeal_flutter (from `.symlinks/plugins/stack_appodeal_flutter/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -394,6 +397,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   map_launcher:
     :path: ".symlinks/plugins/map_launcher/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
   stack_appodeal_flutter:
@@ -438,6 +443,7 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OMSDK_Appodeal: f0d5df63dd9a2cadf30b3e0a4f5bfd498375baa3
   OneKit-Pangle: 68a778c39d36ed8feffd667a6b49225427bcf286
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Protobuf: 7504b04fffcf6662ad629694db8231f5e744327f
   RangersAPM-Pangle: 97c8fe91af08574a739cc72a714b735efb6c891f

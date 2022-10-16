@@ -61,6 +61,8 @@ void main() async {
     ],
     debug: true,
   );
+
+
   Appodeal.setAutoCache(AppodealAdType.Banner, true);
   Appodeal.setAutoCache(AppodealAdType.Interstitial, true);
   Appodeal.setBannerCallbacks(
