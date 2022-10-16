@@ -15,6 +15,7 @@ import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
+import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -197,21 +198,38 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         [
-          CupertinoButton(
-            child: Icon(
-              EcampusIcons.icons8_notification,
-              color: primaryColor,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => NotificationsPage(
-                    context: context,
-                  ),
+          Stack(
+            children: [
+              CupertinoButton(
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Icon(
+                      EcampusIcons.icons8_notification,
+                      color: primaryColor,
+                    ),
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: CustomColors.error,
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => NotificationsPage(
+                        context: context,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           )
         ],
         ContentMain(
