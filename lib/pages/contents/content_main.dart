@@ -62,6 +62,11 @@ class _ContentMainState extends State<ContentMain> {
             userPic = null;
             isUnActualToken = false;
           });
+          CacheSystem.getStudentCache().then((value) {
+            if (value.userName != "undefined") {
+              getCacheData();
+            }
+          });
           ecampus.isActualToken().then((value) {
             if (value) {
               isUnActualToken = false;
@@ -217,12 +222,12 @@ class _ContentMainState extends State<ContentMain> {
                       children: [
                         isUnActualToken
                             ? Text(
-                              "Данные могут быть неактуальными!",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(color: Colors.red),
-                            )
+                                "Данные могут быть неактуальными!",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(color: Colors.red),
+                              )
                             : const SizedBox(),
                         userPic != null
                             ? MainInfoView().getAvaterView(userPic!)

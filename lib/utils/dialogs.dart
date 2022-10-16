@@ -108,7 +108,7 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage,
                 controller: captcha,
                 enableSuggestions: false,
                 autocorrect: false,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.done,
                 prefix: const Padding(
                   padding: EdgeInsets.only(left: 8.0),

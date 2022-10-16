@@ -335,7 +335,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 enableSuggestions: false,
                                                 autocorrect: false,
                                                 keyboardType:
-                                                    TextInputType.text,
+                                                    TextInputType.number,
                                                 textInputAction:
                                                     TextInputAction.done,
                                                 prefix: const Padding(

@@ -5,6 +5,7 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
+import 'package:ecampus_ncfu/inc/fade_indexed_stack.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
 import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
 import 'package:ecampus_ncfu/pages/contents/content_services.dart';
@@ -388,7 +389,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: IndexedStack(
+      body: FadeIndexedStack(
         index: pageIndex,
         children: [
           bottomNavItems[0].content,
