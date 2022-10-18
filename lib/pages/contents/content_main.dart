@@ -39,64 +39,36 @@ class _ContentMainState extends State<ContentMain> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) {
-      ecampus = eCampus(value.getString("token") ?? "undefined");
-      update();
-    });
+    update();
   }
 
-  void update({bool showCaptchaDialog = false, bool useCache = true}) async {
-    if (showCaptchaDialog) {
-      ecampus = eCampus(
-          (await SharedPreferences.getInstance()).getString("token") ??
-              "undefined");
+  void update({isSwipeRefresh = false}) async {
+    String? token = (await SharedPreferences.getInstance()).getString("token");
+    ecampus = eCampus(token ?? "undefined");
+    setState(() {
+      userName = null;
+      ratingModel = null;
+      userPic = null;
+      isUnActualToken = false;
+    });
+    getCacheData();
+    if(await ecampus.isActualToken()){
+      setState(() {
+        isUnActualToken = false;
+      });
+      getFreshData();
+    }else{
+      if(!(await CacheSystem.isActualCache())){
+        setState(() {
+          isUnActualToken = true;
+        });
+      }
+      if(isSwipeRefresh){
+        showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, (){
+          update();
+        });
+      }
     }
-    CacheSystem.isActualCache().then(
-      (value) {
-        if (value && useCache) {
-          getCacheData();
-        } else {
-          setState(() {
-            userName = null;
-            ratingModel = null;
-            userPic = null;
-            isUnActualToken = false;
-          });
-          CacheSystem.getStudentCache().then((value) {
-            if (value.userName != "undefined") {
-              getCacheData();
-            }
-          });
-          ecampus.isActualToken().then((value) {
-            if (value) {
-              isUnActualToken = false;
-              getFreshData();
-            } else {
-              if (showCaptchaDialog) {
-                setState(() {
-                  isUnActualToken = true;
-                });
-                isOnline().then((isOnline) {
-                  if (isOnline) {
-                    ecampus.getCaptcha().then((captchaImage) {
-                      showCapchaDialog(context, captchaImage, ecampus, update);
-                    });
-                    getCacheData();
-                  } else {
-                    showOfflineDialog(context);
-                  }
-                });
-              } else {
-                setState(() {
-                  isUnActualToken = true;
-                });
-                getCacheData();
-              }
-            }
-          });
-        }
-      },
-    );
   }
 
   void getCacheData() async {
@@ -106,20 +78,16 @@ class _ContentMainState extends State<ContentMain> {
         setState(() {
           schedule = (scheduleCache.value as ScheduleResponse).scheduleModels;
         });
-      } else {
-        log("update");
-        update(useCache: false);
       }
-    } else {
-      setState(() {
-        log("update");
-        update(useCache: false);
-      });
     }
     StudentCache studentCache = await CacheSystem.getStudentCache();
     setState(() {
-      userName = studentCache.userName;
-      userPic = studentCache.userPic;
+      if(studentCache.userName != "undefined"){
+        userName = studentCache.userName;
+      }
+      if(studentCache.userPic != null){
+        userPic = studentCache.userPic;
+      }
       if (studentCache.ratingModel.fullName != "undefined") {
         ratingModel = studentCache.ratingModel;
         rating = true;
@@ -211,7 +179,7 @@ class _ContentMainState extends State<ContentMain> {
           slivers: [
             CupertinoSliverRefreshControl(
               onRefresh: () async {
-                update(showCaptchaDialog: true);
+                update(isSwipeRefresh: true);
               },
             ),
             SliverList(

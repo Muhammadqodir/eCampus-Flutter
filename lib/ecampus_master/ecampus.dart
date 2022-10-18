@@ -1338,7 +1338,7 @@ class eCampus {
   }
 
   Future<RecordBookResponse> getRecordBook() async {
-    // try {
+    try {
       http.Response response =
           await client.post('https://ecampus.ncfu.ru/details/zachetka');
 
@@ -1396,6 +1396,63 @@ class eCampus {
         }
       } else {
         return RecordBookResponse(false, "response.isSuccessful=false",  models: []);
+      }
+    } catch (e) {
+      return RecordBookResponse(false, e.toString(), models: []);
+    }
+  }
+
+  Future<int> getNotificationSize() async {
+    // try {
+      http.Response response = await client.post(
+          'https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
+      if (response.statusCode == 200) {
+        Map<String, dynamic> json = jsonDecode(response.body);
+        if (json.containsKey("Messages")) {
+          List<Map<String, dynamic>> messageList =
+              List<Map<String, dynamic>>.from(json["Messages"]);
+          List<NotificationModel> unread = [];
+          List<NotificationModel> read = [];
+          messageList.forEach((element) {
+            print(element["DateOfReading"]);
+            if (element["DateOfReading"] == null) {
+              unread.add(NotificationModel(
+                  title: element["Title"] ?? "undefined",
+                  message: element["Message"] ?? "undefined",
+                  dateOfCreation: element["DateOfCreation"] ?? "",
+                  dateOfReading: "unread",
+                  actionData: element["ActionData"] ?? "",
+                  actionType: element["ActionType"] ?? "",
+                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                  activityKindIcon: element["ActivityKindIcon"] ??
+                      "/images/icons/education.png",
+                  activityKindName: element["ActivityKindName"] ?? "undefined",
+                  categoryId: element["CategoryId"] ?? "",
+                  notificationImportanceId:
+                      element["NotificationImportanceId"] ?? ""));
+            } else {
+              read.add(NotificationModel(
+                  title: element["Title"] ?? "undefined",
+                  message: element["Message"] ?? "undefined",
+                  dateOfCreation: element["DateOfCreation"] ?? "",
+                  dateOfReading: element["DateOfReading"] ?? "",
+                  actionData: element["ActionData"] ?? "",
+                  actionType: element["ActionType"] ?? "",
+                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                  activityKindIcon: element["ActivityKindIcon"] ??
+                      "/images/icons/education.png",
+                  activityKindName: element["ActivityKindName"] ?? "undefined",
+                  categoryId: element["CategoryId"] ?? "",
+                  notificationImportanceId:
+                      element["NotificationImportanceId"] ?? ""));
+            }
+          });
+          return unread.length;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
       }
     // } catch (e) {
     //   return RecordBookResponse(false, e.toString(), []);

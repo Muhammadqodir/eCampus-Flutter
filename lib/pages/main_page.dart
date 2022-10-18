@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -66,6 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
       if (value) {
         widget.ecampus.isActualToken().then((value) {
           isActialToken = value;
+          if(value){
+            widget.ecampus.getNotificationSize().then((value) {
+              log("Notifications: $value");
+            });
+          }
         });
       }
     });
@@ -364,7 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            bottomNavItems[pageIndex].title != "eCampus" || true
+            bottomNavItems[pageIndex].title != "eCampus" || false
                 ? SizedBox(
                     width: double.infinity,
                     child: Text(
