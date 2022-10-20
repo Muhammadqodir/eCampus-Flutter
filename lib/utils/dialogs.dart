@@ -1,11 +1,15 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
+import 'package:ecampus_ncfu/utils/system_info.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:open_store/open_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../ecampus_icons.dart';
 
@@ -31,6 +35,47 @@ void showConfirmDialog(BuildContext context, String title, String msg,
             Navigator.pop(context);
           },
           child: const Text("Отменить"),
+        )
+      ],
+    ),
+  );
+}
+
+void showUpdateDialog(
+    BuildContext context, String version, String packageName) {
+  showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: const Text(
+        "Обновление",
+      ),
+      content: Text(
+        "Доступно новая версия $version. Обновите приложение!",
+      ),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          isDestructiveAction: false,
+          onPressed: () {
+            OpenStore.instance.open(
+              appStoreId: '1644613830',
+              androidAppBundleId: 'uz.mqsoft.ecampusncfu',
+            );
+          },
+          child: const Text(
+            "Обновить",
+          ),
+        ),
+        CupertinoDialogAction(
+          /// This parameter indicates the action would perform
+          /// a destructive action such as deletion, and turns
+          /// the action's text color to red.
+          isDestructiveAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text(
+            "Позже",
+          ),
         )
       ],
     ),

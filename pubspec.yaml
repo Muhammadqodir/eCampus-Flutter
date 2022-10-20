@@ -55,6 +55,8 @@ dependencies:
   awesome_notifications: ^0.6.21
   firebase_messaging: ^13.0.2
   new_version: ^0.3.1
+  package_info: ^2.0.2
+  open_store: ^0.3.1
 
 dev_dependencies:
   build_runner: ^2.2.0

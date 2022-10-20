@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
@@ -19,11 +20,13 @@ import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info/package_info.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -46,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   StatefulWidget? content;
   bool isActialToken = false;
   int notification_count = 0;
+
   int getPageIndex() {
     return pageIndex;
   }
@@ -77,9 +81,28 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           }
         });
+
+        versionCheck(context);
       }
     });
     super.initState();
+  }
+
+  void versionCheck(context) async {
+    final FirebaseDatabase database = FirebaseDatabase.instance;
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    String currentVersion = info.version;
+    String packageName= info.packageName;
+    log("Current version:$currentVersion");
+    log("Package name:$packageName");
+    database.ref("config/flutter/version").get().then((snapshot) {
+      String dataJson = jsonEncode(snapshot.value);
+      Map<String, dynamic> data = jsonDecode(dataJson);
+      log("Store version: ${data["name"]}");
+      if(currentVersion != data["name"]){
+        showUpdateDialog(context, data["name"], packageName);
+      }
+    });
   }
 
   void setAppbarElevation(double visibility) {

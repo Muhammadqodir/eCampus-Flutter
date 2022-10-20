@@ -52,19 +52,19 @@ class _ContentMainState extends State<ContentMain> {
       isUnActualToken = false;
     });
     getCacheData();
-    if(await ecampus.isActualToken()){
+    if (await ecampus.isActualToken()) {
       setState(() {
         isUnActualToken = false;
       });
       getFreshData();
-    }else{
-      if(!(await CacheSystem.isActualCache())){
+    } else {
+      if (!(await CacheSystem.isActualCache())) {
         setState(() {
           isUnActualToken = true;
         });
       }
-      if(isSwipeRefresh){
-        showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, (){
+      if (isSwipeRefresh) {
+        showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, () {
           update();
         });
       }
@@ -82,10 +82,10 @@ class _ContentMainState extends State<ContentMain> {
     }
     StudentCache studentCache = await CacheSystem.getStudentCache();
     setState(() {
-      if(studentCache.userName != "undefined"){
+      if (studentCache.userName != "undefined") {
         userName = studentCache.userName;
       }
-      if(studentCache.userPic != null){
+      if (studentCache.userPic != null) {
         userPic = studentCache.userPic;
       }
       if (studentCache.ratingModel.fullName != "undefined") {
@@ -99,11 +99,6 @@ class _ContentMainState extends State<ContentMain> {
 
   bool rating = true;
   void getFreshData() {
-    setState(() {
-      userName = null;
-      ratingModel = null;
-      userPic = null;
-    });
     ecampus.getUserName().then((vUserName) {
       CacheSystem.saveUserName(vUserName);
       setState(() {
