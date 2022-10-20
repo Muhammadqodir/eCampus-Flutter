@@ -206,9 +206,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           lessonItems[lPos].gradeText == "отлично" ||
                           lessonItems[lPos].gradeText ==
                               "неудовлетворительно") {
+                        lessonItems[lPos].subject = subjectStr;
                         fillKT.add(lessonItems[lPos]);
                         fillKT[fillKT.length - 1].subject == subjectStr;
                       } else {
+                        lessonItems[lPos].subject = subjectStr;
                         openKT.add(lessonItems[lPos]);
                         openKT[openKT.length - 1].subject = subjectStr;
                       }
@@ -307,9 +309,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               "неудовлетворительно") {
                         lessonItems[lPos].subject = subjectStr;
                         fillKT.add(lessonItems[lPos]);
+                        fillKT[fillKT.length - 1].subject = subjectStr;
                       } else {
                         lessonItems[lPos].subject = subjectStr;
                         openKT.add(lessonItems[lPos]);
+                        openKT[openKT.length - 1].subject = subjectStr;
                       }
                     }
                   }

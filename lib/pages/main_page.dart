@@ -45,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double elevation = 0;
   StatefulWidget? content;
   bool isActialToken = false;
+  int notification_count = 0;
   int getPageIndex() {
     return pageIndex;
   }
@@ -67,9 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
       if (value) {
         widget.ecampus.isActualToken().then((value) {
           isActialToken = value;
-          if(value){
+          if (value) {
             widget.ecampus.getNotificationSize().then((value) {
               log("Notifications: $value");
+              setState(() {
+                notification_count = value;
+              });
             });
           }
         });
@@ -214,14 +218,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       EcampusIcons.icons8_notification,
                       color: primaryColor,
                     ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: CustomColors.error,
-                      ),
-                    ),
+                    notification_count > 0
+                        ? Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: CustomColors.error,
+                            ),
+                          )
+                        : SizedBox(),
                   ],
                 ),
                 onPressed: () {
@@ -370,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            bottomNavItems[pageIndex].title != "eCampus" || false
+            bottomNavItems[pageIndex].title != "eCampus" || true
                 ? SizedBox(
                     width: double.infinity,
                     child: Text(

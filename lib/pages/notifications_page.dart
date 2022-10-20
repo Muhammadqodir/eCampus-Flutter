@@ -130,19 +130,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                     .map(
                                       (element) => CrossListElement(
                                         onPressed: () {
-                                          // ScaffoldMessenger.of(context)
-                                          //     .showSnackBar(SnackBar(
-                                          //   content: Text(element.message),
-                                          // ));
-                                          Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  ChatPage(
-                                                context: context,
-                                              ),
-                                            ),
-                                          );
+                                          // Navigator.push(
+                                          //   context,
+                                          //   CupertinoPageRoute(
+                                          //     builder: (context) =>
+                                          //         ChatPage(
+                                          //       context: context,
+                                          //     ),
+                                          //   ),
+                                          // );
                                         },
                                         child: element.getView(context),
                                       ),
