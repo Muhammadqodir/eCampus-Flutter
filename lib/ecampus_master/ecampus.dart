@@ -110,6 +110,19 @@ class eCampus {
     }
   }
 
+  Future<String> resetWiFi() async {
+    print("test");
+    http.Response response = await client.post('https://ecampus.ncfu.ru/DomainAccountInfo/GetDomenP');
+    
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      String passwod = response.body;
+      return passwod;
+    } else {
+      return "undefined";
+    }
+  }
+
   Future<bool> isActualToken() async {
     http.Response response =
         await client.post("https://ecampus.ncfu.ru/details");

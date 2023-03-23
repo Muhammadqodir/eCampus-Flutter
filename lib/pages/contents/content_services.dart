@@ -7,13 +7,17 @@ import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/rating_page.dart';
 import 'package:ecampus_ncfu/pages/record_book_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
+import 'package:ecampus_ncfu/pages/wifi_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ContentServices extends StatefulWidget {
   const ContentServices(
-      {Key? key, required this.context, required this.setElevation, required this.ecampus})
+      {Key? key,
+      required this.context,
+      required this.setElevation,
+      required this.ecampus})
       : super(key: key);
 
   final BuildContext context;
@@ -165,10 +169,19 @@ class _ContentServicesState extends State<ContentServices> {
             ),
           ),
           CrossListElement(
-            onPressed: () {},
-            enabled: false,
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => WifiPage(
+                    ecampus: widget.ecampus,
+                  ),
+                ),
+              );
+            },
+            enabled: true,
             child: ServiceItem(
-              commingSoon: true,
+              commingSoon: false,
               icon: EcampusIcons.icons8_wi_fi,
               backgroundColor: CustomColors.colorPalette[1],
               title: "Wi-Fi",
