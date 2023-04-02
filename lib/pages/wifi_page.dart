@@ -40,6 +40,9 @@ class _WifiPageState extends State<WifiPage> {
 
   _getWifiLogin() async {
     userName = await widget.ecampus.getWifiUserName();
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString("wLogin", userName);
     setState(() {});
   }
 

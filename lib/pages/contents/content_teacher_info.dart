@@ -4,6 +4,8 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
+import 'package:ecampus_ncfu/inc/teacher_rating.dart';
+import 'package:ecampus_ncfu/models/teacher_review.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,8 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
   int initHumor = 0;
   String userId = "undefined";
 
+  List<TeacherReview> reviewsList = [];
+
   @override
   void initState() {
     CacheSystem.getUserId().then((value) {
@@ -57,67 +61,89 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
     super.initState();
   }
 
-  void getTeacherInfo() {
+  void getTeacherInfo() async {
     setState(() {
       loading = true;
     });
-    isOnline().then((isOnline) {
-      if (isOnline) {
-        final ref = widget.database.ref("teachers/${widget.teacherId}");
-        ref.get().then((snapshot) {
-          if (snapshot.exists) {
-            String dataJson = jsonEncode(snapshot.value);
-            Map<String, dynamic> data = jsonDecode(dataJson);
-            setState(() {
-              loading = false;
-              notFound = false;
-              info = data["moreInfo"];
-              picUrl = data["picUrl"];
-              contactInfo = data["contactInfo"];
-              employeePageUrl = data["employeePageUrl"];
-              try {
-                humorRating = data["rating"]["humorRating"];
-                for (String key in humorRating.keys) {
-                  if (key == userId) {
-                    initHumor = humorRating[key].toInt();
-                  }
-                }
-              } catch (e) {
-                log("Can not load HumorRating for ${data["fullName"]}");
-              }
-              try {
-                examRating = data["rating"]["examRating"];
-                for (String key in examRating.keys) {
-                  if (key == userId) {
-                    initExam = examRating[key].toInt();
-                  }
-                }
-              } catch (e) {
-                log("Can not load ExamRating for ${data["fullName"]}");
-              }
-              try {
-                teachSkills = data["rating"]["teachSkills"];
-                for (String key in teachSkills.keys) {
-                  if (key == userId) {
-                    initTeach = teachSkills[key].toInt();
-                  }
-                }
-              } catch (e) {
-                log("Can not load TeachSlikks for ${data["fullName"]}");
-              }
-            });
-          } else {
-            setState(() {
-              loading = false;
-              notFound = true;
-            });
+    if (await isOnline()) {
+      final ref = widget.database.ref("teachers/${widget.teacherId}");
+      DataSnapshot snapshot = await ref.get();
+      if (snapshot.exists) {
+        String dataJson = jsonEncode(snapshot.value);
+        Map<String, dynamic> data = jsonDecode(dataJson);
+        loading = false;
+        notFound = false;
+        info = data["moreInfo"];
+        picUrl = data["picUrl"];
+        contactInfo = data["contactInfo"];
+        employeePageUrl = data["employeePageUrl"];
+        try {
+          Map<String, dynamic> reviewsRaw = data["rating"]["reviews"];
+          for (Map<String, dynamic> key in reviewsRaw.values) {
+            TeacherReview review = TeacherReview(
+              key["id"],
+              key["author"],
+              key["date"],
+              key["message"],
+              key["target"],
+            );
+            try {
+              String authorName =  (await widget.database.ref("usersData/${key["author"]}/fullName").get()).value as String;
+              review.setAuthorName(authorName);
+            } catch (e) {
+              log(e.toString());
+              review.setAuthorName("Аноним");
+            }
+            List<dynamic> likes = key["likes"];
+            for (String like in likes) {
+              review.addLike(like);
+            }
+            reviewsList.add(review);
           }
-        });
+        } catch (e) {
+          log("Error on getting reviews$e");
+        }
+        try {
+          humorRating = data["rating"]["humorRating"];
+          for (String key in humorRating.keys) {
+            if (key == userId) {
+              initHumor = humorRating[key].toInt();
+            }
+          }
+        } catch (e) {
+          log("Can not load HumorRating for ${data["fullName"]}");
+        }
+        try {
+          examRating = data["rating"]["examRating"];
+          for (String key in examRating.keys) {
+            if (key == userId) {
+              initExam = examRating[key].toInt();
+            }
+          }
+        } catch (e) {
+          log("Can not load ExamRating for ${data["fullName"]}");
+        }
+        try {
+          teachSkills = data["rating"]["teachSkills"];
+          for (String key in teachSkills.keys) {
+            if (key == userId) {
+              initTeach = teachSkills[key].toInt();
+            }
+          }
+        } catch (e) {
+          log("Can not load TeachSlikks for ${data["fullName"]}");
+        }
+        setState(() {});
       } else {
-        Navigator.pop(context);
-        showOfflineDialog(context);
+        setState(() {
+          loading = false;
+          notFound = true;
+        });
       }
-    });
+    } else {
+      Navigator.pop(context);
+      showOfflineDialog(context);
+    }
   }
 
   double getHumorRating() {
@@ -189,6 +215,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,153 +262,44 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                           const SizedBox(
                             height: 8,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Способность донести материал:",
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  RatingBar.builder(
-                                    initialRating: initTeach.toDouble(),
-                                    minRating: 0,
-                                    direction: Axis.horizontal,
-                                    glow: false,
-                                    itemCount: 5,
-                                    itemSize: 28,
-                                    itemPadding: const EdgeInsets.symmetric(
-                                        horizontal: 4.0),
-                                    itemBuilder: (context, _) => Icon(
-                                      Icons.star,
-                                      size: 12,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      setRating("teachSkills", rating.toInt());
-                                    },
-                                  ),
-                                  Text(
-                                    getTeachSkills() > 0
-                                        ? "${getTeachSkills().toStringAsFixed(2)} из 5"
-                                        : "Без рейтинга",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              )
-                            ],
+                          TeacherRating(
+                            examRating: getExamRating(),
+                            humorRating: getHumorRating(),
+                            teachSkills: getTeachSkills(),
+                            initExam: initExam,
+                            initHumor: initHumor,
+                            initTeach: initTeach,
+                            setRating: setRating,
                           ),
                           const SizedBox(
                             height: 8,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Сложность сдачи экзамена:",
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                          if (reviewsList.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Text("Отзывы студентов:", style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: reviewsList
+                                      .map((e) => e.getView(context))
+                                      .toList(),
                                 ),
-                              ),
-                              Column(
-                                children: [
-                                  RatingBar.builder(
-                                    initialRating: initExam.toDouble(),
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    glow: false,
-                                    itemCount: 5,
-                                    itemSize: 28,
-                                    itemPadding: const EdgeInsets.symmetric(
-                                        horizontal: 4.0),
-                                    itemBuilder: (context, _) => Icon(
-                                      Icons.star,
-                                      size: 12,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      setRating("examRating", rating.toInt());
-                                    },
-                                  ),
-                                  Text(
-                                    getExamRating() > 0
-                                        ? "${getExamRating().toStringAsFixed(2)} из 5"
-                                        : "Без рейтинга",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Чувство юмора:",
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ),
-                              Column(
-                                children: [
-                                  RatingBar.builder(
-                                    initialRating: initHumor.toDouble(),
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    glow: false,
-                                    itemCount: 5,
-                                    itemSize: 28,
-                                    itemPadding: const EdgeInsets.symmetric(
-                                        horizontal: 4.0),
-                                    itemBuilder: (context, _) => Icon(
-                                      Icons.star,
-                                      size: 12,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      setRating("humorRating", rating.toInt());
-                                    },
-                                  ),
-                                  Text(
-                                    getHumorRating() > 0
-                                        ? "${getHumorRating().toStringAsFixed(2)} из 5"
-                                        : "Без рейтинга",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
+                              ],
+                            ),
                           CrossButton(
                             wight: double.infinity,
                             onPressed: () async {
-                              String url = employeePageUrl;
-                              if (await canLaunchUrlString(url)) {
-                                await launchUrlString(url);
-                              } else {
-                                throw "Could not launch $url";
-                              }
+                              log(widget.teacherId.toString());
+                              // String url = employeePageUrl;
+                              // if (await canLaunchUrlString(url)) {
+                              //   await launchUrlString(url);
+                              // } else {
+                              //   throw "Could not launch $url";
+                              // }
                             },
                             backgroundColor: Theme.of(context).primaryColor,
                             child: const Text("Подробнее"),
