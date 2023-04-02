@@ -117,8 +117,25 @@ class eCampus {
     print(response.statusCode);
     if (response.statusCode == 200) {
       String passwod = response.body;
-      return passwod;
+      return passwod.replaceAll("\"", "");
     } else {
+      return "undefined";
+    }
+  }
+
+  Future<String> getWifiUserName() async {
+    http.Response response = await client.get('https://ecampus.ncfu.ru/DomainAccountInfo');
+    
+    if (response.statusCode == 200) {
+      String body = response.body;
+      // print(body);
+      var doc = parse(body);
+
+      String userName = doc.getElementsByClassName("form-control-static")[0].text;
+
+      return userName;
+    } else {
+      // print(response.body);
       return "undefined";
     }
   }
