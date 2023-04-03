@@ -187,6 +187,8 @@ PODS:
     - RangersAPM-Pangle/Core
     - RangersAPM-Pangle/HMD
     - RangersAPM-Pangle/Public
+  - rate_my_app (1.1.4):
+    - Flutter
   - shared_preferences_ios (0.0.1):
     - Flutter
   - smaato-ios-sdk (21.7.5):
@@ -337,6 +339,7 @@ DEPENDENCIES:
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - rate_my_app (from `.symlinks/plugins/rate_my_app/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - stack_appodeal_flutter (from `.symlinks/plugins/stack_appodeal_flutter/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -404,6 +407,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
+  rate_my_app:
+    :path: ".symlinks/plugins/rate_my_app/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
   stack_appodeal_flutter:
@@ -453,6 +458,7 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Protobuf: 7504b04fffcf6662ad629694db8231f5e744327f
   RangersAPM-Pangle: 97c8fe91af08574a739cc72a714b735efb6c891f
+  rate_my_app: e249ec0751c276811746ff89558c23dc0da39f0c
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   smaato-ios-sdk: bc1f78e079ac0ef88f9cdbe29205db0af405ce61
   stack_appodeal_flutter: 084c2e276c754daa1f092adec5607fb9a34c0b6a
