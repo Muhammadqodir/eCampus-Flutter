@@ -4,12 +4,14 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
+import 'package:ecampus_ncfu/inc/custom_text_field.dart';
 import 'package:ecampus_ncfu/inc/teacher_rating.dart';
 import 'package:ecampus_ncfu/models/teacher_review.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/utils.dart';
@@ -88,7 +90,10 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
               key["target"],
             );
             try {
-              String authorName =  (await widget.database.ref("usersData/${key["author"]}/fullName").get()).value as String;
+              String authorName = (await widget.database
+                      .ref("usersData/${key["author"]}/fullName")
+                      .get())
+                  .value as String;
               review.setAuthorName(authorName);
             } catch (e) {
               log(e.toString());
@@ -192,129 +197,165 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: loading
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CrossActivityIndicator(
-                  radius: 12,
-                  color: Theme.of(context).dividerColor,
-                ),
-                Text(
-                  "Загрузка...",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-              ],
-            )
-          : !notFound
-              ? ListView(
-                  physics: const ClampingScrollPhysics(),
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                picUrl,
-                                width: 150,
-                              ),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      widget.teacherName,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      contactInfo,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            info,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          TeacherRating(
-                            examRating: getExamRating(),
-                            humorRating: getHumorRating(),
-                            teachSkills: getTeachSkills(),
-                            initExam: initExam,
-                            initHumor: initHumor,
-                            initTeach: initTeach,
-                            setRating: setRating,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          if (reviewsList.isNotEmpty)
-                            Column(
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        child: loading
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CrossActivityIndicator(
+                    radius: 12,
+                    color: Theme.of(context).dividerColor,
+                  ),
+                  Text(
+                    "Загрузка...",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )
+                ],
+              )
+            : !notFound
+                ? ListView(
+                    physics: const ClampingScrollPhysics(),
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Text("Отзывы студентов:", style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: reviewsList
-                                      .map((e) => e.getView(context))
-                                      .toList(),
+                                Image.network(
+                                  picUrl,
+                                  width: 150,
                                 ),
                                 const SizedBox(
-                                  height: 8,
+                                  width: 12,
                                 ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        widget.teacherName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        contactInfo,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      )
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
-                          CrossButton(
-                            wight: double.infinity,
-                            onPressed: () async {
-                              log(widget.teacherId.toString());
-                              // String url = employeePageUrl;
-                              // if (await canLaunchUrlString(url)) {
-                              //   await launchUrlString(url);
-                              // } else {
-                              //   throw "Could not launch $url";
-                              // }
-                            },
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: const Text("Подробнее"),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Image.asset("images/not_found.png"),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              info,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            TeacherRating(
+                              examRating: getExamRating(),
+                              humorRating: getHumorRating(),
+                              teachSkills: getTeachSkills(),
+                              initExam: initExam,
+                              initHumor: initHumor,
+                              initTeach: initTeach,
+                              setRating: setRating,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            reviewsList.isNotEmpty
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Text("Отзывы студентов:", style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold)),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: reviewsList
+                                            .map((e) => e.getView(context))
+                                            .toList(),
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "images/forum.svg",
+                                            color: Colors.black87,
+                                          ),
+                                          const SizedBox(
+                                            width: 12,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "Будь первым!\nПоделись своим мнением, подскажи другим.",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            CustomTextField(
+                              controller: TextEditingController(),
+                              hint: "Оставить отзыв",
+                              onChanged: (v) {},
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            CrossButton(
+                              wight: double.infinity,
+                              onPressed: () async {
+                                log(widget.teacherId.toString());
+                                // String url = employeePageUrl;
+                                // if (await canLaunchUrlString(url)) {
+                                //   await launchUrlString(url);
+                                // } else {
+                                //   throw "Could not launch $url";
+                                // }
+                              },
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: const Text("Подробнее"),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                : Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Image.asset("images/not_found.png"),
+                    ),
                   ),
-                ),
+      ),
     );
   }
 }
