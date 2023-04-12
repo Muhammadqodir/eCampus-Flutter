@@ -20,6 +20,7 @@ class NotificationModel {
   String activityKindIcon = "/images/icons/education.png";
   String activityKindName = "Учебная деятельность";
   int categoryId = 4;
+  int messageId = -1;
   int notificationImportanceId = 3;
 
   NotificationModel(
@@ -33,6 +34,7 @@ class NotificationModel {
       this.activityKindIcon = "/images/icons/education.png",
       this.activityKindName = "Учебная деятельность",
       this.categoryId = 4,
+      this.messageId = -1,
       this.notificationImportanceId = 3});
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) => _$NotificationModelFromJson(json);

@@ -19,11 +19,12 @@ import '../../utils/utils.dart';
 
 class ContentMain extends StatefulWidget {
   const ContentMain(
-      {Key? key, required this.context, required this.setElevation})
+      {Key? key, required this.context, required this.setElevation, required this.update})
       : super(key: key);
 
   final BuildContext context;
   final Function setElevation;
+  final Function() update;
 
   @override
   State<ContentMain> createState() => _ContentMainState();
@@ -70,6 +71,7 @@ class _ContentMainState extends State<ContentMain> {
         });
       }
     }
+    widget.update();
   }
 
   void getCacheData() async {

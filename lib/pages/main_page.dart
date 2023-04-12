@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     content = ContentMain(
       context: context,
+      update: update,
       setElevation: setAppbarElevation,
     );
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -112,6 +113,24 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
     super.initState();
+  }
+
+  void update(){
+    isOnline().then((value) {
+      if (value) {
+        widget.ecampus.isActualToken().then((value) {
+          isActialToken = value;
+          if (value) {
+            widget.ecampus.getNotificationSize().then((value) {
+              log("Notifications: $value");
+              setState(() {
+                notification_count = value;
+              });
+            });
+          }
+        });
+      }
+    });
   }
 
   void versionCheck(context) async {
@@ -295,6 +314,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         ContentMain(
           context: context,
+          update: update,
           setElevation: setAppbarElevation,
         ),
         EcampusIcons.icons8_student_male_1,

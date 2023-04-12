@@ -112,8 +112,9 @@ class eCampus {
 
   Future<String> resetWiFi() async {
     print("test");
-    http.Response response = await client.post('https://ecampus.ncfu.ru/DomainAccountInfo/GetDomenP');
-    
+    http.Response response = await client
+        .post('https://ecampus.ncfu.ru/DomainAccountInfo/GetDomenP');
+
     print(response.statusCode);
     if (response.statusCode == 200) {
       String passwod = response.body;
@@ -124,14 +125,16 @@ class eCampus {
   }
 
   Future<String> getWifiUserName() async {
-    http.Response response = await client.get('https://ecampus.ncfu.ru/DomainAccountInfo');
-    
+    http.Response response =
+        await client.get('https://ecampus.ncfu.ru/DomainAccountInfo');
+
     if (response.statusCode == 200) {
       String body = response.body;
       // print(body);
       var doc = parse(body);
 
-      String userName = doc.getElementsByClassName("form-control-static")[0].text;
+      String userName =
+          doc.getElementsByClassName("form-control-static")[0].text;
 
       return userName;
     } else {
@@ -255,35 +258,45 @@ class eCampus {
           messageList.forEach((element) {
             print(element["DateOfReading"]);
             if (element["DateOfReading"] == null) {
-              unread.add(NotificationModel(
-                  title: element["Title"] ?? "undefined",
-                  message: element["Message"] ?? "undefined",
-                  dateOfCreation: element["DateOfCreation"] ?? "",
-                  dateOfReading: "unread",
-                  actionData: element["ActionData"] ?? "",
-                  actionType: element["ActionType"] ?? "",
-                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
-                  activityKindIcon: element["ActivityKindIcon"] ??
-                      "/images/icons/education.png",
-                  activityKindName: element["ActivityKindName"] ?? "undefined",
-                  categoryId: element["CategoryId"] ?? "",
-                  notificationImportanceId:
-                      element["NotificationImportanceId"] ?? ""));
+              unread.add(
+                NotificationModel(
+                    title: element["Title"] ?? "undefined",
+                    message: element["Message"] ?? "undefined",
+                    dateOfCreation: element["DateOfCreation"] ?? "",
+                    dateOfReading: "unread",
+                    actionData: element["ActionData"] ?? "",
+                    actionType: element["ActionType"] ?? "",
+                    messageId: element["MessageId"] ?? -1,
+                    activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                    activityKindIcon: element["ActivityKindIcon"] ??
+                        "/images/icons/education.png",
+                    activityKindName:
+                        element["ActivityKindName"] ?? "undefined",
+                    categoryId: element["CategoryId"] ?? -1,
+                    notificationImportanceId:
+                        element["NotificationImportanceId"] ?? -1),
+              );
+              log("Messaageid${element["MessageId"] ?? -1}");
+              readNotification(element["MessageId"] ?? -1);
             } else {
-              read.add(NotificationModel(
-                  title: element["Title"] ?? "undefined",
-                  message: element["Message"] ?? "undefined",
-                  dateOfCreation: element["DateOfCreation"] ?? "",
-                  dateOfReading: element["DateOfReading"] ?? "",
-                  actionData: element["ActionData"] ?? "",
-                  actionType: element["ActionType"] ?? "",
-                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
-                  activityKindIcon: element["ActivityKindIcon"] ??
-                      "/images/icons/education.png",
-                  activityKindName: element["ActivityKindName"] ?? "undefined",
-                  categoryId: element["CategoryId"] ?? "",
-                  notificationImportanceId:
-                      element["NotificationImportanceId"] ?? ""));
+              read.add(
+                NotificationModel(
+                    title: element["Title"] ?? "undefined",
+                    message: element["Message"] ?? "undefined",
+                    dateOfCreation: element["DateOfCreation"] ?? "",
+                    dateOfReading: element["DateOfReading"] ?? "",
+                    actionData: element["ActionData"] ?? "",
+                    messageId: element["MessageId"] ?? -1,
+                    actionType: element["ActionType"] ?? "",
+                    activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                    activityKindIcon: element["ActivityKindIcon"] ??
+                        "/images/icons/education.png",
+                    activityKindName:
+                        element["ActivityKindName"] ?? "undefined",
+                    categoryId: element["CategoryId"] ?? "",
+                    notificationImportanceId:
+                        element["NotificationImportanceId"] ?? -1),
+              );
             }
           });
           return NotificationsResponse(true, "error_",
@@ -299,6 +312,12 @@ class eCampus {
     } catch (e) {
       return NotificationsResponse(false, e.toString());
     }
+  }
+
+  void readNotification(messageId) async {
+    Map<String, String> body = {'messagesIds[]': messageId.toString()};
+    http.Response response = await client
+        .post('https://ecampus.ncfu.ru/NotificationCenter/SetMessagesRead', body: body);
   }
 
   Future<SearchScheduleResponse> searchSchedule(String q) async {
@@ -1403,11 +1422,11 @@ class eCampus {
                 List<dynamic> list = term[listIndexes[k]];
                 for (int d = 0; d < list.length; d++) {
                   Map<String, dynamic> li = list[d];
-                  String disc = li["Discipline"]??"".replaceAll("  ", " ");
+                  String disc = li["Discipline"] ?? "".replaceAll("  ", " ");
                   String hours = li["Hours"].toString();
-                  String type = li["Kod_v_name"]??"".replaceAll("  ", " ");
-                  String mark = li["Mark"]??"".replaceAll(" ", "");
-                  String teacher = li["Teacher"]??"".replaceAll("  ", " ");
+                  String type = li["Kod_v_name"] ?? "".replaceAll("  ", " ");
+                  String mark = li["Mark"] ?? "".replaceAll(" ", "");
+                  String teacher = li["Teacher"] ?? "".replaceAll("  ", " ");
                   String date = li["Date"].replaceAll("  ", " ");
                   RecordBookItem item = RecordBookItem(
                       disc, hours, mark, date, teacher, type, false);
@@ -1422,10 +1441,12 @@ class eCampus {
           }
           return RecordBookResponse(true, "", models: courseModels);
         } else {
-          return RecordBookResponse(true, "EducationDetails not has json", models: []);
+          return RecordBookResponse(true, "EducationDetails not has json",
+              models: []);
         }
       } else {
-        return RecordBookResponse(false, "response.isSuccessful=false",  models: []);
+        return RecordBookResponse(false, "response.isSuccessful=false",
+            models: []);
       }
     } catch (e) {
       return RecordBookResponse(false, e.toString(), models: []);
@@ -1434,56 +1455,56 @@ class eCampus {
 
   Future<int> getNotificationSize() async {
     // try {
-      http.Response response = await client.post(
-          'https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
-      if (response.statusCode == 200) {
-        Map<String, dynamic> json = jsonDecode(response.body);
-        if (json.containsKey("Messages")) {
-          List<Map<String, dynamic>> messageList =
-              List<Map<String, dynamic>>.from(json["Messages"]);
-          List<NotificationModel> unread = [];
-          List<NotificationModel> read = [];
-          messageList.forEach((element) {
-            print(element["DateOfReading"]);
-            if (element["DateOfReading"] == null) {
-              unread.add(NotificationModel(
-                  title: element["Title"] ?? "undefined",
-                  message: element["Message"] ?? "undefined",
-                  dateOfCreation: element["DateOfCreation"] ?? "",
-                  dateOfReading: "unread",
-                  actionData: element["ActionData"] ?? "",
-                  actionType: element["ActionType"] ?? "",
-                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
-                  activityKindIcon: element["ActivityKindIcon"] ??
-                      "/images/icons/education.png",
-                  activityKindName: element["ActivityKindName"] ?? "undefined",
-                  categoryId: element["CategoryId"] ?? "",
-                  notificationImportanceId:
-                      element["NotificationImportanceId"] ?? ""));
-            } else {
-              read.add(NotificationModel(
-                  title: element["Title"] ?? "undefined",
-                  message: element["Message"] ?? "undefined",
-                  dateOfCreation: element["DateOfCreation"] ?? "",
-                  dateOfReading: element["DateOfReading"] ?? "",
-                  actionData: element["ActionData"] ?? "",
-                  actionType: element["ActionType"] ?? "",
-                  activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
-                  activityKindIcon: element["ActivityKindIcon"] ??
-                      "/images/icons/education.png",
-                  activityKindName: element["ActivityKindName"] ?? "undefined",
-                  categoryId: element["CategoryId"] ?? "",
-                  notificationImportanceId:
-                      element["NotificationImportanceId"] ?? ""));
-            }
-          });
-          return unread.length;
-        } else {
-          return 0;
-        }
+    http.Response response = await client.post(
+        'https://ecampus.ncfu.ru/NotificationCenter/GetNotificationMessages');
+    if (response.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      if (json.containsKey("Messages")) {
+        List<Map<String, dynamic>> messageList =
+            List<Map<String, dynamic>>.from(json["Messages"]);
+        List<NotificationModel> unread = [];
+        List<NotificationModel> read = [];
+        messageList.forEach((element) {
+          print(element["DateOfReading"]);
+          if (element["DateOfReading"] == null) {
+            unread.add(NotificationModel(
+                title: element["Title"] ?? "undefined",
+                message: element["Message"] ?? "undefined",
+                dateOfCreation: element["DateOfCreation"] ?? "",
+                dateOfReading: "unread",
+                actionData: element["ActionData"] ?? "",
+                actionType: element["ActionType"] ?? "",
+                activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                activityKindIcon: element["ActivityKindIcon"] ??
+                    "/images/icons/education.png",
+                activityKindName: element["ActivityKindName"] ?? "undefined",
+                categoryId: element["CategoryId"] ?? "",
+                notificationImportanceId:
+                    element["NotificationImportanceId"] ?? ""));
+          } else {
+            read.add(NotificationModel(
+                title: element["Title"] ?? "undefined",
+                message: element["Message"] ?? "undefined",
+                dateOfCreation: element["DateOfCreation"] ?? "",
+                dateOfReading: element["DateOfReading"] ?? "",
+                actionData: element["ActionData"] ?? "",
+                actionType: element["ActionType"] ?? "",
+                activityKindColor: element["ActivityKindColor"] ?? "FFB40C",
+                activityKindIcon: element["ActivityKindIcon"] ??
+                    "/images/icons/education.png",
+                activityKindName: element["ActivityKindName"] ?? "undefined",
+                categoryId: element["CategoryId"] ?? "",
+                notificationImportanceId:
+                    element["NotificationImportanceId"] ?? ""));
+          }
+        });
+        return unread.length;
       } else {
         return 0;
       }
+    } else {
+      return 0;
+    }
     // } catch (e) {
     //   return RecordBookResponse(false, e.toString(), []);
     // }
