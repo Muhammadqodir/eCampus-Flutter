@@ -9,6 +9,7 @@ import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -247,23 +248,26 @@ class _ContentMainState extends State<ContentMain> {
                             // SharedPreferences.getInstance().then((value) => {
                             //       value.setString("token", "invalid"),
                             //     });
-
-                            // Navigator.push(
-                            //   context,
-                            //   CupertinoPageRoute(
-                            //     builder: (context) => StatisticsPage(
-                            //       context: context,
-                            //     ),
-                            //   ),
-                            // );
+                            if (!isUnActualToken) {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => StatisticsPage(
+                                    context: context,
+                                  ),
+                                ),
+                              );
+                            }else{
+                              update();
+                            }
 
                             // log(ratingModel!.toJson().toString());
-                            AwesomeNotifications().createNotification(
-                                content: NotificationContent(
-                                    id: 10,
-                                    channelKey: 'basic_channel',
-                                    title: 'Simple Notification',
-                                    body: 'Simple body'));
+                            // AwesomeNotifications().createNotification(
+                            //     content: NotificationContent(
+                            //         id: 10,
+                            //         channelKey: 'basic_channel',
+                            //         title: 'Simple Notification',
+                            //         body: 'Simple body'));
                           },
                         ),
                       ),
