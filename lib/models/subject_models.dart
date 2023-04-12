@@ -380,7 +380,6 @@ class LessonItemModel {
   Widget getScoreView(BuildContext context) {
     if (gradeText != "") {
       return Container(
-        margin: const EdgeInsets.only(top: 3),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
           color: getScoreBgColor(),
@@ -409,7 +408,7 @@ class LessonItemModel {
                           width: 2,
                         ),
                         const Icon(
-                          EcampusIcons.icons8_up,
+                          CupertinoIcons.up_arrow,
                           size: 21,
                           color: Colors.white,
                         ),
@@ -418,6 +417,89 @@ class LessonItemModel {
                         ),
                         Text(
                           gainedScore.toString(),
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
+              const SizedBox(width: 4)
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  Widget getViewFile(BuildContext context) {
+    if (hasFile) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          color: CustomColors.perfect,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Row(
+            children: [
+              const SizedBox(width: 4),
+              const Icon(
+                CupertinoIcons.doc,
+                size: 21,
+                color: Colors.white,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                "Отчёт загружен",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  Widget getLostScoreView(BuildContext context) {
+    if (lostScore > 0) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          color: Colors.grey,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Row(
+            children: [
+              const SizedBox(width: 4),
+              const Icon(
+                CupertinoIcons.down_arrow,
+                size: 21,
+                color: Colors.white,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                "сгоревшие баллы:",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              lostScore > 0
+                  ? Row(
+                      children: [
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          lostScore.toString(),
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ],
@@ -498,9 +580,26 @@ class LessonItemModel {
                       style: Theme.of(context).textTheme.bodyMedium,
                       overflow: TextOverflow.fade,
                     ),
+                    const SizedBox(height: 3,),
+                    Row(
+                      children: [
+                        getViewFile(context),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
                     Row(
                       children: [
                         getScoreView(context),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: [
+                        getLostScoreView(context),
                       ],
                     ),
                     const SizedBox(
