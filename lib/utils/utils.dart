@@ -60,3 +60,9 @@ String getCurrentDateTime(){
     String currentDate = dateFormat.format(DateTime.now());
     return currentDate;
 }
+
+String getCurrentDateTimeForReview(){
+    DateFormat dateFormat = DateFormat("dd.MM.yyyy HH:mm");
+    String currentDate = dateFormat.format(DateTime.now());
+    return currentDate;
+}

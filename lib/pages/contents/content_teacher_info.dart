@@ -7,11 +7,14 @@ import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/custom_text_field.dart';
 import 'package:ecampus_ncfu/inc/teacher_rating.dart';
 import 'package:ecampus_ncfu/models/teacher_review.dart';
+import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/utils.dart';
@@ -53,6 +56,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
   String userId = "undefined";
 
   List<TeacherReview> reviewsList = [];
+  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
@@ -94,12 +98,16 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                       .ref("usersData/${key["author"]}/fullName")
                       .get())
                   .value as String;
-              review.setAuthorName(authorName);
+              // review.setAuthorName(authorName);
+              review.setAuthorName("Аноним");
             } catch (e) {
               log(e.toString());
               review.setAuthorName("Аноним");
             }
-            List<dynamic> likes = key["likes"];
+            List<dynamic> likes = [];
+            try{
+              likes = key["likes"];
+            }catch (e){}
             for (String like in likes) {
               review.addLike(like);
             }
@@ -277,6 +285,9 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                               initHumor: initHumor,
                               initTeach: initTeach,
                               setRating: setRating,
+                              examRatingC: examRating,
+                              humorRatingC: humorRating,
+                              teachSkillsC: teachSkills,
                             ),
                             const SizedBox(
                               height: 8,
@@ -322,10 +333,29 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                             const SizedBox(
                               height: 8,
                             ),
-                            CustomTextField(
-                              controller: TextEditingController(),
-                              hint: "Оставить отзыв",
-                              onChanged: (v) {},
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CustomTextField(
+                                    controller: controller,
+                                    hint: "Оставить отзыв (Анонимно)",
+                                    onChanged: (v) {},
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                CrossButton(
+                                  onPressed: (){
+                                    _addReview();
+                                  },
+                                  child: const Icon(
+                                    CupertinoIcons.arrow_up_circle_fill,
+                                    color: primaryColor,
+                                    size: 44,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 12,
@@ -357,5 +387,27 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                   ),
       ),
     );
+  }
+
+  _addReview() async {
+    String review = controller.text;
+    String login = (await SharedPreferences.getInstance()).getString("login")??"anonymus";
+    // showAlertDialog(context, "eCmapus", login);
+    if (review.isNotEmpty) {
+      final ref = widget.database
+          .ref(
+              "teachers/${widget.teacherId}/rating/reviews/$login")
+          .set({
+        "author": login,
+        "date": getCurrentDateTimeForReview(),
+        "id": login,
+        "message": review,
+        "target": "teachers/${widget.teacherId}",
+      });
+      log("teachers/${widget.teacherId}/rating/reviews/$login");
+      showAlertDialog(context, "eCampus", "Готово!");
+    } else {
+      showAlertDialog(context, "Ошибка", "Введите отзыв");
+    }
   }
 }

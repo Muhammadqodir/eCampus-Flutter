@@ -1,9 +1,22 @@
+import 'package:ecampus_ncfu/inc/user_ava_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class TeacherRating extends StatefulWidget {
-  TeacherRating({Key? key, required this.examRating, required this.humorRating, required this.teachSkills, required this.initExam, required this.initHumor, required this.initTeach, required this.setRating}) : super(key: key);
+  TeacherRating(
+      {Key? key,
+      required this.examRating,
+      required this.humorRating,
+      required this.teachSkills,
+      required this.initExam,
+      required this.initHumor,
+      required this.initTeach,
+      required this.setRating,
+      required this.teachSkillsC,
+      required this.examRatingC,
+      required this.humorRatingC})
+      : super(key: key);
 
   Function(String, int) setRating;
   int initTeach;
@@ -12,6 +25,9 @@ class TeacherRating extends StatefulWidget {
   double teachSkills;
   double examRating;
   double humorRating;
+  Map<String, dynamic> teachSkillsC;
+  Map<String, dynamic> examRatingC;
+  Map<String, dynamic> humorRatingC;
 
   @override
   State<TeacherRating> createState() => _TeacherRatingState();
@@ -53,13 +69,13 @@ class _TeacherRatingState extends State<TeacherRating> {
                 ),
                 Text(
                   widget.teachSkills > 0
-                      ? "${widget.teachSkills.toStringAsFixed(2)} из 5"
+                      ? "${widget.teachSkills.toStringAsFixed(2)} из 5 (${widget.examRatingC.length} оценок)"
                       : "Без рейтинга",
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall!
                       .copyWith(fontWeight: FontWeight.bold),
-                )
+                ),
               ],
             )
           ],
@@ -98,7 +114,7 @@ class _TeacherRatingState extends State<TeacherRating> {
                 ),
                 Text(
                   widget.examRating > 0
-                      ? "${widget.examRating.toStringAsFixed(2)} из 5"
+                      ? "${widget.examRating.toStringAsFixed(2)} из 5 (${widget.examRatingC.length} оценок)"
                       : "Без рейтинга",
                   style: Theme.of(context)
                       .textTheme
@@ -143,13 +159,13 @@ class _TeacherRatingState extends State<TeacherRating> {
                 ),
                 Text(
                   widget.humorRating > 0
-                      ? "${widget.humorRating.toStringAsFixed(2)} из 5"
+                      ? "${widget.humorRating.toStringAsFixed(2)} из 5 (${widget.humorRatingC.length} оценок)"
                       : "Без рейтинга",
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall!
                       .copyWith(fontWeight: FontWeight.bold),
-                )
+                ),
               ],
             )
           ],
