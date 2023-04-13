@@ -344,8 +344,8 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                     controller: controller,
                                     hint: "Оставить отзыв",
                                     onChanged: (v) {},
-                                    onModeChanged: (v){
-                                      log(v?"Anonym":"User");
+                                    onModeChanged: (v) {
+                                      log(v ? "Anonym" : "User");
                                       isAnonymus = v;
                                     },
                                   ),
@@ -361,6 +361,27 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                     CupertinoIcons.arrow_up_circle_fill,
                                     color: primaryColor,
                                     size: 44,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 17,
+                                ),
+                                const Icon(
+                                  CupertinoIcons.up_arrow,
+                                  size: 16,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "Нажмите на сюда для анонимного отзыва",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ),
                               ],
@@ -401,7 +422,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
     String review = controller.text;
     String login = (await SharedPreferences.getInstance()).getString("login") ??
         "anonymus";
-    if(isAnonymus){
+    if (isAnonymus) {
       login += "_hide";
     }
     // showAlertDialog(context, "eCmapus", login);
