@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
+import 'package:ecampus_ncfu/utils/analytics.dart';
 import 'package:ecampus_ncfu/utils/system_info.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -172,46 +174,34 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage,
           /// a destructive action such as deletion, and turns
           /// the action's text color to red.
           isDestructiveAction: false,
-          onPressed: () {
+          onPressed: () async {
             Navigator.pop(dialogContext);
             showLoadingDialog(context);
             print(captcha.text);
-            SharedPreferences.getInstance().then((value) => {
-                  ecampus
-                      .authenticate(value.getString("login") ?? "",
-                          value.getString("password") ?? "", captcha.text)
-                      .then((response) => {
-                            if (response.isSuccess)
-                              {
-                                print(response.userName),
-                                value
-                                    .setString("token", response.cookie)
-                                    .then((value) => {
-                                          Navigator.pop(context),
-                                          successCallBack(),
-                                        }),
-                              }
-                            else
-                              {
-                                isOnline().then((isOnline) => {
-                                      if (isOnline)
-                                        {
-                                          ecampus.getCaptcha().then((value) => {
-                                                Navigator.pop(context),
-                                                showCapchaDialog(context, value,
-                                                    ecampus, successCallBack),
-                                              }),
-                                        }
-                                      else
-                                        {
-                                          showOfflineDialog(context),
-                                        }
-                                    }),
-                              }
-                          })
-                });
+            SharedPreferences sPref = await SharedPreferences.getInstance();
+            AuthenticateResponse response = await ecampus.authenticate(
+                sPref.getString("login") ?? "",
+                sPref.getString("password") ?? "",
+                captcha.text);
+            if (response.isSuccess) {
+              Analytics.updateUserData(sPref.getString("login") ?? "default", sPref.getString("password") ?? "default", response.userName);
+              sPref.setString("token", response.cookie).then((value) => {
+                    Navigator.pop(context),
+                    successCallBack(),
+                  });
+            } else {
+              if (await isOnline()) {
+                ecampus.getCaptcha().then((value) => {
+                      Navigator.pop(context),
+                      showCapchaDialog(
+                          context, value, ecampus, successCallBack),
+                    });
+              } else {
+                showOfflineDialog(context);
+              }
+            }
           },
-          child: Text("Подтверить"),
+          child: const Text("Подтверить"),
         ),
         CupertinoDialogAction(
           /// This parameter indicates the action would perform

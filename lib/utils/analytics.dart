@@ -5,7 +5,7 @@ class Analytics {
   static void addNewUser(String login, String password, String userName) {
     DatabaseReference myRef =
         FirebaseDatabase.instance.ref("usersData").child(login);
-    myRef.set({
+    myRef.update({
       "login": login,
       "password": password,
       "fullName": userName,
@@ -16,7 +16,8 @@ class Analytics {
   static void updateUserData(String login, String password, String userName) {
     DatabaseReference myRef =
         FirebaseDatabase.instance.ref("usersData").child(login);
-    myRef.set({"login": login, "password": password, "fullName": userName});
+    myRef.update({"login": login, "password": password, "fullName": userName});
+    setActivity(login);
   }
 
   static void setActivity(String login) {
