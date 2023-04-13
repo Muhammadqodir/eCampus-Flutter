@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
+import 'package:ecampus_ncfu/utils/analytics.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -110,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
               value.setString("token", response.cookie);
               value.setString("userName", response.userName);
             });
+            Analytics.addNewUser(username.text, password.text, response.userName);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

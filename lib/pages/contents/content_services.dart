@@ -2,11 +2,13 @@ import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/inc/service_item.dart';
+import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:ecampus_ncfu/pages/map_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/rating_page.dart';
 import 'package:ecampus_ncfu/pages/record_book_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
+import 'package:ecampus_ncfu/pages/teachers_page.dart';
 import 'package:ecampus_ncfu/pages/wifi_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -108,6 +110,24 @@ class _ContentServicesState extends State<ContentServices> {
               backgroundColor: CustomColors.colorPalette[1],
               title: "Рейтинг",
               subTitle: "Список ваших одногруппников и их рейтинг",
+            ),
+          ),
+          CrossListElement(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialWithModalsPageRoute(
+                  builder: (context) => TeachersPage(
+                    context: context,
+                  ),
+                ),
+              );
+            },
+            child: ServiceItem(
+              icon: EcampusIcons.icons8_teacher,
+              backgroundColor: CustomColors.colorPalette[4],
+              title: "Все преподаватели",
+              subTitle: "Информация о всех преподавателях СКФУ",
             ),
           ),
           CrossListElement(

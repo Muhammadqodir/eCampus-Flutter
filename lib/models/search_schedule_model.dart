@@ -13,11 +13,12 @@ class SearchScheduleResult {
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodyMedium,
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
-          const Spacer(),
           Icon(
             EcampusIcons.icons8_forward,
             color: Theme.of(context).dividerColor,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
@@ -30,6 +32,35 @@ class _SearchScheduleState extends State<SearchSchedule> {
     });
   }
 
+  Timer? _debounce;
+  _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1000), () {
+      if (value.length >= 2) {
+        ecampus!.searchSchedule(value).then((response) {
+          if (response.isSuccess) {
+            setState(() {
+              models = response.models;
+            });
+          } else {
+            models = [];
+          }
+        });
+      } else {
+        setState(() {
+          models = null;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _debounce?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,23 +80,7 @@ class _SearchScheduleState extends State<SearchSchedule> {
             autofocus: true,
             placeholder: "Поиск",
             style: Theme.of(context).textTheme.bodyMedium,
-            onChanged: (value) {
-              if (value.length >= 2) {
-                ecampus!.searchSchedule(value).then((response) {
-                  if (response.isSuccess) {
-                    setState(() {
-                      models = response.models;
-                    });
-                  } else {
-                    models = [];
-                  }
-                });
-              } else {
-                setState(() {
-                  models = null;
-                });
-              }
-            },
+            onChanged: _onSearchChanged,
           ),
         ),
       ),

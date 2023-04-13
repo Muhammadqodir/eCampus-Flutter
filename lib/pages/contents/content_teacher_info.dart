@@ -317,7 +317,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                         children: [
                                           SvgPicture.asset(
                                             "images/forum.svg",
-                                            color: Colors.black87,
+                                            color: Theme.of(context).textTheme.bodyMedium!.color,
                                           ),
                                           const SizedBox(
                                             width: 12,
@@ -343,6 +343,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                   child: ReviewTextField(
                                     controller: controller,
                                     hint: "Оставить отзыв",
+                                    baseColor: Theme.of(context).splashColor,
                                     onChanged: (v) {},
                                     onModeChanged: (v) {
                                       log(v ? "Anonym" : "User");
