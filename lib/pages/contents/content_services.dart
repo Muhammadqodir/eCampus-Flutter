@@ -89,7 +89,7 @@ class _ContentServicesState extends State<ContentServices> {
               icon: EcampusIcons.icons8_notification,
               backgroundColor: CustomColors.colorPalette[1],
               title: "Уведомления",
-              subTitle: "Список ваших одногруппников и их рейтинг",
+              subTitle: "Уведомления о выскавленных КТ, финансовых задолженностей и т.д",
             ),
           ),
           CrossListElement(
