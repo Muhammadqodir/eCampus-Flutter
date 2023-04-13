@@ -120,7 +120,11 @@ class _TeacherRatingState extends State<TeacherRating> {
                       .textTheme
                       .bodySmall!
                       .copyWith(fontWeight: FontWeight.bold),
-                )
+                ),
+                Text(
+                  "1* - Сложно, 5* - Легко",
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 10),
+                ),
               ],
             )
           ],

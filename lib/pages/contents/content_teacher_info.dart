@@ -4,7 +4,9 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
+import 'package:ecampus_ncfu/inc/custom_checkbox.dart';
 import 'package:ecampus_ncfu/inc/custom_text_field.dart';
+import 'package:ecampus_ncfu/inc/review_textfield.dart';
 import 'package:ecampus_ncfu/inc/teacher_rating.dart';
 import 'package:ecampus_ncfu/models/teacher_review.dart';
 import 'package:ecampus_ncfu/themes.dart';
@@ -98,16 +100,16 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                       .ref("usersData/${key["author"]}/fullName")
                       .get())
                   .value as String;
-              // review.setAuthorName(authorName);
-              review.setAuthorName("Аноним");
+              review.setAuthorName(authorName);
+              // review.setAuthorName("Аноним");
             } catch (e) {
               log(e.toString());
               review.setAuthorName("Аноним");
             }
             List<dynamic> likes = [];
-            try{
+            try {
               likes = key["likes"];
-            }catch (e){}
+            } catch (e) {}
             for (String like in likes) {
               review.addLike(like);
             }
@@ -202,6 +204,8 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
     log("teachers/${widget.teacherId}/rating/$rType/$userId");
     tRef.set(value);
   }
+
+  bool isAnonymus = false;
 
   @override
   Widget build(BuildContext context) {
@@ -336,17 +340,21 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: CustomTextField(
+                                  child: ReviewTextField(
                                     controller: controller,
-                                    hint: "Оставить отзыв (Анонимно)",
+                                    hint: "Оставить отзыв",
                                     onChanged: (v) {},
+                                    onModeChanged: (v){
+                                      log(v?"Anonym":"User");
+                                      isAnonymus = v;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
                                 CrossButton(
-                                  onPressed: (){
+                                  onPressed: () {
                                     _addReview();
                                   },
                                   child: const Icon(
@@ -391,12 +399,15 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
 
   _addReview() async {
     String review = controller.text;
-    String login = (await SharedPreferences.getInstance()).getString("login")??"anonymus";
+    String login = (await SharedPreferences.getInstance()).getString("login") ??
+        "anonymus";
+    if(isAnonymus){
+      login += "_hide";
+    }
     // showAlertDialog(context, "eCmapus", login);
     if (review.isNotEmpty) {
       final ref = widget.database
-          .ref(
-              "teachers/${widget.teacherId}/rating/reviews/$login")
+          .ref("teachers/${widget.teacherId}/rating/reviews/$login")
           .set({
         "author": login,
         "date": getCurrentDateTimeForReview(),
@@ -405,7 +416,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
         "target": "teachers/${widget.teacherId}",
       });
       log("teachers/${widget.teacherId}/rating/reviews/$login");
-      showAlertDialog(context, "eCampus", "Готово!");
+      showAlertDialog(context, "Готово", "Спасибо за отзыв!");
     } else {
       showAlertDialog(context, "Ошибка", "Введите отзыв");
     }

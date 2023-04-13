@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class OnTapScaleAndFade extends StatefulWidget {
   final Widget child;
   final void Function() onTap;
-  const OnTapScaleAndFade({Key? key, required this.child, required this.onTap}) : super(key: key);
+  final double lowerBound;
+  const OnTapScaleAndFade({Key? key, required this.child, required this.onTap, this.lowerBound = 0.9}) : super(key: key);
 
   @override
   _OnTapScaleAndFadeState createState() => _OnTapScaleAndFadeState();
@@ -19,7 +20,7 @@ class _OnTapScaleAndFadeState extends State<OnTapScaleAndFade>
   void initState() {
     _controllerA = AnimationController(
       vsync: this,
-      lowerBound: 0.98,
+      lowerBound: widget.lowerBound,
       upperBound: 1.0,
       value: 1,
       duration: Duration(milliseconds: 100),
