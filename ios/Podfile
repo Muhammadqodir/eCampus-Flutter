@@ -27,13 +27,7 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 def appodeal
   pod 'APDBidMachineAdapter', '3.0.0.4' # Required
-  pod 'BDMCriteoAdapter', '~> 1.9.4'
-  pod 'BDMPangleAdapter', '~> 1.9.4.2'
-  pod 'BDMAmazonAdapter', '~> 1.9.4.2'
-  pod 'BDMSmaatoAdapter', '~> 1.9.4'
-  pod 'BDMTapjoyAdapter', '~> 1.9.4'
   pod 'APDIABAdapter', '3.0.0.1' # Required
-  pod 'BDMIABAdapter', '~> 1.9.4'
   pod 'APDStackAnalyticsAdapter', '3.0.0.2' # Required
   pod 'APDYandexAdapter', '3.0.0.1'
 end

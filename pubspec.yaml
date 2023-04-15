@@ -57,9 +57,9 @@ dependencies:
   new_version: ^0.3.1
   package_info: ^2.0.2
   open_store: ^0.3.1
-  rate_my_app: ^1.1.4
   cloud_firestore: ^3.5.1
   paginate_firestore: ^1.0.3+1
+  in_app_review: ^2.0.6
 
 dev_dependencies:
   build_runner: ^2.2.0

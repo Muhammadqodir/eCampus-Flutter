@@ -25,7 +25,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:new_version/new_version.dart';
-import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info/package_info.dart';
 
@@ -51,36 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isActialToken = false;
   int notification_count = 0;
 
-  RateMyApp rateMyApp = RateMyApp(
-    preferencesPrefix: 'rateMyApp_',
-    minDays: 1,
-    minLaunches: 1,
-    remindDays: 7,
-    remindLaunches: 10,
-    googlePlayIdentifier: 'uz.mqsoft.ecampusncfu',
-    appStoreIdentifier: '1644613830',
-  );
-
   int getPageIndex() {
     return pageIndex;
   }
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await rateMyApp.init();
-      if (mounted && rateMyApp.shouldOpenDialog) {
-        rateMyApp.showRateDialog(
-          context,
-          title: "Оцените это приложение",
-          rateButton: "Оценить",
-          noButton: "Никогда",
-          laterButton: "Позже",
-          message:
-              "Если вам нравится это приложение, пожалуйста, найдите немного времени, чтобы оченить! \nЭто действительно помогает нам, и это не должно занять у вас больше одной минуты.",
-        );
-      }
-    });
 
     content = ContentMain(
       context: context,

@@ -13,6 +13,7 @@ import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 import '../../utils/utils.dart';
@@ -151,6 +152,17 @@ class _ContentMainState extends State<ContentMain> {
     return [];
   }
 
+  void review() async {
+    final InAppReview inAppReview = InAppReview.instance;
+
+
+    // inAppReview.openStoreListing(appStoreId: '1644613830');
+    if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -247,29 +259,20 @@ class _ContentMainState extends State<ContentMain> {
                             ],
                           ),
                           onPressed: () {
-                            // SharedPreferences.getInstance().then((value) => {
-                            //       value.setString("token", "invalid"),
-                            //     });
-                            if (!isUnActualToken) {
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => StatisticsPage(
-                                    context: context,
-                                  ),
-                                ),
-                              );
-                            }else{
-                              update();
-                            }
+                            // if (!isUnActualToken) {
+                            //   Navigator.push(
+                            //     context,
+                            //     CupertinoPageRoute(
+                            //       builder: (context) => StatisticsPage(
+                            //         context: context,
+                            //       ),
+                            //     ),
+                            //   );
+                            // }else{
+                            //   update();
+                            // }
 
-                            // log(ratingModel!.toJson().toString());
-                            // AwesomeNotifications().createNotification(
-                            //     content: NotificationContent(
-                            //         id: 10,
-                            //         channelKey: 'basic_channel',
-                            //         title: 'Simple Notification',
-                            //         body: 'Simple body'));
+                            review();
                           },
                         ),
                       ),
