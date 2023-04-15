@@ -48,7 +48,7 @@
 		<true/>
 	</dict>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>This identifier will be used to deliver personalized ads to you.</string>
+	<string>Этот идентификатор будет использоваться для показа вам персонализированной рекламы.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
