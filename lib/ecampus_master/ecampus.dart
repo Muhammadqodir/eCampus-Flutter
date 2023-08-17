@@ -316,7 +316,7 @@ class eCampus {
 
   void readNotification(messageId) async {
     Map<String, String> body = {'messagesIds[]': messageId.toString()};
-    http.Response response = await client
+    await client
         .post('https://ecampus.ncfu.ru/NotificationCenter/SetMessagesRead', body: body);
   }
 
@@ -398,7 +398,7 @@ class eCampus {
           for (var i = 0; i < academicYears.length; i++) {
             Map<String, dynamic> academicYear = academicYears[i];
             String kursName = "";
-            String kursTypeName = "";
+            // String kursTypeName = "";
             String name = "";
             int id = 0;
             int parent_id = 0;
@@ -494,7 +494,7 @@ class eCampus {
         String json = response.body;
         json = json.replaceAll("JSON.parse(\"\\\"", "\"");
         json = json.replaceAll("\\\"\")", "\"");
-        Map<String, dynamic> jsonObject = jsonDecode(response.body);
+        Map<String, dynamic>? jsonObject = jsonDecode(response.body);
         if (jsonObject != null) {
           List<dynamic> fileAbleActivities = [];
           List<dynamic> sciFiles = [];
@@ -530,6 +530,7 @@ class eCampus {
               } catch (e) {}
               try {
                 hasInstruction = subject["HasInstruction"];
+                print(hasInstruction);
               } catch (e) {}
               try {
                 hasLectures = subject["HasLectures"];
@@ -752,7 +753,7 @@ class eCampus {
     return models;
   }
 
-  SubjectsResponse getSubjectsByJSON(Map<String, dynamic> jsonObject,
+  SubjectsResponse getSubjectsByJSON(Map<String, dynamic>? jsonObject,
       {MyTeachersResponse? myTeachersResponse}) {
     try {
       if (jsonObject != null) {
@@ -791,6 +792,7 @@ class eCampus {
             } catch (e) {}
             try {
               hasInstruction = subject["HasInstruction"];
+              print(hasInstruction);
             } catch (e) {}
             try {
               hasLectures = subject["HasLectures"];

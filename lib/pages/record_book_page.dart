@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/record_book_models.dart';
-import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';

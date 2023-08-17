@@ -3,11 +3,8 @@ import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
-import 'package:ecampus_ncfu/models/schedule_models.dart';
-import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:ecampus_ncfu/utils/config.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

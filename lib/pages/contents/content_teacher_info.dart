@@ -4,8 +4,6 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
-import 'package:ecampus_ncfu/inc/custom_checkbox.dart';
-import 'package:ecampus_ncfu/inc/custom_text_field.dart';
 import 'package:ecampus_ncfu/inc/review_textfield.dart';
 import 'package:ecampus_ncfu/inc/teacher_rating.dart';
 import 'package:ecampus_ncfu/models/teacher_review.dart';
@@ -14,10 +12,8 @@ import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/utils.dart';
 
@@ -428,7 +424,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
     }
     // showAlertDialog(context, "eCmapus", login);
     if (review.isNotEmpty) {
-      final ref = widget.database
+      widget.database
           .ref("teachers/${widget.teacherId}/rating/reviews/$login")
           .set({
         "author": login,

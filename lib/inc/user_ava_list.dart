@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AvaList extends StatelessWidget {
-  AvaList({Key? key, required this.list}) : super(key: key);
+  const AvaList({Key? key, required this.list}) : super(key: key);
 
-  Map<String, dynamic> list;
+  final Map<String, dynamic> list;
 
   String getAuthorInitials(String authorName) {
     List<String> split = authorName.split(" ");

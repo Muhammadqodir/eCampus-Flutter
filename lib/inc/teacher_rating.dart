@@ -1,5 +1,3 @@
-import 'package:ecampus_ncfu/inc/user_ava_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -18,16 +16,16 @@ class TeacherRating extends StatefulWidget {
       required this.humorRatingC})
       : super(key: key);
 
-  Function(String, int) setRating;
-  int initTeach;
-  int initExam;
-  int initHumor;
-  double teachSkills;
-  double examRating;
-  double humorRating;
-  Map<String, dynamic> teachSkillsC;
-  Map<String, dynamic> examRatingC;
-  Map<String, dynamic> humorRatingC;
+  final Function(String, int) setRating;
+  final int initTeach;
+  final int initExam;
+  final int initHumor;
+  final double teachSkills;
+  final double examRating;
+  final double humorRating;
+  final Map<String, dynamic> teachSkillsC;
+  final Map<String, dynamic> examRatingC;
+  final Map<String, dynamic> humorRatingC;
 
   @override
   State<TeacherRating> createState() => _TeacherRatingState();

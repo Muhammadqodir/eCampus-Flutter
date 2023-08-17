@@ -1,17 +1,13 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
-import 'package:ecampus_ncfu/pages/main_page.dart';
 import 'package:ecampus_ncfu/utils/analytics.dart';
-import 'package:ecampus_ncfu/utils/system_info.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:open_store/open_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../ecampus_icons.dart';
 

@@ -5,7 +5,6 @@ import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/search_schedule_model.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'responses.g.dart';
 

@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/pages/contents/content_teacher_info.dart';
-import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/schedule_page.dart';
-import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

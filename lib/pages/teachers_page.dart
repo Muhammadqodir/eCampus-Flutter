@@ -1,18 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
-import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
-import 'package:ecampus_ncfu/inc/custom_text_field.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/pages/contents/content_teacher_info.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
-import 'package:ecampus_ncfu/utils/dialogs.dart';
-import 'package:ecampus_ncfu/utils/gui_utils.dart';
-import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

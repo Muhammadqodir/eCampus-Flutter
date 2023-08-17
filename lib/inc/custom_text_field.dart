@@ -9,12 +9,12 @@ class CustomTextField extends StatefulWidget {
   final TextInputType inputType;
   final TextAlign textAlign;
   final bool obscureText;
-  BorderRadius borderRadius;
-  List<TextInputFormatter> inputFormatter;
+  final BorderRadius borderRadius;
+  final List<TextInputFormatter> inputFormatter;
   final EdgeInsets padding;
   final Function(String) onChanged;
 
-  CustomTextField({
+  const CustomTextField({
     this.hint = "",
     required this.controller,
     required this.onChanged,

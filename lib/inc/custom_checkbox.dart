@@ -16,7 +16,7 @@ class CustomCheckBox extends StatefulWidget {
   bool value;
   final IconData checkedIcon;
   final IconData unCheckedIcon;
-  double radius;
+  final double radius;
   final double size;
   final Function(bool) onChanged;
 

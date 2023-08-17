@@ -2,7 +2,6 @@ import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/inc/service_item.dart';
-import 'package:ecampus_ncfu/models/teacher_model.dart';
 import 'package:ecampus_ncfu/pages/map_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/rating_page.dart';

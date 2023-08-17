@@ -1,10 +1,5 @@
-import 'dart:convert';
-
-import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../ecampus_icons.dart';
 
 class CustomBottomNavItem {
   String title = "undefined";

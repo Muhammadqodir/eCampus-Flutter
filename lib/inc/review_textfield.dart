@@ -11,12 +11,12 @@ class ReviewTextField extends StatefulWidget {
   final TextInputType inputType;
   final TextAlign textAlign;
   final bool obscureText;
-  BorderRadius borderRadius;
-  List<TextInputFormatter> inputFormatter;
+  final BorderRadius borderRadius;
+  final List<TextInputFormatter> inputFormatter;
   final Function(String) onChanged;
   final Function(bool) onModeChanged;
 
-  ReviewTextField({
+  const ReviewTextField({
     this.hint = "",
     required this.controller,
     required this.onChanged,

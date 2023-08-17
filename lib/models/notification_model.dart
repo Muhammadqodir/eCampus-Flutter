@@ -1,7 +1,4 @@
-import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/gui_utils.dart';
 import '../utils/utils.dart';
 
 import 'package:json_annotation/json_annotation.dart';
