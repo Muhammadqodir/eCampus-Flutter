@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
@@ -11,7 +12,7 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -38,10 +39,8 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) {
-      ecampus = eCampus(value.getString("token") ?? "undefined");
-      getWeeks();
-    });
+    ecampus = context.read<ApiCubit>().state.api;
+    getWeeks();
   }
 
   void getWeeks() {

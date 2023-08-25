@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
@@ -23,19 +24,15 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:package_info/package_info.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    Key? key,
-    required this.title,
-    required this.ecampus,
-  }) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
-  final eCampus ecampus;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -49,13 +46,33 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isActialToken = false;
   int notification_count = 0;
 
+  late eCampus ecampus;
+
   int getPageIndex() {
     return pageIndex;
   }
 
+  void startUp() async {
+    ecampus = context.read<ApiCubit>().state.api;
+    if (await isOnline()) {
+      ecampus.isActualToken().then((value) {
+        isActialToken = value;
+        if (value) {
+          ecampus.getNotificationSize().then((value) {
+            log("Notifications: $value");
+            setState(() {
+              notification_count = value;
+            });
+          });
+        }
+      });
+
+      versionCheck(context);
+    }
+  }
+
   @override
   void initState() {
-
     content = ContentMain(
       context: context,
       update: update,
@@ -69,33 +86,17 @@ class _MyHomePageState extends State<MyHomePage> {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
-    isOnline().then((value) {
-      if (value) {
-        widget.ecampus.isActualToken().then((value) {
-          isActialToken = value;
-          if (value) {
-            widget.ecampus.getNotificationSize().then((value) {
-              log("Notifications: $value");
-              setState(() {
-                notification_count = value;
-              });
-            });
-          }
-        });
-
-        versionCheck(context);
-      }
-    });
+    startUp();
     super.initState();
   }
 
-  void update(){
+  void update() {
     isOnline().then((value) {
       if (value) {
-        widget.ecampus.isActualToken().then((value) {
+        ecampus.isActualToken().then((value) {
           isActialToken = value;
           if (value) {
-            widget.ecampus.getNotificationSize().then((value) {
+            ecampus.getNotificationSize().then((value) {
               log("Notifications: $value");
               setState(() {
                 notification_count = value;
@@ -334,7 +335,7 @@ class _MyHomePageState extends State<MyHomePage> {
           key: scheduleKey,
           context: context,
           getIndex: getPageIndex,
-          ecampus: widget.ecampus,
+          ecampus: ecampus,
         ),
         EcampusIcons.icons8_schedule,
         'Расписание',
@@ -374,7 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
           context: context,
           setElevation: setAppbarElevation,
           getIndex: getPageIndex,
-          ecampus: widget.ecampus,
+          ecampus: ecampus,
         ),
         EcampusIcons.icons8_books,
         'Предметы',
@@ -403,7 +404,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ContentServices(
             context: context,
             setElevation: setAppbarElevation,
-            ecampus: widget.ecampus),
+            ecampus: ecampus),
         EcampusIcons.icons8_circled_menu,
         'Сервисы',
       ),

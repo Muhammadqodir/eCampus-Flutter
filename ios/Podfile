@@ -26,10 +26,10 @@ end
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
 def appodeal
-  pod 'APDBidMachineAdapter', '3.0.0.4' # Required
-  pod 'APDIABAdapter', '3.0.0.1' # Required
-  pod 'APDStackAnalyticsAdapter', '3.0.0.2' # Required
-  pod 'APDYandexAdapter', '3.0.0.1'
+  pod 'APDBidMachineAdapter', '3.0.2.1' # Required
+  pod 'APDIABAdapter', '3.0.2.1' # Required
+  pod 'APDStackAnalyticsAdapter', '3.0.2.1' # Required
+  pod 'APDYandexAdapter', '3.0.2.1'
 end
 
 flutter_ios_podfile_setup

@@ -1,34 +1,36 @@
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/system_info.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 import 'firebase_options.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   // If you're going to use other Firebase services in the background, such as Firestore,
+//   // make sure you call `initializeApp` before using other Firebase services.
+//   await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+//   print("Handling a background message: ${message.messageId}");
 
-  if (message.notification != null) {
-    print('Message also contained a notification: ${message.notification}');
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: 10,
-          channelKey: 'basic_channel',
-          title: message.notification?.title,
-          body: message.notification?.body),
-    );
-  }
-}
+//   if (message.notification != null) {
+//     print('Message also contained a notification: ${message.notification}');
+//     AwesomeNotifications().createNotification(
+//       content: NotificationContent(
+//           id: 10,
+//           channelKey: 'basic_channel',
+//           title: message.notification?.title,
+//           body: message.notification?.body),
+//     );
+//   }
+// }
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -62,7 +64,6 @@ void main() async {
     debug: true,
   );
 
-
   Appodeal.setAutoCache(AppodealAdType.Banner, true);
   Appodeal.setAutoCache(AppodealAdType.Interstitial, true);
   Appodeal.setBannerCallbacks(
@@ -86,28 +87,28 @@ void main() async {
       AppodealAdType.Banner,
     ],
     onInitializationFinished: (errors) {
-      if(errors!.isNotEmpty){
-      log("AppodealError" + errors.toString());
+      if (errors!.isNotEmpty) {
+        log("AppodealError" + errors.toString());
       }
     },
   );
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //   print('Got a message whilst in the foreground!');
+  //   print('Message data: ${message.data}');
 
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
-      AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: 10,
-            channelKey: 'basic_channel',
-            title: message.notification?.title,
-            body: message.notification?.body),
-      );
-    }
-  });
+  //   if (message.notification != null) {
+  //     print('Message also contained a notification: ${message.notification}');
+  //     AwesomeNotifications().createNotification(
+  //       content: NotificationContent(
+  //           id: 10,
+  //           channelKey: 'basic_channel',
+  //           title: message.notification?.title,
+  //           body: message.notification?.body),
+  //     );
+  //   }
+  // });
 
   runApp(const MyApp());
 }
@@ -119,13 +120,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'eCampus',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
-      home: LoginPage(context: context),
+    return BlocProvider(
+      create: (context) => ApiCubit(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'eCampus',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
+        home: LoginPage(context: context),
+      ),
     );
   }
 }

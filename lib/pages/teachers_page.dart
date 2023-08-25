@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
@@ -9,9 +10,9 @@ import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:paginate_firestore/paginate_firestore.dart';
 
 class TeachersPage extends StatefulWidget {
   const TeachersPage({
@@ -33,9 +34,7 @@ class _TeachersPageState extends State<TeachersPage> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((sPref) => {
-          ecampus = eCampus(sPref.getString("token")!),
-        });
+    ecampus = context.read<ApiCubit>().state.api;
     paginator = _getNewPaginator("");
   }
 
@@ -108,82 +107,83 @@ class _TeachersPageState extends State<TeachersPage> {
   }
 
   Widget _getNewPaginator(String serach) {
-    return PaginateFirestore(
-      isLive: true,
-      itemBuilder: (ctx, documentSnapshots, index) {
-        final data = documentSnapshots[index].data() as Map?;
-        if (data == null) {
-          return const SizedBox();
-        }
-        return CrossListElement(
-          onPressed: () {
-            showCupertinoModalBottomSheet(
-              context: context,
-              builder: (context) => ContentTeacherInfo(
-                context: context,
-                ecampus: ecampus!,
-                database: FirebaseDatabase.instance,
-                teacherId: data["teacherId"],
-                teacherName: data["fullName"],
-              ),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 6,
-              horizontal: 12,
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Image.network(
-                        data["picUrl"],
-                        errorBuilder: (context, url, error) => Icon(
-                          Icons.error,
-                          color: CustomColors.error,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data["fullName"],
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        _getFaculty(data["moreInfo"]),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      query: FirebaseFirestore.instance
-          .collection('teachers')
-          .orderBy('fullName')
-          .startAt([serach.capitalize()]),
-      itemBuilderType: PaginateBuilderType.listView,
-    );
+    return SizedBox();
+    // return PaginateFirestore(
+    //   isLive: true,
+    //   itemBuilder: (ctx, documentSnapshots, index) {
+    //     final data = documentSnapshots[index].data() as Map?;
+    //     if (data == null) {
+    //       return const SizedBox();
+    //     }
+    //     return CrossListElement(
+    //       onPressed: () {
+    //         showCupertinoModalBottomSheet(
+    //           context: context,
+    //           builder: (context) => ContentTeacherInfo(
+    //             context: context,
+    //             ecampus: ecampus!,
+    //             database: FirebaseDatabase.instance,
+    //             teacherId: data["teacherId"],
+    //             teacherName: data["fullName"],
+    //           ),
+    //         );
+    //       },
+    //       child: Container(
+    //         padding: const EdgeInsets.symmetric(
+    //           vertical: 6,
+    //           horizontal: 12,
+    //         ),
+    //         child: Row(
+    //           children: [
+    //             SizedBox(
+    //               width: 50,
+    //               height: 50,
+    //               child: ClipRRect(
+    //                 borderRadius: BorderRadius.circular(14),
+    //                 child: FittedBox(
+    //                   fit: BoxFit.cover,
+    //                   child: Image.network(
+    //                     data["picUrl"],
+    //                     errorBuilder: (context, url, error) => Icon(
+    //                       Icons.error,
+    //                       color: CustomColors.error,
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),
+    //             const SizedBox(
+    //               width: 12,
+    //             ),
+    //             Expanded(
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Text(
+    //                     data["fullName"],
+    //                     style: Theme.of(context)
+    //                         .textTheme
+    //                         .titleMedium!
+    //                         .copyWith(fontWeight: FontWeight.bold),
+    //                   ),
+    //                   Text(
+    //                     _getFaculty(data["moreInfo"]),
+    //                     style: Theme.of(context).textTheme.bodySmall,
+    //                   )
+    //                 ],
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     );
+    //   },
+    //   query: FirebaseFirestore.instance
+    //       .collection('teachers')
+    //       .orderBy('fullName')
+    //       .startAt([serach.capitalize()]),
+    //   itemBuilderType: PaginateBuilderType.listView,
+    // );
   }
 }
 

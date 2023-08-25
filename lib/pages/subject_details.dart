@@ -1,3 +1,4 @@
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
@@ -7,7 +8,7 @@ import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SubjectDetailsPage extends StatefulWidget {
   const SubjectDetailsPage({
@@ -39,10 +40,8 @@ class _SubjectDetailsPageState extends State<SubjectDetailsPage> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) {
-      ecampus = eCampus(value.getString("token") ?? "undefined");
-      update();
-    });
+    ecampus = context.read<ApiCubit>().state.api;
+    update();
   }
 
   void update({bool showCaptchaDialog = false}) {

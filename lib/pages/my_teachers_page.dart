@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:ecampus_ncfu/cache_system.dart';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
@@ -10,7 +11,7 @@ import 'package:ecampus_ncfu/utils/gui_utils.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class MyTeachersPage extends StatefulWidget {
@@ -34,10 +35,8 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((sPref) => {
-          ecampus = eCampus(sPref.getString("token")!),
-          update(),
-        });
+    ecampus = context.read<ApiCubit>().state.api;
+    update();
   }
 
   void update() {

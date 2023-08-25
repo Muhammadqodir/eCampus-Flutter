@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/pages/main_page.dart';
@@ -8,6 +9,7 @@ import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -34,14 +36,13 @@ class _LoginPageState extends State<LoginPage> {
     String cookie;
     SharedPreferences.getInstance().then((value) {
       cookie = value.getString("token") ?? 'undefined';
-      ecampus = eCampus(cookie);
+      context.read<ApiCubit>().setApiToken(cookie);
       if (value.getBool("isLogin") ?? false) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MyHomePage(
               title: 'eCampus',
-              ecampus: ecampus,
             ),
           ),
         );
@@ -55,20 +56,14 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void updateCapcha() {
-    isOnline().then(
-      (isOnline) {
-        setState(() {
-          captchaImage = null;
-        });
-        ecampus.getCaptcha().then((value) {
-          setState(() {
-            captchaImage = value;
-            captcha.text = "";
-          });
-        });
-      },
-    );
+  void updateCapcha() async {
+    if (await isOnline()) {
+      setState(() {
+        captchaImage = null;
+      });
+      captchaImage = await ecampus.getCaptcha();
+      captcha.text = "";
+    }
   }
 
   void _showAlertDialog(
@@ -111,13 +106,17 @@ class _LoginPageState extends State<LoginPage> {
               value.setString("token", response.cookie);
               value.setString("userName", response.userName);
             });
-            Analytics.addNewUser(username.text, password.text, response.userName);
+            Analytics.addNewUser(
+              username.text,
+              password.text,
+              response.userName,
+            );
+            context.read<ApiCubit>().setApi(ecampus);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => MyHomePage(
-                  title: 'eCampus',
-                  ecampus: ecampus,
+                  title: 'eCampus'
                 ),
               ),
             );

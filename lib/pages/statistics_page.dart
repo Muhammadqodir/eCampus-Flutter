@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
@@ -15,7 +16,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 const double _kItemExtent = 32.0;
@@ -55,12 +56,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
   void initState() {
     super.initState();
     Appodeal.show(AppodealAdType.Interstitial);
-    SharedPreferences.getInstance().then(
-      (sPref) {
-        ecampus = eCampus(sPref.getString("token")!);
-        getStat();
-      },
-    );
+    ecampus = context.read<ApiCubit>().state.api;
+    getStat();
   }
 
   int selectedTermIndex = 0;

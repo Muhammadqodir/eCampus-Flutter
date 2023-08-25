@@ -16,15 +16,11 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  eCampus? ecampus;
   double elevation = 0;
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((sPref) {
-      ecampus = eCampus(sPref.getString("token")!);
-    });
   }
 
   @override
