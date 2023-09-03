@@ -17,9 +17,12 @@ import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 import '../../utils/utils.dart';
 
 class ContentMain extends StatefulWidget {
-  const ContentMain(
-      {Key? key, required this.context, required this.setElevation, required this.update})
-      : super(key: key);
+  const ContentMain({
+    Key? key,
+    required this.context,
+    required this.setElevation,
+    required this.update,
+  }) : super(key: key);
 
   final BuildContext context;
   final Function setElevation;
@@ -64,9 +67,14 @@ class _ContentMainState extends State<ContentMain> {
         });
       }
       if (isSwipeRefresh) {
-        showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, () {
-          update();
-        });
+        showCapchaDialog(
+          context,
+          await ecampus.getCaptcha(),
+          ecampus,
+          () {
+            update();
+          },
+        );
       }
     }
     widget.update();
@@ -151,13 +159,10 @@ class _ContentMainState extends State<ContentMain> {
 
   void review() async {
     final InAppReview inAppReview = InAppReview.instance;
-
-
     // inAppReview.openStoreListing(appStoreId: '1644613830');
     if (await inAppReview.isAvailable()) {
-        inAppReview.requestReview();
+      inAppReview.requestReview();
     }
-
   }
 
   @override
@@ -205,6 +210,7 @@ class _ContentMainState extends State<ContentMain> {
                               )
                             : const SizedBox(),
                         userPic != null
+                            // ? MainInfoView().getAvaterView(Image.asset("images/usr.png").image.)
                             ? MainInfoView().getAvaterView(userPic!)
                             : MainInfoView().getAvaterViewSkeleton(context),
                         userName != null
@@ -255,7 +261,7 @@ class _ContentMainState extends State<ContentMain> {
                               ),
                             ],
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             // if (!isUnActualToken) {
                             //   Navigator.push(
                             //     context,
@@ -269,7 +275,9 @@ class _ContentMainState extends State<ContentMain> {
                             //   update();
                             // }
 
-                            review();
+                            showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, (){});
+
+                            // review();
                           },
                         ),
                       ),
@@ -277,10 +285,10 @@ class _ContentMainState extends State<ContentMain> {
                     const SizedBox(
                       height: 8,
                     ),
-                    const AppodealBanner(
-                      adSize: AppodealBannerSize.BANNER,
-                      placement: "default",
-                    ),
+                    // const AppodealBanner(
+                    //   adSize: AppodealBannerSize.BANNER,
+                    //   placement: "default",
+                    // ),
                     const SizedBox(
                       height: 8,
                     ),

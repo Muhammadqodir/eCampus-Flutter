@@ -1,8 +1,6 @@
 import 'package:ecampus_ncfu/ecampus_icons.dart';
-import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({
