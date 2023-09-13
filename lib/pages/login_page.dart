@@ -63,9 +63,6 @@ class _LoginPageState extends State<LoginPage> {
       });
       captchaImage = await ecampus.getCaptcha();
       captcha.text = "";
-      setState(() {
-        
-      });
     }
   }
 

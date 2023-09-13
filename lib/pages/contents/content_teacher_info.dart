@@ -77,7 +77,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
         Map<String, dynamic> data = jsonDecode(dataJson);
         loading = false;
         notFound = false;
-        info = data["moreInfo"];
+        info = data["moreInfo"] ?? "no_data";
         picUrl = data["picUrl"];
         contactInfo = data["contactInfo"];
         employeePageUrl = data["employeePageUrl"];

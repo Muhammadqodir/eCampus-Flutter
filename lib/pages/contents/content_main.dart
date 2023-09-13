@@ -233,55 +233,55 @@ class _ContentMainState extends State<ContentMain> {
                             : const SizedBox(),
                       ],
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 12, left: 12, right: 12),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: CupertinoButton(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(12)),
-                          disabledColor: Theme.of(context).dividerColor,
-                          color: Theme.of(context).primaryColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(EcampusIcons.icons8_doughnut_chart),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              Text(
-                                "Статистика",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          onPressed: () async {
-                            // if (!isUnActualToken) {
-                            //   Navigator.push(
-                            //     context,
-                            //     CupertinoPageRoute(
-                            //       builder: (context) => StatisticsPage(
-                            //         context: context,
-                            //       ),
-                            //     ),
-                            //   );
-                            // }else{
-                            //   update();
-                            // }
+                    // Padding(
+                    //   padding:
+                    //       const EdgeInsets.only(top: 12, left: 12, right: 12),
+                    //   child: SizedBox(
+                    //     width: double.infinity,
+                    //     height: 50,
+                    //     child: CupertinoButton(
+                    //       borderRadius:
+                    //           const BorderRadius.all(Radius.circular(12)),
+                    //       disabledColor: Theme.of(context).dividerColor,
+                    //       color: Theme.of(context).primaryColor,
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                    //         children: [
+                    //           const Icon(EcampusIcons.icons8_doughnut_chart),
+                    //           const SizedBox(
+                    //             width: 12,
+                    //           ),
+                    //           Text(
+                    //             "Статистика",
+                    //             style: Theme.of(context)
+                    //                 .textTheme
+                    //                 .headlineMedium!
+                    //                 .copyWith(fontWeight: FontWeight.bold),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //       onPressed: () async {
+                    //         // if (!isUnActualToken) {
+                    //         //   Navigator.push(
+                    //         //     context,
+                    //         //     CupertinoPageRoute(
+                    //         //       builder: (context) => StatisticsPage(
+                    //         //         context: context,
+                    //         //       ),
+                    //         //     ),
+                    //         //   );
+                    //         // }else{
+                    //         //   update();
+                    //         // }
 
-                            showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, (){});
+                    //         // showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, (){});
 
-                            // review();
-                          },
-                        ),
-                      ),
-                    ),
+                    //         // review();
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 8,
                     ),
