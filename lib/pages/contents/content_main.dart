@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/cubit/api_cubit.dart';
-import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 import '../../utils/utils.dart';
 
 class ContentMain extends StatefulWidget {
