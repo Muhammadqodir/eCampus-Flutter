@@ -7,7 +7,6 @@ import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/review_textfield.dart';
 import 'package:ecampus_ncfu/inc/teacher_rating.dart';
 import 'package:ecampus_ncfu/models/teacher_review.dart';
-import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -356,7 +355,7 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                   },
                                   child: const Icon(
                                     CupertinoIcons.arrow_up_circle_fill,
-                                    color: primaryColor,
+                                    color: Colors.amber,
                                     size: 44,
                                   ),
                                 ),

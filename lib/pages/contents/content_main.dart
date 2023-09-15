@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 import '../../utils/utils.dart';
 
 class ContentMain extends StatefulWidget {
@@ -283,10 +284,10 @@ class _ContentMainState extends State<ContentMain> {
                     const SizedBox(
                       height: 8,
                     ),
-                    // const AppodealBanner(
-                    //   adSize: AppodealBannerSize.BANNER,
-                    //   placement: "default",
-                    // ),
+                    const AppodealBanner(
+                      adSize: AppodealBannerSize.BANNER,
+                      placement: "default",
+                    ),
                     const SizedBox(
                       height: 8,
                     ),
