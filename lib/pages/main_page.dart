@@ -18,9 +18,11 @@ import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
+import 'package:ecampus_ncfu/pages/story_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
+import 'package:ecampus_ncfu/widgets/story_circle.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -251,6 +253,15 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         [
+          // CupertinoButton(
+          //   child: Icon(
+          //     EcampusIcons.icons8_buy_upgrade,
+          //     color: primaryColor,
+          //   ),
+          //   onPressed: () {
+              
+          //   },
+          // ),
           Stack(
             children: [
               CupertinoButton(
@@ -285,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ],
-          )
+          ),
         ],
         ContentMain(
           context: context,

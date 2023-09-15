@@ -1,13 +1,17 @@
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:circular_clip_route/circular_clip_route.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
+import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/pages/story_page.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
+import 'package:ecampus_ncfu/widgets/story_circle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -164,6 +168,8 @@ class _ContentMainState extends State<ContentMain> {
     }
   }
 
+  GlobalKey key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -208,10 +214,33 @@ class _ContentMainState extends State<ContentMain> {
                                     .copyWith(color: Colors.red),
                               )
                             : const SizedBox(),
-                        userPic != null
-                            // ? MainInfoView().getAvaterView(Image.asset("images/usr.png").image.)
-                            ? MainInfoView().getAvaterView(userPic!)
-                            : MainInfoView().getAvaterViewSkeleton(context),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        OnTapScaleAndFade(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              CircularClipRoute(
+                                expandFrom: key.currentContext!,
+                                builder: (context) => const StoryPage(),
+                              ),
+                            );
+                            // Navigator.push(
+                            //   context,
+                            //   CupertinoPageRoute(
+                            //     builder: (context) => const StoryPage(),
+                            //   ),
+                            // );
+                          },
+                          child: StoryCircle(
+                            key: key,
+                            child: userPic != null
+                                // ? MainInfoView().getAvaterView(Image.asset("images/usr.png").image.)
+                                ? MainInfoView().getAvaterView(userPic!)
+                                : MainInfoView().getAvaterViewSkeleton(context),
+                          ),
+                        ),
                         userName != null
                             ? MainInfoView().getUserNameView(context, userName!)
                             : MainInfoView().getUserNameViewSkeleton(context),
