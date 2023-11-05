@@ -40,7 +40,7 @@ void showConfirmDialog(BuildContext context, String title, String msg,
 }
 
 void showUpdateDialog(
-    BuildContext context, String version, String packageName) {
+    BuildContext context, String version) {
   showCupertinoDialog<void>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(

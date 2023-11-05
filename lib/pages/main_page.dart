@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -9,6 +7,7 @@ import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/bottom_nav.dart';
 import 'package:ecampus_ncfu/inc/fade_indexed_stack.dart';
+import 'package:ecampus_ncfu/models/version.dart';
 import 'package:ecampus_ncfu/pages/contents/content_main.dart';
 import 'package:ecampus_ncfu/pages/contents/content_schedule.dart';
 import 'package:ecampus_ncfu/pages/contents/content_services.dart';
@@ -18,17 +17,13 @@ import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
-import 'package:ecampus_ncfu/pages/story_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
-import 'package:ecampus_ncfu/widgets/story_circle.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -55,19 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void startUp() async {
     ecampus = context.read<ApiCubit>().state.api;
     if (await isOnline()) {
-      ecampus.isActualToken().then((value) {
-        isActialToken = value;
-        if (value) {
-          ecampus.getNotificationSize().then((value) {
-            log("Notifications: $value");
-            setState(() {
-              notification_count = value;
-            });
-          });
-        }
-      });
-
-      versionCheck(context);
+      isActialToken = await ecampus.isActualToken();
+      if (isActialToken) {
+        notification_count = await ecampus.getNotificationSize();
+      }
+      print("Checking version");
+      versionCheck();
     }
   }
 
@@ -90,39 +78,26 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  void update() {
-    isOnline().then((value) {
-      if (value) {
-        ecampus.isActualToken().then((value) {
-          isActialToken = value;
-          if (value) {
-            ecampus.getNotificationSize().then((value) {
-              log("Notifications: $value");
-              setState(() {
-                notification_count = value;
-              });
-            });
-          }
-        });
+  void update() async {
+    if (await isOnline()) {
+      isActialToken = await ecampus.isActualToken();
+      if (isActialToken) {
+        notification_count = await ecampus.getNotificationSize();
       }
-    });
+    }
   }
 
-  void versionCheck(context) async {
-    final FirebaseDatabase database = FirebaseDatabase.instance;
-    final PackageInfo info = await PackageInfo.fromPlatform();
-    String currentVersion = info.version;
-    String packageName = info.packageName;
-    log("Current version:$currentVersion");
-    log("Package name:$packageName");
-    database.ref("config/flutter/version").get().then((snapshot) {
-      String dataJson = jsonEncode(snapshot.value);
-      Map<String, dynamic> data = jsonDecode(dataJson);
-      log("Store version: ${data["name"]}");
-      if (currentVersion != data["name"]) {
-        showUpdateDialog(context, data["name"], packageName);
+  int localVersion = 1;
+  void versionCheck() async {
+    ApiResponse<AppVersion> lastVerson = await ecampus.getLastVersion();
+    if (lastVerson.isSuccess) {
+      print("LastVersion:"+lastVerson.data!.name);
+      if (localVersion < lastVerson.data!.version) {
+        showUpdateDialog(context, lastVerson.data!.name);
       }
-    });
+    }else{
+      print(lastVerson.message);
+    }
   }
 
   void setAppbarElevation(double visibility) {

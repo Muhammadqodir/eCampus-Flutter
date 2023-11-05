@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:ecampus_ncfu/models/record_book_models.dart';
 import 'package:ecampus_ncfu/models/story_model.dart';
+import 'package:ecampus_ncfu/models/version.dart';
 import 'package:ecampus_ncfu/widgets/poll.dart';
 import 'package:html/dom.dart';
 import 'dart:io';
@@ -25,6 +26,29 @@ class eCampus {
   String login = "";
   String password = "";
   String ecampusToken = "undefined";
+
+  Future<ApiResponse<AppVersion>> getLastVersion() async {
+    http.Response response = await http.get(
+        Uri.parse("https://abduvoitov.uz/projects/eCampus/lastVersion.php"));
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> res = jsonDecode(response.body);
+        return ApiResponse(
+          data: AppVersion(
+            message: res["message"] ?? "",
+            version: int.parse(res["version"] ?? "0"),
+            name: res["name"] ?? "v udefined",
+            required: res["required"] == "1" ? true : false,
+          ),
+        );
+      } catch (e) {
+        print("Error:" + e.toString());
+        return ApiResponse.error(message: response.body);
+      }
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
 
   Future<ApiResponse<List<StoryModel>>> getStories() async {
     http.Response response = await client

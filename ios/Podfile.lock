@@ -850,8 +850,6 @@ PODS:
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
   - OMSDK_Appodeal (1.4.2.0)
-  - package_info (0.0.1):
-    - Flutter
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -960,7 +958,6 @@ DEPENDENCIES:
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
-  - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -1025,8 +1022,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/in_app_review/ios"
   map_launcher:
     :path: ".symlinks/plugins/map_launcher/ios"
-  package_info:
-    :path: ".symlinks/plugins/package_info/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
@@ -1078,7 +1073,6 @@ SPEC CHECKSUMS:
   map_launcher: e325db1261d029ff33e08e03baccffe09593ffea
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OMSDK_Appodeal: c3e648a353665dc4c0a8235d6e7efa66b8277ab5
-  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
