@@ -13,4 +13,8 @@ class ApiCubit extends Cubit<ApiState> {
   void setApi(eCampus api){
     emit(ApiState(api));
   }
+
+  eCampus getApi(){
+    return state.api;
+  }
 }

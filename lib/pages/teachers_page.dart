@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
-import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/pages/contents/content_teacher_info.dart';
@@ -10,7 +8,6 @@ import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:paginate_firestore/paginate_firestore.dart';
 
@@ -27,7 +24,6 @@ class TeachersPage extends StatefulWidget {
 }
 
 class _TeachersPageState extends State<TeachersPage> {
-  eCampus? ecampus;
   List<RatingModel>? models;
   double elevation = 0;
   late TeachersList teachersList;
@@ -36,7 +32,6 @@ class _TeachersPageState extends State<TeachersPage> {
   @override
   void initState() {
     super.initState();
-    ecampus = context.read<ApiCubit>().state.api;
     teachersList = TeachersList([]);
     controller.addListener(_scrollListener);
     search();
@@ -128,7 +123,6 @@ class _TeachersPageState extends State<TeachersPage> {
                           context: context,
                           builder: (context) => ContentTeacherInfo(
                             context: context,
-                            ecampus: ecampus!,
                             database: FirebaseDatabase.instance,
                             teacherId: data["teacherId"],
                             teacherName: data["fullName"],

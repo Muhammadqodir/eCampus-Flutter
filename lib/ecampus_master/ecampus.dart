@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:ecampus_ncfu/models/record_book_models.dart';
+import 'package:ecampus_ncfu/models/story_model.dart';
+import 'package:ecampus_ncfu/widgets/poll.dart';
 import 'package:html/dom.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -24,14 +26,47 @@ class eCampus {
   String password = "";
   String ecampusToken = "undefined";
 
-  eCampus(String ecampusToken) {
-    this.ecampusToken = ecampusToken;
+  Future<ApiResponse<List<StoryModel>>> getStories() async {
+    http.Response response = await client
+        .get("https://abduvoitov.uz/projects/eCampus/activeStories.php");
+    if (response.statusCode == 200) {
+      List<dynamic> list = jsonDecode(response.body);
+      List<StoryModel> models = [];
+      for (Map<String, dynamic> item in list) {
+        Map<String, dynamic> pollJson = jsonDecode(item["poll"]);
+        List<String> options = pollJson["options"];
+        PollModel poll = PollModel(
+          title: pollJson["title"],
+          options: options,
+          stat: {},
+          pollId: item["id"],
+        );
+        models.add(
+          StoryModel(
+            title: item["title"],
+            url: item["url"],
+            poll: poll,
+            views: item["views"],
+          ),
+        );
+      }
+      return ApiResponse(data: models);
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
+  eCampus(this.ecampusToken) {
     client.addCookie("ecampus", ecampusToken);
   }
 
   void setToken(String ecampusToken) {
     this.ecampusToken = ecampusToken;
     client.addCookie("ecampus", ecampusToken);
+  }
+
+  String getAuthToken() {
+    return client.getCookie("ecampus");
   }
 
   Future<String> getToken() async {
@@ -316,8 +351,9 @@ class eCampus {
 
   void readNotification(messageId) async {
     Map<String, String> body = {'messagesIds[]': messageId.toString()};
-    await client
-        .post('https://ecampus.ncfu.ru/NotificationCenter/SetMessagesRead', body: body);
+    await client.post(
+        'https://ecampus.ncfu.ru/NotificationCenter/SetMessagesRead',
+        body: body);
   }
 
   Future<SearchScheduleResponse> searchSchedule(String q) async {
@@ -1511,4 +1547,14 @@ class eCampus {
     //   return RecordBookResponse(false, e.toString(), []);
     // }
   }
+}
+
+class ApiResponse<T> {
+  String message;
+  bool isSuccess;
+  T? data;
+
+  ApiResponse.error({required this.message, this.isSuccess = false});
+
+  ApiResponse({required this.data, this.message = "", this.isSuccess = true});
 }

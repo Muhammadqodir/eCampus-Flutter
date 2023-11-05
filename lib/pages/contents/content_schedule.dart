@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:ecampus_ncfu/cache_system.dart';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
@@ -13,18 +14,18 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const double _kItemExtent = 32.0;
 
 class ContentSchedule extends StatefulWidget {
   const ContentSchedule(
-      {Key? key, required this.context, required this.getIndex, required this.ecampus})
+      {Key? key, required this.context, required this.getIndex})
       : super(key: key);
 
   final BuildContext context;
   final Function getIndex;
-  final eCampus ecampus;
 
   @override
   State<ContentSchedule> createState() => ContentScheduleState();
@@ -36,10 +37,12 @@ class ContentScheduleState extends State<ContentSchedule> {
   List<ScheduleWeeksModel> weeks = [];
   String selectedWeek = "";
   bool isDataLoaded = true;
+  late eCampus ecampus;
 
   @override
   void initState() {
     super.initState();
+    ecampus = context.read<ApiCubit>().getApi();
     fillData();
   }
 
@@ -71,7 +74,7 @@ class ContentScheduleState extends State<ContentSchedule> {
   void onPageActive(){
     if(!isDataLoaded){
       SharedPreferences.getInstance().then((value) {
-        widget.ecampus.setToken(value.getString("token") ?? 'undefined');
+        ecampus.setToken(value.getString("token") ?? 'undefined');
         fillData();
       });
     }
@@ -137,9 +140,9 @@ class ContentScheduleState extends State<ContentSchedule> {
         setState(() {
           loading = true;
         });
-        widget.ecampus.isActualToken().then((isActualToken) {
+        ecampus.isActualToken().then((isActualToken) {
           if (isActualToken) {
-            widget.ecampus.getScheduleWeeks().then((value) {
+            ecampus.getScheduleWeeks().then((value) {
               if (value.isSuccess) {
                 setState(() {
                   CacheSystem.saveScheduleWeeksResponse(value);
@@ -158,8 +161,8 @@ class ContentScheduleState extends State<ContentSchedule> {
             });
           } else {
             if (widget.getIndex() == 1) {
-              widget.ecampus.getCaptcha().then((captcha) {
-                showCapchaDialog(context, captcha, widget.ecampus, () {
+              ecampus.getCaptcha().then((captcha) {
+                showCapchaDialog(context, captcha, ecampus, () {
                   getWeeks();
                 });
               });
@@ -180,9 +183,9 @@ class ContentScheduleState extends State<ContentSchedule> {
         setState(() {
           loading = true;
         });
-        widget.ecampus.isActualToken().then((isActualToken) {
+        ecampus.isActualToken().then((isActualToken) {
           if (isActualToken) {
-            widget.ecampus.getSchedule(date, scheduleId, targetType).then((value) {
+            ecampus.getSchedule(date, scheduleId, targetType).then((value) {
               if (value.isSuccess) {
                 setState(() {
                   if (date == currentWeekDate) {
@@ -200,8 +203,8 @@ class ContentScheduleState extends State<ContentSchedule> {
             });
           } else {
             if (widget.getIndex() == 1) {
-              widget.ecampus.getCaptcha().then((captcha) {
-                showCapchaDialog(context, captcha, widget.ecampus, () {
+              ecampus.getCaptcha().then((captcha) {
+                showCapchaDialog(context, captcha, ecampus, () {
                   getSchedule(date);
                 });
               });

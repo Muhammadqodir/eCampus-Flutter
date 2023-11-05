@@ -41,9 +41,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MyHomePage(
-              title: 'eCampus',
-            ),
+            builder: (context) => const MyHomePage(),
           ),
         );
       } else {
@@ -63,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       captchaImage = await ecampus.getCaptcha();
       captcha.text = "";
+      setState(() {});
     }
   }
 
@@ -111,13 +110,12 @@ class _LoginPageState extends State<LoginPage> {
               password.text,
               response.userName,
             );
-            context.read<ApiCubit>().setApi(ecampus);
+            print("AuthToken:"+ecampus.getAuthToken());
+            context.read<ApiCubit>().setApiToken(ecampus.getAuthToken());
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => MyHomePage(
-                  title: 'eCampus'
-                ),
+                builder: (context) => const MyHomePage(),
               ),
             );
           } else {

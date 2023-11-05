@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:ecampus_ncfu/cache_system.dart';
-import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_activity_indicator.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/review_textfield.dart';
@@ -17,19 +16,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/utils.dart';
 
 class ContentTeacherInfo extends StatefulWidget {
-  const ContentTeacherInfo(
-      {Key? key,
-      required this.context,
-      required this.teacherId,
-      required this.database,
-      required this.ecampus,
-      required this.teacherName})
-      : super(key: key);
+  const ContentTeacherInfo({
+    Key? key,
+    required this.context,
+    required this.teacherId,
+    required this.database,
+    required this.teacherName,
+  }) : super(key: key);
 
   final BuildContext context;
   final String teacherName;
   final int teacherId;
-  final eCampus ecampus;
   final FirebaseDatabase database;
 
   @override
@@ -312,7 +309,10 @@ class _ContentTeacherInfoState extends State<ContentTeacherInfo> {
                                         children: [
                                           SvgPicture.asset(
                                             "images/forum.svg",
-                                            color: Theme.of(context).textTheme.bodyMedium!.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .color,
                                           ),
                                           const SizedBox(
                                             width: 12,

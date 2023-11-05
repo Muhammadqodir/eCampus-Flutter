@@ -504,6 +504,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.4"
+  in_app_update:
+    dependency: transitive
+    description:
+      name: in_app_update
+      sha256: "6ce3fe4ce975812f7d6133ea95cd146ca29fccc733860b40871302a0385ddffb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   intl:
     dependency: "direct main"
     description:
@@ -608,6 +616,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0-pre"
+  native_updater:
+    dependency: "direct main"
+    description:
+      name: native_updater
+      sha256: df844b38ae08af15ba6312063d30e9804cef3dfe560812c0b221bb037f98d689
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   nested:
     dependency: transitive
     description:
@@ -632,6 +648,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  package_info:
+    dependency: transitive
+    description:
+      name: package_info
+      sha256: "6c07d9d82c69e16afeeeeb6866fe43985a20b3b50df243091bfc4a4ad2b03b75"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   package_info_plus:
     dependency: "direct main"
     description:

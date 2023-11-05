@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 
 class NetworkService {
@@ -71,6 +73,10 @@ class NetworkService {
   void addCookie(String key, String value){
     cookies.addAll({key: value});
     headers['Cookie'] = _generateCookieHeader();
+  }
+
+  String getCookie(String key){
+    return cookies[key] ?? "undefined";
   }
 
   void setContentLength(int length){

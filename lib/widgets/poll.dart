@@ -1,20 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
 import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/themes.dart';
-import 'package:flutter/material.dart';
 
 class PollWidget extends StatefulWidget {
   const PollWidget({
     super.key,
-    required this.title,
-    required this.options,
-    required this.pollId,
-    required this.stat,
+    required this.poll,
   });
 
-  final String title;
-  final List<String> options;
-  final Map<String, int> stat;
-  final int pollId;
+  final PollModel poll;
 
   @override
   State<PollWidget> createState() => _PollWidgetState();
@@ -34,12 +30,12 @@ class _PollWidgetState extends State<PollWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.title,
+            widget.poll.title,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 6),
           Column(
-            children: widget.options
+            children: widget.poll.options
                 .map(
                   (e) => OnTapScaleAndFade(
                     lowerBound: 0.95,
@@ -66,4 +62,19 @@ class _PollWidgetState extends State<PollWidget> {
       ),
     );
   }
+}
+
+class PollModel {
+
+  final String title;
+  final List<String> options;
+  final Map<String, int> stat;
+  final int pollId;
+
+  PollModel({
+    required this.title,
+    required this.options,
+    required this.stat,
+    required this.pollId,
+  });
 }

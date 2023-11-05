@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:circular_clip_route/circular_clip_route.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/cubit/api_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/models/story_model.dart';
 import 'package:ecampus_ncfu/pages/story_page.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/widgets/story_circle.dart';
@@ -17,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
+import 'package:story_view/story_view.dart';
 import '../../utils/utils.dart';
 
 class ContentMain extends StatefulWidget {
@@ -46,11 +49,12 @@ class _ContentMainState extends State<ContentMain> {
   @override
   void initState() {
     super.initState();
+    ecampus = context.read<ApiCubit>().getApi();
     update();
   }
 
   void update({isSwipeRefresh = false}) async {
-    ecampus = context.read<ApiCubit>().state.api;
+    getStories();
     setState(() {
       userName = null;
       ratingModel = null;
@@ -110,43 +114,49 @@ class _ContentMainState extends State<ContentMain> {
   }
 
   bool rating = true;
-  void getFreshData() {
-    ecampus.getUserName().then((vUserName) {
-      CacheSystem.saveUserName(vUserName);
+  void getFreshData() async {
+    String vUserName = await ecampus.getUserName();
+    CacheSystem.saveUserName(vUserName);
+    setState(() {
+      userName = vUserName;
+    });
+    Uint8List vUserPic = await ecampus.getUserPic();
+    CacheSystem.saveUserPic(vUserPic);
+    setState(() {
+      userPic = vUserPic;
+    });
+    ScheduleResponse scheduleResponse = await ecampus.getCurrentSchedule();
+    if (scheduleResponse.isSuccess) {
+      CacheSystem.saveCurrentScheduleWeek(scheduleResponse);
       setState(() {
-        userName = vUserName;
+        schedule = scheduleResponse.scheduleModels;
       });
-    });
-    ecampus.getUserPic().then((vUserPic) {
-      CacheSystem.saveUserPic(vUserPic);
-      setState(
-        () {
-          userPic = vUserPic;
-        },
-      );
-    });
-    ecampus.getCurrentSchedule().then((scheduleResponse) {
-      if (scheduleResponse.isSuccess) {
-        CacheSystem.saveCurrentScheduleWeek(scheduleResponse);
-        setState(() {
-          schedule = scheduleResponse.scheduleModels;
-        });
-      }
-    });
-    ecampus.getRating().then((ratingResponse) {
-      if (ratingResponse.isSuccess) {
-        CacheSystem.saveRating(getMyRating(ratingResponse.items));
-        setState(() {
-          rating = true;
-          ratingModel = getMyRating(ratingResponse.items);
-        });
-      } else {
-        log(ratingResponse.error);
-        setState(() {
-          rating = false;
-        });
-      }
-    });
+    }
+    RatingResponse ratingResponse = await ecampus.getRating();
+    if (ratingResponse.isSuccess) {
+      CacheSystem.saveRating(getMyRating(ratingResponse.items));
+      setState(() {
+        rating = true;
+        ratingModel = getMyRating(ratingResponse.items);
+      });
+    } else {
+      log(ratingResponse.error);
+      setState(() {
+        rating = false;
+      });
+    }
+  }
+
+  bool isNewStory = false;
+  List<StoryModel> stories = [];
+  void getStories() async {
+    ApiResponse<List<StoryModel>> res = await ecampus.getStories();
+    if (res.isSuccess) {
+      print("Stories: "+res.data!.length.toString());
+      setState(() {
+        stories = res.data!;
+      });
+    }
   }
 
   List<ScheduleModel> schedule = [];
@@ -223,18 +233,24 @@ class _ContentMainState extends State<ContentMain> {
                               context,
                               CircularClipRoute(
                                 expandFrom: key.currentContext!,
-                                builder: (context) => const StoryPage(),
+                                builder: (context) => StoryPage(
+                                  models: stories
+                                      .map(
+                                        (e) => StoryItem.pageImage(
+                                          url: e.url,
+                                          controller: StoryController(),
+                                          imageFit: BoxFit.cover,
+                                          duration: const Duration(seconds: 15),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
                               ),
                             );
-                            // Navigator.push(
-                            //   context,
-                            //   CupertinoPageRoute(
-                            //     builder: (context) => const StoryPage(),
-                            //   ),
-                            // );
                           },
                           child: StoryCircle(
                             key: key,
+                            models: stories,
                             child: userPic != null
                                 // ? MainInfoView().getAvaterView(Image.asset("images/usr.png").image.)
                                 ? MainInfoView().getAvaterView(userPic!)

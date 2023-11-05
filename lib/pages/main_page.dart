@@ -32,9 +32,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -346,7 +344,6 @@ class _MyHomePageState extends State<MyHomePage> {
           key: scheduleKey,
           context: context,
           getIndex: getPageIndex,
-          ecampus: ecampus,
         ),
         EcampusIcons.icons8_schedule,
         'Расписание',

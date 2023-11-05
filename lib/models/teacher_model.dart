@@ -1,5 +1,4 @@
 import 'package:ecampus_ncfu/ecampus_icons.dart';
-import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/pages/contents/content_teacher_info.dart';
 import 'package:ecampus_ncfu/pages/schedule_page.dart';
@@ -39,12 +38,11 @@ class TeacherModel {
 
   // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoPicker.
   void showTeacherDialog(
-      BuildContext context, eCampus ecampus, FirebaseDatabase database) {
+      BuildContext context, FirebaseDatabase database) {
     showCupertinoModalBottomSheet(
       context: context,
       builder: (context) => ContentTeacherInfo(
         context: context,
-        ecampus: ecampus,
         database: database,
         teacherId: id,
         teacherName: fullName,
@@ -53,7 +51,7 @@ class TeacherModel {
   }
 
   Widget getView(
-      BuildContext context, eCampus ecampus, FirebaseDatabase database) {
+      BuildContext context, FirebaseDatabase database) {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Column(
@@ -119,7 +117,7 @@ class TeacherModel {
                 child: CrossButton(
                   backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () {
-                    showTeacherDialog(context, ecampus, database);
+                    showTeacherDialog(context, database);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
