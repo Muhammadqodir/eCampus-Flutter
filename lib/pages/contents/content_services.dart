@@ -4,6 +4,7 @@ import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/inc/service_item.dart';
 import 'package:ecampus_ncfu/pages/map_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
+import 'package:ecampus_ncfu/pages/notifications_page.dart';
 import 'package:ecampus_ncfu/pages/rating_page.dart';
 import 'package:ecampus_ncfu/pages/record_book_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
@@ -80,9 +81,7 @@ class _ContentServicesState extends State<ContentServices> {
               Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (context) => RatingPage(
-                    context: context,
-                  ),
+                  builder: (context) => const NotificationsPage(),
                 ),
               );
             },
@@ -90,7 +89,8 @@ class _ContentServicesState extends State<ContentServices> {
               icon: EcampusIcons.icons8_notification,
               backgroundColor: CustomColors.colorPalette[1],
               title: "Уведомления",
-              subTitle: "Уведомления о выскавленных КТ, финансовых задолженностей и т.д",
+              subTitle:
+                  "Уведомления о выскавленных КТ, финансовых задолженностей и т.д",
             ),
           ),
           CrossListElement(

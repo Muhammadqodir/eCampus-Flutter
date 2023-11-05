@@ -257,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //     color: primaryColor,
           //   ),
           //   onPressed: () {
-              
+
           //   },
           // ),
           Stack(
@@ -279,16 +279,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               color: CustomColors.error,
                             ),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                   ],
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => NotificationsPage(
-                        context: context,
-                      ),
+                      builder: (context) => const NotificationsPage(),
                     ),
                   );
                 },
@@ -401,9 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (context) => NotificationsPage(
-                    context: context,
-                  ),
+                  builder: (context) => const NotificationsPage(),
                 ),
               );
             },
