@@ -36,7 +36,9 @@ class _LoginPageState extends State<LoginPage> {
     String cookie;
     SharedPreferences.getInstance().then((value) {
       cookie = value.getString("token") ?? 'undefined';
-      context.read<ApiCubit>().setApiToken(cookie);
+      String login = value.getString("login") ?? 'undefined';
+      String pass = value.getString("password") ?? 'undefined';
+      context.read<ApiCubit>().setApiData(cookie, login, pass);
       if (value.getBool("isLogin") ?? false) {
         Navigator.pushReplacement(
           context,
@@ -48,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           isLogined = false;
         });
-        ecampus = eCampus("undefined");
+        ecampus = eCampus("undefined", "undefined", "undefined");
         updateCapcha();
       }
     });
@@ -111,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
               response.userName,
             );
             print("AuthToken:"+ecampus.getAuthToken());
-            context.read<ApiCubit>().setApiToken(ecampus.getAuthToken());
+            context.read<ApiCubit>().setApiData(ecampus.getAuthToken(), username.text, password.text);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

@@ -21,16 +21,17 @@ class _PollWidgetState extends State<PollWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(24),
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             widget.poll.title,
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 6),
@@ -38,14 +39,16 @@ class _PollWidgetState extends State<PollWidget> {
             children: widget.poll.options
                 .map(
                   (e) => OnTapScaleAndFade(
-                    lowerBound: 0.95,
+                    lowerBound: 0.97,
                     child: Container(
                       width: double.infinity,
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 12),
+                        vertical: 10,
+                        horizontal: 12,
+                      ),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(12),
                         color: primaryColor.withAlpha(100),
                       ),
                       child: Text(
@@ -65,16 +68,15 @@ class _PollWidgetState extends State<PollWidget> {
 }
 
 class PollModel {
-
   final String title;
   final List<String> options;
   final Map<String, int> stat;
-  final int pollId;
+  // final int pollId;
 
   PollModel({
     required this.title,
     required this.options,
     required this.stat,
-    required this.pollId,
+    // required this.pollId,
   });
 }

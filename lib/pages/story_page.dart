@@ -1,8 +1,14 @@
-import 'package:ecampus_ncfu/widgets/poll.dart';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
+import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
+import 'package:ecampus_ncfu/inc/cross_button.dart';
+import 'package:ecampus_ncfu/models/story_model.dart';
+import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_view/story_view.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class StoryPage extends StatefulWidget {
   const StoryPage({
@@ -10,7 +16,7 @@ class StoryPage extends StatefulWidget {
     required this.models,
   }) : super(key: key);
 
-  final List<StoryItem> models;
+  final List<StoryModel> models;
 
   @override
   State<StoryPage> createState() => _StoryPageState();
@@ -18,6 +24,35 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> {
   StoryController controller = StoryController();
+  int selectedIndex = 0;
+  List<StoryItem> items = [];
+  @override
+  void initState() {
+    super.initState();
+    items = widget.models
+        .map(
+          (e) => StoryItem.pageImage(
+            url: e.url,
+            imageFit: BoxFit.cover,
+            duration: const Duration(seconds: 20),
+            controller: controller,
+          ),
+        )
+        .toList();
+  }
+
+  void viewStory(int id) async {
+    ApiResponse<String> res = await context
+        .read<ApiCubit>()
+        .state
+        .api
+        .viewStory(widget.models[selectedIndex].id);
+    if (res.isSuccess) {
+      print("ViewSoty: " + res.data!);
+    }else{
+      print("ViewSoty: "+res.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +66,16 @@ class _StoryPageState extends State<StoryPage> {
             child: Stack(
               children: [
                 StoryView(
-                  storyItems: [
-                    StoryItem.pageImage(
-                      url:
-                          "https://i.pinimg.com/236x/f7/8a/e0/f78ae036a9310b8c24ab5d19ef67ea11.jpg",
-                      imageFit: BoxFit.cover,
-                      duration: const Duration(seconds: 20),
-                      controller: controller,
-                    ),
-                  ],
+                  storyItems: items,
                   controller: controller,
                   repeat: false,
                   onStoryShow: (s) {
-                    print(s);
+                    viewStory(widget.models[selectedIndex].id);
+                    try {
+                      setState(() {
+                        selectedIndex = items.indexOf(s);
+                      });
+                    } catch (e) {}
                   },
                   onComplete: () {
                     Navigator.of(context).pop();
@@ -54,29 +86,59 @@ class _StoryPageState extends State<StoryPage> {
                     }
                   },
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: PollWidget(
-                    poll: PollModel(
-                      title: "Вопросс",
-                      options: [
-                        "Вариант 1",
-                        "Вариант 5",
-                        "Вариант 2",
-                        "Вариант 3"
-                      ],
-                      pollId: 45,
-                      stat: {
-                        "Вариант 1": 5,
-                        "Вариант 4": 5,
-                        "Вариант 2": 5,
-                        "Вариант 3": 5,
-                      },
+                // if (widget.models[selectedIndex].poll != null)
+                //   Positioned(
+                //     bottom: 0,
+                //     left: 0,
+                //     right: 0,
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(12),
+                //       child: PollWidget(
+                //         poll: PollModel(
+                //           title: widget.models[selectedIndex].poll!.title,
+                //           options: widget.models[selectedIndex].poll!.options,
+                //           stat: {},
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                if (widget.models[selectedIndex].link != "")
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: CrossButton(
+                        height: 50,
+                        onPressed: () {
+                          try {
+                            launchUrlString(
+                              widget.models[selectedIndex].link,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } catch (e) {}
+                        },
+                        backgroundColor: primaryColor,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Перейти",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                  ),
+                            ),
+                            const Icon(CupertinoIcons.arrow_up_right),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

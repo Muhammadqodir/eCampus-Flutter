@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:typed_data';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:circular_clip_route/circular_clip_route.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/cubit/api_cubit.dart';
@@ -19,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
-import 'package:story_view/story_view.dart';
 import '../../utils/utils.dart';
 
 class ContentMain extends StatefulWidget {
@@ -152,11 +150,23 @@ class _ContentMainState extends State<ContentMain> {
   void getStories() async {
     ApiResponse<List<StoryModel>> res = await ecampus.getStories();
     if (res.isSuccess) {
-      print("Stories: "+res.data!.length.toString());
+      print("Stories: " + res.data!.length.toString());
       setState(() {
         stories = res.data!;
       });
+    } else {
+      print("Stories error:" + res.message);
     }
+  }
+
+  bool isUnviewedStory(){
+    bool res = false;
+    for (StoryModel element in stories) {
+      if(!element.views.contains(context.read<ApiCubit>().state.api.login)){
+        res = true;
+      }
+    }
+    return res;
   }
 
   List<ScheduleModel> schedule = [];
@@ -233,24 +243,16 @@ class _ContentMainState extends State<ContentMain> {
                               context,
                               CircularClipRoute(
                                 expandFrom: key.currentContext!,
-                                builder: (context) => StoryPage(
-                                  models: stories
-                                      .map(
-                                        (e) => StoryItem.pageImage(
-                                          url: e.url,
-                                          controller: StoryController(),
-                                          imageFit: BoxFit.cover,
-                                          duration: const Duration(seconds: 15),
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
+                                builder: (context) =>
+                                    StoryPage(models: stories),
                               ),
                             );
                           },
                           child: StoryCircle(
                             key: key,
                             models: stories,
+                            isExist: stories.isNotEmpty,
+                            isActive: isUnviewedStory(),
                             child: userPic != null
                                 // ? MainInfoView().getAvaterView(Image.asset("images/usr.png").image.)
                                 ? MainInfoView().getAvaterView(userPic!)

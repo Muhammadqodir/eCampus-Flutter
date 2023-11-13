@@ -2,14 +2,18 @@
 import 'package:ecampus_ncfu/widgets/poll.dart';
 
 class StoryModel {
+  int id;
   String title;
   String url;
-  PollModel poll;
+  PollModel? poll;
   String views;
+  String link;
   StoryModel({
+    required this.id,
     required this.title,
     required this.url,
     required this.poll,
     required this.views,
+    required this.link,
   });
 }

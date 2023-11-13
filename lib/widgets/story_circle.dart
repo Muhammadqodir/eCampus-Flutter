@@ -10,10 +10,14 @@ class StoryCircle extends StatefulWidget {
   const StoryCircle({
     Key? key,
     required this.child,
+    required this.isExist,
+    required this.isActive,
     required this.models,
   }) : super(key: key);
-  
+
   final Widget child;
+  final bool isExist;
+  final bool isActive;
   final List<StoryModel> models;
 
   @override
@@ -32,14 +36,14 @@ class _StoryCircleState extends State<StoryCircle>
     super.initState();
     controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
-    base = CurvedAnimation(
-        parent: controller, curve: Curves.easeInBack);
+    base = CurvedAnimation(parent: controller, curve: Curves.easeInBack);
     reverse = Tween<double>(begin: 0.0, end: -1.0).animate(base);
     gap = Tween<double>(begin: 10, end: 2.0).animate(base)
       ..addListener(() {
         setState(() {});
       });
-    Future.delayed(const Duration(seconds: 1)).then((value) => controller.forward());
+    Future.delayed(const Duration(seconds: 1))
+        .then((value) => controller.forward());
   }
 
   @override
@@ -50,20 +54,20 @@ class _StoryCircleState extends State<StoryCircle>
 
   @override
   Widget build(BuildContext context) {
-    return RotationTransition(
-      turns: base,
-      child: DashedCircle(
-        gapSize: gap.value,
-        dashes: 15,
-        color: primaryColor,
-        child: RotationTransition(
-          turns: reverse,
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: widget.child
-          ),
-        ),
-      ),
-    );
+    return widget.isExist
+        ? RotationTransition(
+            turns: base,
+            child: DashedCircle(
+              gapSize: gap.value,
+              dashes: 15,
+              color: widget.isActive ? primaryColor : grayColor,
+              child: RotationTransition(
+                turns: reverse,
+                child: Padding(
+                    padding: const EdgeInsets.all(5.0), child: widget.child),
+              ),
+            ),
+          )
+        : widget.child;
   }
 }

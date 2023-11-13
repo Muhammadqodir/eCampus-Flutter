@@ -1,28 +1,31 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:developer';
-import 'package:ecampus_ncfu/models/record_book_models.dart';
-import 'package:ecampus_ncfu/models/story_model.dart';
-import 'package:ecampus_ncfu/models/version.dart';
-import 'package:ecampus_ncfu/widgets/poll.dart';
-import 'package:html/dom.dart';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:html/dom.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:http/http.dart' as http;
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/NetworkService.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/record_book_models.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/search_schedule_model.dart';
+import 'package:ecampus_ncfu/models/story_model.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' show parse;
+import 'package:ecampus_ncfu/models/version.dart';
+import 'package:ecampus_ncfu/widgets/poll.dart';
+
+//shjnkbi9
+//zhKk926A
 
 class eCampus {
   final JsonEncoder _encoder = const JsonEncoder();
-  NetworkService client = new NetworkService();
+  NetworkService client = NetworkService();
   String login = "";
   String password = "";
   String ecampusToken = "undefined";
@@ -50,24 +53,45 @@ class eCampus {
     }
   }
 
+  Future<ApiResponse<String>> viewStory(int storyId) async {
+    http.Response response = await http.get(Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/storyView.php?user_id=$login&story_id=$storyId"));
+    if (response.statusCode == 200) {
+      return ApiResponse(data: response.body);
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
   Future<ApiResponse<List<StoryModel>>> getStories() async {
-    http.Response response = await client
-        .get("https://abduvoitov.uz/projects/eCampus/activeStories.php");
+    http.Response response = await http.get(
+      Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/activeStories.php?user_id=$login",
+      ),
+    );
     if (response.statusCode == 200) {
       List<dynamic> list = jsonDecode(response.body);
       List<StoryModel> models = [];
       for (Map<String, dynamic> item in list) {
-        Map<String, dynamic> pollJson = jsonDecode(item["poll"]);
-        List<String> options = pollJson["options"];
-        PollModel poll = PollModel(
-          title: pollJson["title"],
-          options: options,
-          stat: {},
-          pollId: item["id"],
-        );
+        List<String> optionsList = [];
+        PollModel? poll;
+        try {
+          Map<String, dynamic> pollJson = jsonDecode(item["poll"]);
+          List<dynamic> options = pollJson["options"];
+          for (var element in options) {
+            optionsList.add(element.toString());
+          }
+          poll = PollModel(
+            title: pollJson["title"],
+            options: optionsList,
+            stat: {},
+          );
+        } catch (e) {}
         models.add(
           StoryModel(
+            id: int.parse(item["id"]),
             title: item["title"],
+            link: item["link"],
             url: item["url"],
             poll: poll,
             views: item["views"],
@@ -80,7 +104,11 @@ class eCampus {
     }
   }
 
-  eCampus(this.ecampusToken) {
+  eCampus(
+    this.login,
+    this.password,
+    this.ecampusToken,
+  ) {
     client.addCookie("ecampus", ecampusToken);
   }
 

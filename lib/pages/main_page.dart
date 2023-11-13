@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/cubit/api_cubit.dart';
@@ -21,6 +19,7 @@ import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -91,11 +90,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void versionCheck() async {
     ApiResponse<AppVersion> lastVerson = await ecampus.getLastVersion();
     if (lastVerson.isSuccess) {
-      print("LastVersion:"+lastVerson.data!.name);
+      print("LastVersion:" + lastVerson.data!.name);
       if (localVersion < lastVerson.data!.version) {
         showUpdateDialog(context, lastVerson.data!.name);
       }
-    }else{
+    } else {
       print(lastVerson.message);
     }
   }
@@ -109,7 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool bottomNavShadow = true;
 
   Container buildCustomBottomNavigaton(
-      BuildContext ctx, List<CustomBottomNavItem> items) {
+    BuildContext ctx,
+    List<CustomBottomNavItem> items,
+  ) {
     return Container(
       height: 61,
       decoration: BoxDecoration(
