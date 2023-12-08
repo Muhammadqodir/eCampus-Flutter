@@ -5,12 +5,14 @@ import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
+import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/story_model.dart';
 import 'package:ecampus_ncfu/pages/story_page.dart';
+import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/widgets/story_circle.dart';
 import 'package:flutter/cupertino.dart';
@@ -159,10 +161,10 @@ class _ContentMainState extends State<ContentMain> {
     }
   }
 
-  bool isUnviewedStory(){
+  bool isUnviewedStory() {
     bool res = false;
     for (StoryModel element in stories) {
-      if(!element.views.contains(context.read<ApiCubit>().state.api.login)){
+      if (!element.views.contains(context.read<ApiCubit>().state.api.login)) {
         res = true;
       }
     }
@@ -189,9 +191,10 @@ class _ContentMainState extends State<ContentMain> {
   }
 
   GlobalKey key = GlobalKey();
-
+  bool isPremium = false;
   @override
   Widget build(BuildContext context) {
+    isPremium = context.watch<ApiCubit>().state.isPremium;
     return Center(
       child: NotificationListener<ScrollUpdateNotification>(
         onNotification: (notification) {
@@ -279,6 +282,20 @@ class _ContentMainState extends State<ContentMain> {
                             : const SizedBox(),
                       ],
                     ),
+                    CrossButton(
+                      wight: double.infinity,
+                      onPressed: () {
+                        if (context.read<ApiCubit>().state.isPremium) {
+                          context.read<ApiCubit>().setPremium(false);
+                        } else {
+                          context.read<ApiCubit>().setPremium(true);
+                        }
+                      },
+                      backgroundColor: primaryColor,
+                      child: Text(
+                        "Toggle premium${isPremium}",
+                      ),
+                    ),
                     // Padding(
                     //   padding:
                     //       const EdgeInsets.only(top: 12, left: 12, right: 12),
@@ -331,10 +348,11 @@ class _ContentMainState extends State<ContentMain> {
                     const SizedBox(
                       height: 8,
                     ),
-                    const AppodealBanner(
-                      adSize: AppodealBannerSize.BANNER,
-                      placement: "default",
-                    ),
+                    if (!context.watch<ApiCubit>().state.isPremium)
+                      const AppodealBanner(
+                        adSize: AppodealBannerSize.BANNER,
+                        placement: "default",
+                      ),
                     const SizedBox(
                       height: 8,
                     ),

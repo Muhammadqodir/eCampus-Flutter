@@ -53,9 +53,38 @@ class eCampus {
     }
   }
 
+  Future<ApiResponse<String>> sendStat(String type) async {
+    http.Response response = await http.get(
+      Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/sendStat.php?user_id=$login&story_id=$type",
+      ),
+    );
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> res = jsonDecode(response.body);
+        return ApiResponse(data: res.toString());
+      } catch (e) {
+        print("Error:" + e.toString());
+        return ApiResponse.error(message: response.body);
+      }
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
   Future<ApiResponse<String>> viewStory(int storyId) async {
     http.Response response = await http.get(Uri.parse(
         "https://abduvoitov.uz/projects/eCampus/storyView.php?user_id=$login&story_id=$storyId"));
+    if (response.statusCode == 200) {
+      return ApiResponse(data: response.body);
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
+  Future<ApiResponse<String>> answerStory(int storyId, String answer) async {
+    http.Response response = await http.get(Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/storyView.php?user_id=$login&story_id=$storyId&message=$answer"));
     if (response.statusCode == 200) {
       return ApiResponse(data: response.body);
     } else {

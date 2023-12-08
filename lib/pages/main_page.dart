@@ -227,47 +227,42 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         [
-          // CupertinoButton(
-          //   child: Icon(
-          //     EcampusIcons.icons8_buy_upgrade,
-          //     color: primaryColor,
-          //   ),
-          //   onPressed: () {
-
-          //   },
-          // ),
-          Stack(
-            children: [
-              CupertinoButton(
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Icon(
-                      EcampusIcons.icons8_notification,
-                      color: primaryColor,
-                    ),
-                    notification_count > 0
-                        ? Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: CustomColors.error,
-                            ),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => const NotificationsPage(),
-                    ),
-                  );
-                },
+          if (!context.watch<ApiCubit>().state.isPremium)
+            CupertinoButton(
+              child: Icon(
+                EcampusIcons.icons8_buy_upgrade,
+                color: primaryColor,
               ),
-            ],
+              onPressed: () {},
+            ),
+          CupertinoButton(
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Icon(
+                  EcampusIcons.icons8_notification,
+                  color: primaryColor,
+                ),
+                notification_count > 0
+                    ? Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: CustomColors.error,
+                        ),
+                      )
+                    : const SizedBox(),
+              ],
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => const NotificationsPage(),
+                ),
+              );
+            },
           ),
         ],
         ContentMain(
