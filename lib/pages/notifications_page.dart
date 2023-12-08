@@ -15,10 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({
     Key? key,
-    required this.context,
   }) : super(key: key);
 
-  final BuildContext context;
   @override
   State<NotificationsPage> createState() => _NotificationsPageState();
 }

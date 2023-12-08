@@ -1,13 +1,20 @@
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:circular_clip_route/circular_clip_route.dart';
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
+import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/inc/main_info.dart';
+import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/models/story_model.dart';
+import 'package:ecampus_ncfu/pages/story_page.dart';
+import 'package:ecampus_ncfu/themes.dart';
 import 'package:ecampus_ncfu/utils/dialogs.dart';
+import 'package:ecampus_ncfu/widgets/story_circle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,11 +49,12 @@ class _ContentMainState extends State<ContentMain> {
   @override
   void initState() {
     super.initState();
+    ecampus = context.read<ApiCubit>().getApi();
     update();
   }
 
   void update({isSwipeRefresh = false}) async {
-    ecampus = context.read<ApiCubit>().state.api;
+    getStories();
     setState(() {
       userName = null;
       ratingModel = null;
@@ -106,43 +114,61 @@ class _ContentMainState extends State<ContentMain> {
   }
 
   bool rating = true;
-  void getFreshData() {
-    ecampus.getUserName().then((vUserName) {
-      CacheSystem.saveUserName(vUserName);
+  void getFreshData() async {
+    String vUserName = await ecampus.getUserName();
+    CacheSystem.saveUserName(vUserName);
+    setState(() {
+      userName = vUserName;
+    });
+    Uint8List vUserPic = await ecampus.getUserPic();
+    CacheSystem.saveUserPic(vUserPic);
+    setState(() {
+      userPic = vUserPic;
+    });
+    ScheduleResponse scheduleResponse = await ecampus.getCurrentSchedule();
+    if (scheduleResponse.isSuccess) {
+      CacheSystem.saveCurrentScheduleWeek(scheduleResponse);
       setState(() {
-        userName = vUserName;
+        schedule = scheduleResponse.scheduleModels;
       });
-    });
-    ecampus.getUserPic().then((vUserPic) {
-      CacheSystem.saveUserPic(vUserPic);
-      setState(
-        () {
-          userPic = vUserPic;
-        },
-      );
-    });
-    ecampus.getCurrentSchedule().then((scheduleResponse) {
-      if (scheduleResponse.isSuccess) {
-        CacheSystem.saveCurrentScheduleWeek(scheduleResponse);
-        setState(() {
-          schedule = scheduleResponse.scheduleModels;
-        });
+    }
+    RatingResponse ratingResponse = await ecampus.getRating();
+    if (ratingResponse.isSuccess) {
+      CacheSystem.saveRating(getMyRating(ratingResponse.items));
+      setState(() {
+        rating = true;
+        ratingModel = getMyRating(ratingResponse.items);
+      });
+    } else {
+      log(ratingResponse.error);
+      setState(() {
+        rating = false;
+      });
+    }
+  }
+
+  bool isNewStory = false;
+  List<StoryModel> stories = [];
+  void getStories() async {
+    ApiResponse<List<StoryModel>> res = await ecampus.getStories();
+    if (res.isSuccess) {
+      print("Stories: " + res.data!.length.toString());
+      setState(() {
+        stories = res.data!;
+      });
+    } else {
+      print("Stories error:" + res.message);
+    }
+  }
+
+  bool isUnviewedStory() {
+    bool res = false;
+    for (StoryModel element in stories) {
+      if (!element.views.contains(context.read<ApiCubit>().state.api.login)) {
+        res = true;
       }
-    });
-    ecampus.getRating().then((ratingResponse) {
-      if (ratingResponse.isSuccess) {
-        CacheSystem.saveRating(getMyRating(ratingResponse.items));
-        setState(() {
-          rating = true;
-          ratingModel = getMyRating(ratingResponse.items);
-        });
-      } else {
-        log(ratingResponse.error);
-        setState(() {
-          rating = false;
-        });
-      }
-    });
+    }
+    return res;
   }
 
   List<ScheduleModel> schedule = [];
@@ -164,8 +190,11 @@ class _ContentMainState extends State<ContentMain> {
     }
   }
 
+  GlobalKey key = GlobalKey();
+  bool isPremium = false;
   @override
   Widget build(BuildContext context) {
+    isPremium = context.watch<ApiCubit>().state.isPremium;
     return Center(
       child: NotificationListener<ScrollUpdateNotification>(
         onNotification: (notification) {
@@ -208,10 +237,31 @@ class _ContentMainState extends State<ContentMain> {
                                     .copyWith(color: Colors.red),
                               )
                             : const SizedBox(),
-                        userPic != null
-                            // ? MainInfoView().getAvaterView(Image.asset("images/usr.png").image.)
-                            ? MainInfoView().getAvaterView(userPic!)
-                            : MainInfoView().getAvaterViewSkeleton(context),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        OnTapScaleAndFade(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              CircularClipRoute(
+                                expandFrom: key.currentContext!,
+                                builder: (context) =>
+                                    StoryPage(models: stories),
+                              ),
+                            );
+                          },
+                          child: StoryCircle(
+                            key: key,
+                            models: stories,
+                            isExist: stories.isNotEmpty,
+                            isActive: isUnviewedStory(),
+                            child: userPic != null
+                                // ? MainInfoView().getAvaterView(Image.asset("images/usr.png").image.)
+                                ? MainInfoView().getAvaterView(userPic!)
+                                : MainInfoView().getAvaterViewSkeleton(context),
+                          ),
+                        ),
                         userName != null
                             ? MainInfoView().getUserNameView(context, userName!)
                             : MainInfoView().getUserNameViewSkeleton(context),
@@ -231,6 +281,20 @@ class _ContentMainState extends State<ContentMain> {
                                     .getRatingBarViewSkeleton(context)
                             : const SizedBox(),
                       ],
+                    ),
+                    CrossButton(
+                      wight: double.infinity,
+                      onPressed: () {
+                        if (context.read<ApiCubit>().state.isPremium) {
+                          context.read<ApiCubit>().setPremium(false);
+                        } else {
+                          context.read<ApiCubit>().setPremium(true);
+                        }
+                      },
+                      backgroundColor: primaryColor,
+                      child: Text(
+                        "Toggle premium${isPremium}",
+                      ),
                     ),
                     // Padding(
                     //   padding:
@@ -284,10 +348,11 @@ class _ContentMainState extends State<ContentMain> {
                     const SizedBox(
                       height: 8,
                     ),
-                    const AppodealBanner(
-                      adSize: AppodealBannerSize.BANNER,
-                      placement: "default",
-                    ),
+                    if (!context.watch<ApiCubit>().state.isPremium)
+                      const AppodealBanner(
+                        adSize: AppodealBannerSize.BANNER,
+                        placement: "default",
+                      ),
                     const SizedBox(
                       height: 8,
                     ),

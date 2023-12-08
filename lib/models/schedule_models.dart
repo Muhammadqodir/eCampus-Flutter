@@ -89,7 +89,7 @@ class ScheduleLessonsModel {
 
   Widget getView(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -148,7 +148,7 @@ class ScheduleLessonsModel {
             height: 7,
           ),
           Text(
-            teacher,
+            teacher.replaceAll("  ", " "),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(

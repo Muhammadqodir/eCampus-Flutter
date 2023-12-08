@@ -2,6 +2,7 @@ import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 const primaryColor = Color(0xFF009AD1);
+const grayColor = Color(0xFF666666);
 const colorAccent = Color(0xFFE1F2F0);
 const lightGray = Color(0xFFcccccc);
 

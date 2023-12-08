@@ -1,4 +1,5 @@
 import 'package:ecampus_ncfu/cache_system.dart';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
@@ -9,6 +10,7 @@ import 'package:ecampus_ncfu/utils/dialogs.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
@@ -53,8 +55,8 @@ class ContentSubjectsState extends State<ContentSubjects> {
     });
   }
 
-  void onPageActive(){
-    if(!isDataLoaded){
+  void onPageActive() {
+    if (!isDataLoaded) {
       SharedPreferences.getInstance().then((value) {
         widget.ecampus.setToken(value.getString("token") ?? 'undefined');
         fillData();
@@ -125,7 +127,7 @@ class ContentSubjectsState extends State<ContentSubjects> {
               getFreshData();
             });
           });
-        }else{
+        } else {
           isDataLoaded = false;
         }
       }
@@ -179,9 +181,10 @@ class ContentSubjectsState extends State<ContentSubjects> {
                   "Загрузка...",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                const AppodealBanner(
-                  adSize: AppodealBannerSize.BANNER,
-                ),
+                if (!context.watch<ApiCubit>().state.isPremium)
+                  const AppodealBanner(
+                    adSize: AppodealBannerSize.BANNER,
+                  ),
               ],
             ),
           )

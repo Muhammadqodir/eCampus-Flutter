@@ -135,7 +135,9 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
                                       (element) => CrossListElement(
                                         onPressed: () {},
                                         child: element.getView(
-                                            context, ecampus!, widget.database),
+                                          context,
+                                          widget.database,
+                                        ),
                                       ),
                                     )
                                     .toList(),

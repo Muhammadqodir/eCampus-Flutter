@@ -1,37 +1,153 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:developer';
-import 'package:ecampus_ncfu/models/record_book_models.dart';
-import 'package:html/dom.dart';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:html/dom.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:http/http.dart' as http;
 import 'package:ecampus_ncfu/cache_system.dart';
 import 'package:ecampus_ncfu/ecampus_master/NetworkService.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/models/notification_model.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
+import 'package:ecampus_ncfu/models/record_book_models.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
 import 'package:ecampus_ncfu/models/search_schedule_model.dart';
+import 'package:ecampus_ncfu/models/story_model.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:ecampus_ncfu/models/teacher_model.dart';
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' show parse;
+import 'package:ecampus_ncfu/models/version.dart';
+import 'package:ecampus_ncfu/widgets/poll.dart';
+
+//shjnkbi9
+//zhKk926A
 
 class eCampus {
   final JsonEncoder _encoder = const JsonEncoder();
-  NetworkService client = new NetworkService();
+  NetworkService client = NetworkService();
   String login = "";
   String password = "";
   String ecampusToken = "undefined";
 
-  eCampus(String ecampusToken) {
-    this.ecampusToken = ecampusToken;
+  Future<ApiResponse<AppVersion>> getLastVersion() async {
+    http.Response response = await http.get(
+        Uri.parse("https://abduvoitov.uz/projects/eCampus/lastVersion.php"));
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> res = jsonDecode(response.body);
+        return ApiResponse(
+          data: AppVersion(
+            message: res["message"] ?? "",
+            version: int.parse(res["version"] ?? "0"),
+            name: res["name"] ?? "v udefined",
+            required: res["required"] == "1" ? true : false,
+          ),
+        );
+      } catch (e) {
+        print("Error:" + e.toString());
+        return ApiResponse.error(message: response.body);
+      }
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
+  Future<ApiResponse<String>> sendStat(String type) async {
+    http.Response response = await http.get(
+      Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/sendStat.php?user_id=$login&story_id=$type",
+      ),
+    );
+    if (response.statusCode == 200) {
+      try {
+        Map<String, dynamic> res = jsonDecode(response.body);
+        return ApiResponse(data: res.toString());
+      } catch (e) {
+        print("Error:" + e.toString());
+        return ApiResponse.error(message: response.body);
+      }
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
+  Future<ApiResponse<String>> viewStory(int storyId) async {
+    http.Response response = await http.get(Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/storyView.php?user_id=$login&story_id=$storyId"));
+    if (response.statusCode == 200) {
+      return ApiResponse(data: response.body);
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
+  Future<ApiResponse<String>> answerStory(int storyId, String answer) async {
+    http.Response response = await http.get(Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/storyView.php?user_id=$login&story_id=$storyId&message=$answer"));
+    if (response.statusCode == 200) {
+      return ApiResponse(data: response.body);
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
+  Future<ApiResponse<List<StoryModel>>> getStories() async {
+    http.Response response = await http.get(
+      Uri.parse(
+        "https://abduvoitov.uz/projects/eCampus/activeStories.php?user_id=$login",
+      ),
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> list = jsonDecode(response.body);
+      List<StoryModel> models = [];
+      for (Map<String, dynamic> item in list) {
+        List<String> optionsList = [];
+        PollModel? poll;
+        try {
+          Map<String, dynamic> pollJson = jsonDecode(item["poll"]);
+          List<dynamic> options = pollJson["options"];
+          for (var element in options) {
+            optionsList.add(element.toString());
+          }
+          poll = PollModel(
+            title: pollJson["title"],
+            options: optionsList,
+            stat: {},
+          );
+        } catch (e) {}
+        models.add(
+          StoryModel(
+            id: int.parse(item["id"]),
+            title: item["title"],
+            link: item["link"],
+            url: item["url"],
+            poll: poll,
+            views: item["views"],
+          ),
+        );
+      }
+      return ApiResponse(data: models);
+    } else {
+      return ApiResponse.error(message: response.body);
+    }
+  }
+
+  eCampus(
+    this.login,
+    this.password,
+    this.ecampusToken,
+  ) {
     client.addCookie("ecampus", ecampusToken);
   }
 
   void setToken(String ecampusToken) {
     this.ecampusToken = ecampusToken;
     client.addCookie("ecampus", ecampusToken);
+  }
+
+  String getAuthToken() {
+    return client.getCookie("ecampus");
   }
 
   Future<String> getToken() async {
@@ -316,8 +432,9 @@ class eCampus {
 
   void readNotification(messageId) async {
     Map<String, String> body = {'messagesIds[]': messageId.toString()};
-    await client
-        .post('https://ecampus.ncfu.ru/NotificationCenter/SetMessagesRead', body: body);
+    await client.post(
+        'https://ecampus.ncfu.ru/NotificationCenter/SetMessagesRead',
+        body: body);
   }
 
   Future<SearchScheduleResponse> searchSchedule(String q) async {
@@ -1511,4 +1628,14 @@ class eCampus {
     //   return RecordBookResponse(false, e.toString(), []);
     // }
   }
+}
+
+class ApiResponse<T> {
+  String message;
+  bool isSuccess;
+  T? data;
+
+  ApiResponse.error({required this.message, this.isSuccess = false});
+
+  ApiResponse({required this.data, this.message = "", this.isSuccess = true});
 }

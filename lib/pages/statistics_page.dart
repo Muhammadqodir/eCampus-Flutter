@@ -677,9 +677,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         ],
                       ),
                     ),
-                    const AppodealBanner(
-                      adSize: AppodealBannerSize.BANNER,
-                    ),
+                    if (!context.watch<ApiCubit>().state.isPremium)
+                      const AppodealBanner(
+                        adSize: AppodealBannerSize.BANNER,
+                      ),
                     Container(
                       margin: const EdgeInsets.all(12),
                       padding: const EdgeInsets.all(12),
