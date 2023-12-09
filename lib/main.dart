@@ -55,7 +55,7 @@ void main() async {
           defaultColor: Color(0xFF9D50DD),
           ledColor: Colors.white)
     ],
-    // Channel groups are only visual and are not required
+    // C`hannel groups are only visual and are not required
     channelGroups: [
       NotificationChannelGroup(
           channelGroupkey: 'basic_channel_group',

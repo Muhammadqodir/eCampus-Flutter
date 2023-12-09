@@ -208,6 +208,13 @@ class _MyHomePageState extends State<MyHomePage> {
             color: primaryColor,
           ),
           onPressed: () {
+            // To send to the server about the button response
+            context
+                .read<ApiCubit>()
+                .state
+                .api
+                .sendStat("Pushed_logout_btn", extra: "Главная страница");
+
             showConfirmDialog(
                 context, "Выход из профиля", "Подтвердите действие", () {
               CacheSystem.invalidateAllCache();
@@ -233,7 +240,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 EcampusIcons.icons8_buy_upgrade,
                 color: primaryColor,
               ),
-              onPressed: () {},
+              onPressed: () {
+                // To the send data to the server
+                context.read<ApiCubit>().state.api.sendStat(
+                      "Pushed_buy_upgrade_btn",
+                      extra: "Главная страница",
+                    );
+              },
             ),
           CupertinoButton(
             child: Stack(
@@ -256,6 +269,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             onPressed: () {
+              // To send the click data to the server
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Action_notif_btn",
+                    extra: "Главная страница",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -281,6 +300,8 @@ class _MyHomePageState extends State<MyHomePage> {
             color: primaryColor,
           ),
           onPressed: () {
+            context.read<ApiCubit>().state.api.sendStat("Pushed_teachers_btn",
+                extra: "Расписание (страница)");
             Navigator.push(
               context,
               MaterialWithModalsPageRoute(
@@ -298,6 +319,10 @@ class _MyHomePageState extends State<MyHomePage> {
               color: primaryColor,
             ),
             onPressed: () {
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_search_btn",
+                    extra: "Расписание (страница)",
+                  );
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -325,6 +350,12 @@ class _MyHomePageState extends State<MyHomePage> {
             color: primaryColor,
           ),
           onPressed: () {
+            // To send the click data to the server
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_statistics_btn",
+                  extra: "Bottom nav bar",
+                );
+
             Navigator.push(
               context,
               CupertinoPageRoute(
@@ -367,6 +398,12 @@ class _MyHomePageState extends State<MyHomePage> {
               color: primaryColor,
             ),
             onPressed: () {
+              // To send the click data to the server
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_action_notif_btn",
+                    extra: "Statistics page",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -391,52 +428,13 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: bottomNavItems[pageIndex].actions,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: elevation,
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            bottomNavItems[pageIndex].title != "eCampus" || true
-                ? SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      bottomNavItems[pageIndex].title,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  )
-                : Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      // color: primaryColor,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // SvgPicture.asset(
-                        //   "images/lovestar_1.svg",
-                        //   color: primaryColor,
-                        //   width: 24,
-                        // ),
-                        Text(
-                          "Limited 1 of 1",
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontFamily: "LimitedEditionFont",
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-          ],
+        centerTitle: true,
+        title: Text(
+          bottomNavItems[pageIndex].title,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ),
       body: FadeIndexedStack(

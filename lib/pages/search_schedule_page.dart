@@ -66,6 +66,11 @@ class _SearchScheduleState extends State<SearchSchedule> {
       appBar: AppBar(
         leading: CupertinoButton(
           onPressed: (() {
+            // To send the click data to the server
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_back_btn",
+                  extra: "Search Page",
+                );
             Navigator.pop(context);
           }),
           child: const Icon(EcampusIcons.icons8_back),
@@ -91,6 +96,11 @@ class _SearchScheduleState extends State<SearchSchedule> {
                         .map(
                           (e) => CrossListElement(
                             onPressed: () {
+                              // // To send the click data to the server
+                              // context.read<ApiCubit>().state.api.sendStat(
+                              //       "Pushed_schedule",
+                              //       extra: "Расписание (страница)",
+                              //     );
                               Navigator.push(
                                 context,
                                 CupertinoPageRoute(
