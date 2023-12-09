@@ -1,3 +1,4 @@
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
@@ -12,6 +13,7 @@ import 'package:ecampus_ncfu/pages/teachers_page.dart';
 import 'package:ecampus_ncfu/pages/wifi_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ContentServices extends StatefulWidget {
@@ -59,6 +61,12 @@ class _ContentServicesState extends State<ContentServices> {
         children: [
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_statistics_btn",
+                    extra: "Statistics page",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -78,6 +86,12 @@ class _ContentServicesState extends State<ContentServices> {
           ),
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_notif_btn",
+                    extra: "Statistics page",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -95,6 +109,12 @@ class _ContentServicesState extends State<ContentServices> {
           ),
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_rating_btn",
+                    extra: "Services page",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -113,6 +133,12 @@ class _ContentServicesState extends State<ContentServices> {
           ),
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_teachers_btn",
+                    extra: "Services page",
+                  );
+
               Navigator.push(
                 context,
                 MaterialWithModalsPageRoute(
@@ -131,6 +157,12 @@ class _ContentServicesState extends State<ContentServices> {
           ),
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_my_teachers_btn",
+                    extra: "Services page",
+                  );
+
               Navigator.push(
                 context,
                 MaterialWithModalsPageRoute(
@@ -150,6 +182,12 @@ class _ContentServicesState extends State<ContentServices> {
           ),
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_housing_mapp_btn",
+                    extra: "Services page",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -168,6 +206,12 @@ class _ContentServicesState extends State<ContentServices> {
           ),
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_record_book_btn",
+                    extra: "Services page",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -189,6 +233,12 @@ class _ContentServicesState extends State<ContentServices> {
           ),
           CrossListElement(
             onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_wi-fi_btn",
+                    extra: "Services page",
+                  );
+
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -208,7 +258,13 @@ class _ContentServicesState extends State<ContentServices> {
             ),
           ),
           CrossListElement(
-            onPressed: () {},
+            onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_students_office_btn",
+                    extra: "Services page",
+                  );
+            },
             enabled: false,
             child: ServiceItem(
               commingSoon: true,

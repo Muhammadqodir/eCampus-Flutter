@@ -53,12 +53,15 @@ class eCampus {
     }
   }
 
-  Future<ApiResponse<String>> sendStat(String type) async {
-    http.Response response = await http.get(
-      Uri.parse(
-        "https://abduvoitov.uz/projects/eCampus/sendStat.php?user_id=$login&story_id=$type",
-      ),
+  Future<ApiResponse<String>> sendStat(
+    String type, {
+    String extra = "undefined",
+  }) async {
+    Uri uri = Uri.parse(
+      "https://abduvoitov.uz/projects/eCampus/sendStat.php?user_id=$login&type=$type&extra=$extra",
     );
+    print(uri);
+    http.Response response = await http.get(uri);
     if (response.statusCode == 200) {
       try {
         Map<String, dynamic> res = jsonDecode(response.body);

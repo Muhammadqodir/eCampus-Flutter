@@ -1,3 +1,4 @@
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/pages/contents/content_teacher_info.dart';
@@ -5,6 +6,7 @@ import 'package:ecampus_ncfu/pages/schedule_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 part 'teacher_model.g.dart';
@@ -37,8 +39,7 @@ class TeacherModel {
   }
 
   // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoPicker.
-  void showTeacherDialog(
-      BuildContext context, FirebaseDatabase database) {
+  void showTeacherDialog(BuildContext context, FirebaseDatabase database) {
     showCupertinoModalBottomSheet(
       context: context,
       builder: (context) => ContentTeacherInfo(
@@ -50,8 +51,7 @@ class TeacherModel {
     );
   }
 
-  Widget getView(
-      BuildContext context, FirebaseDatabase database) {
+  Widget getView(BuildContext context, FirebaseDatabase database) {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Column(
@@ -81,6 +81,11 @@ class TeacherModel {
                 child: CrossButton(
                   backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () {
+                    // To send the click data to the server
+                    context.read<ApiCubit>().state.api.sendStat(
+                          "Pushed_schedule_btn",
+                          extra: "My teachers page",
+                        );
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
@@ -103,7 +108,7 @@ class TeacherModel {
                         width: 4,
                       ),
                       Text(
-                        "Рассписание",
+                        "Расписание",
                         style: Theme.of(context).textTheme.headlineMedium,
                       )
                     ],
@@ -117,6 +122,11 @@ class TeacherModel {
                 child: CrossButton(
                   backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () {
+                    // To send the click data to the server
+                    context.read<ApiCubit>().state.api.sendStat(
+                          "Pushed_info_btn",
+                          extra: "My teachers page",
+                        );
                     showTeacherDialog(context, database);
                   },
                   child: Row(
