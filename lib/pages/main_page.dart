@@ -132,6 +132,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      // To sent the click data to the server
+                      context.read<ApiCubit>().state.api.sendStat(
+                            "Pushed_bottom_nav_bar_btn",
+                            extra: "Main page",
+                          );
+
                       pageIndex = items.indexOf(item);
                       content = item.content;
                       elevation = 0;
