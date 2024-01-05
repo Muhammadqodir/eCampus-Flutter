@@ -1,3 +1,4 @@
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
@@ -5,6 +6,7 @@ import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/subject_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StatisticsDetailsPage extends StatefulWidget {
   const StatisticsDetailsPage({
@@ -43,6 +45,11 @@ class _StatisticsDetailsPageState extends State<StatisticsDetailsPage> {
             elevation: 0.5,
             leading: CupertinoButton(
               onPressed: (() {
+                // To send the click data to the server
+                context.read<ApiCubit>().state.api.sendStat(
+                      "Pushed_back_btn",
+                      extra: "Statistics details page",
+                    );
                 Navigator.pop(context);
               }),
               child: const Icon(EcampusIcons.icons8_back),
@@ -57,6 +64,13 @@ class _StatisticsDetailsPageState extends State<StatisticsDetailsPage> {
             ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             bottom: TabBar(
+              onTap: (v) {
+                // To send the click data to the server
+                context.read<ApiCubit>().state.api.sendStat(
+                      "Pushed_tab",
+                      extra: "Statistic details page",
+                    );
+              },
               tabs: widget.tabs
                   .map(
                     (e) => Tab(
@@ -105,7 +119,13 @@ class _StatisticsDetailsPageState extends State<StatisticsDetailsPage> {
                         children: e.models
                             .map(
                               (e) => CrossListElement(
-                                onPressed: () {},
+                                onPressed: () {
+                                  // To send the click data to the server
+                                  context.read<ApiCubit>().state.api.sendStat(
+                                        "Pushed_cross_list_elemenit",
+                                        extra: "Statistics details page",
+                                      );
+                                },
                                 child: e.getView(context),
                               ),
                             )

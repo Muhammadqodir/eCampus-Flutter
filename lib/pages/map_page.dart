@@ -319,10 +319,9 @@ class _MapPageState extends State<MapPage> {
         elevation: elevation,
         title: Text(
           "Карта корпусов",
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ),
       body: Center(
@@ -348,6 +347,7 @@ class _MapPageState extends State<MapPage> {
                 .map(
                   (MapMarkerModel e) => CrossListElement(
                     onPressed: () {
+                      // To send the click data to the server
                       context.read<ApiCubit>().state.api.sendStat(
                             "map_btn",
                             extra: e.title,

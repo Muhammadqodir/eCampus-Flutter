@@ -146,16 +146,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  void dispose() {
-    context
-        .read<ApiCubit>()
-        .state
-        .api
-        .sendStat("App_closed", extra: "undefined");
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,

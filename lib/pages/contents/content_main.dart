@@ -12,6 +12,7 @@ import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/models/snow_animation.dart';
 import 'package:ecampus_ncfu/models/story_model.dart';
 import 'package:ecampus_ncfu/pages/story_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
@@ -221,11 +222,12 @@ class _ContentMainState extends State<ContentMain> {
           slivers: [
             CupertinoSliverRefreshControl(
               onRefresh: () async {
-                context
-                    .read<ApiCubit>()
-                    .state
-                    .api
-                    .sendStat("Refreshed", extra: "Главная страница");
+                // To send the refresh data to the server
+                context.read<ApiCubit>().state.api.sendStat(
+                      "Refreshed",
+                      extra: "Main page",
+                    );
+
                 update(isSwipeRefresh: true);
               },
             ),
@@ -235,6 +237,7 @@ class _ContentMainState extends State<ContentMain> {
                   children: <Widget>[
                     Column(
                       children: [
+                        // SnowWidget(totalSnow: 150, speed: 0.5, isRunning: true),
                         isUnActualToken
                             ? Text(
                                 "Данные могут быть неактуальными!",
@@ -253,8 +256,9 @@ class _ContentMainState extends State<ContentMain> {
                               // To send the click data to the server
                               context.read<ApiCubit>().state.api.sendStat(
                                     "Pushed_avatar",
-                                    extra: "Главная страница",
+                                    extra: "Main page",
                                   );
+
                               Navigator.push(
                                 context,
                                 CircularClipRoute(
@@ -307,7 +311,7 @@ class _ContentMainState extends State<ContentMain> {
                       },
                       backgroundColor: primaryColor,
                       child: Text(
-                        "Toggle premium ${isPremium}",
+                        "Toggle premium $isPremium",
                       ),
                     ),
                     const SizedBox(

@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 const double _kItemExtent = 32.0;
@@ -457,6 +458,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
       appBar: AppBar(
         leading: CupertinoButton(
           onPressed: (() {
+            // To send the click data to the server
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_back_btn",
+                  extra: "Statistics page",
+                );
             Navigator.pop(context);
           }),
           child: const Icon(EcampusIcons.icons8_back),
@@ -465,6 +471,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
           !loading
               ? CupertinoButton(
                   onPressed: () {
+                    // To send the click data to the server
+                    context.read<ApiCubit>().state.api.sendStat(
+                          "Pushed_semester_btn",
+                          extra: "Statistics page",
+                        );
+
                     showSelectTermDialog();
                   },
                   child: Text(
@@ -507,19 +519,24 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CrossActivityIndicator(
+                    CupertinoActivityIndicator(
                       radius: 12,
                       color: Theme.of(context).textTheme.bodyLarge!.color!,
                     ),
                     const SizedBox(
                       height: 8,
                     ),
-                    Text(
-                      dataCollection ? "Сбор данных..." : "Загрузка...",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
+                    Shimmer.fromColors(
+                      period: const Duration(milliseconds: 1000),
+                      baseColor: Theme.of(context).secondaryHeaderColor,
+                      highlightColor: Colors.grey[400]!,
+                      child: Text(
+                        dataCollection ? "Сбор данных..." : "Загрузка...",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     dataCollection
                         ? Padding(
@@ -583,6 +600,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       count: openKT.length,
                                       color: CustomColors.error,
                                       onTap: () {
+                                        // To send the click data to the server
+                                        context
+                                            .read<ApiCubit>()
+                                            .state
+                                            .api
+                                            .sendStat(
+                                              "Pushed_открыте_кт",
+                                              extra: "Statistics page",
+                                            );
+
                                         Navigator.push(
                                           context,
                                           CupertinoPageRoute(
@@ -617,6 +644,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       count: fillKT.length,
                                       color: CustomColors.success,
                                       onTap: () {
+                                        // To send the click data to the server
+                                        context
+                                            .read<ApiCubit>()
+                                            .state
+                                            .api
+                                            .sendStat(
+                                              "Pushed_закрытые_кт",
+                                              extra: "Statistics page",
+                                            );
                                         Navigator.push(
                                           context,
                                           CupertinoPageRoute(
@@ -712,6 +748,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   count: nki.length,
                                   color: CustomColors.error,
                                   onTap: () {
+                                    // To send the click data to the server
+                                    context.read<ApiCubit>().state.api.sendStat(
+                                          "Pushed_Нки_btn",
+                                          extra: "Statistics page",
+                                        );
+
                                     Navigator.push(
                                       context,
                                       CupertinoPageRoute(
@@ -748,6 +790,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   count: ushki.length,
                                   color: CustomColors.warning,
                                   onTap: () {
+                                    // To send the click data to the server
+                                    context.read<ApiCubit>().state.api.sendStat(
+                                          "Pushed_Ушки_btn",
+                                          extra: "Statistics page",
+                                        );
+
                                     Navigator.push(
                                       context,
                                       CupertinoPageRoute(

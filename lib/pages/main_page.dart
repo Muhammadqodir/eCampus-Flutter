@@ -13,6 +13,7 @@ import 'package:ecampus_ncfu/pages/contents/content_subjects.dart';
 import 'package:ecampus_ncfu/pages/login_page.dart';
 import 'package:ecampus_ncfu/pages/my_teachers_page.dart';
 import 'package:ecampus_ncfu/pages/notifications_page.dart';
+import 'package:ecampus_ncfu/pages/premium_page.dart';
 import 'package:ecampus_ncfu/pages/search_schedule_page.dart';
 import 'package:ecampus_ncfu/pages/statistics_page.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
@@ -215,11 +216,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onPressed: () {
             // To send to the server about the button response
-            context
-                .read<ApiCubit>()
-                .state
-                .api
-                .sendStat("Pushed_logout_btn", extra: "Главная страница");
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_logout_btn",
+                  extra: "Главная страница",
+                );
 
             showConfirmDialog(
                 context, "Выход из профиля", "Подтвердите действие", () {
@@ -247,6 +247,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: primaryColor,
               ),
               onPressed: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const PremiumPage(),
+                  ),
+                );
                 // To the send data to the server
                 context.read<ApiCubit>().state.api.sendStat(
                       "Pushed_buy_upgrade_btn",
@@ -306,6 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: primaryColor,
           ),
           onPressed: () {
+            // To send the click data to the server
             context.read<ApiCubit>().state.api.sendStat("Pushed_teachers_btn",
                 extra: "Расписание (страница)");
             Navigator.push(
@@ -420,9 +427,10 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
         ContentServices(
-            context: context,
-            setElevation: setAppbarElevation,
-            ecampus: ecampus),
+          context: context,
+          setElevation: setAppbarElevation,
+          ecampus: ecampus,
+        ),
         EcampusIcons.icons8_circled_menu,
         'Сервисы',
       ),

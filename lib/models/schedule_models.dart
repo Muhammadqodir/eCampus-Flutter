@@ -1,4 +1,6 @@
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -88,87 +90,96 @@ class ScheduleLessonsModel {
   }
 
   Widget getView(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).primaryColor,
+    return InkWell(
+      onTap: () {
+        // To send the click data to the server
+        context.read<ApiCubit>().state.api.sendStat(
+              "Clicke_schedule_list",
+              extra: "Main page",
+            );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: Text(
+                        para.toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.white),
+                      ),
                     ),
-                    child: Text(
-                      para.toString(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.white),
+                    const SizedBox(
+                      width: 5,
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    lessonType.replaceAll("  ", ""),
-                    overflow: TextOverflow.fade,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  Text(
-                    "${getTimeStart()}-${getTimeEnd()}",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          Text(
-            subName,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          Text(
-            teacher.replaceAll("  ", " "),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          Row(
-            children: [
-              Text(
-                room,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const Spacer(),
-              Text(
-                group,
-                textAlign: TextAlign.end,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-        ],
+                    Text(
+                      lessonType.replaceAll("  ", ""),
+                      overflow: TextOverflow.fade,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    Text(
+                      "${getTimeStart()}-${getTimeEnd()}",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            Text(
+              subName,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            Text(
+              teacher.replaceAll("  ", " "),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            Row(
+              children: [
+                Text(
+                  room,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const Spacer(),
+                Text(
+                  group,
+                  textAlign: TextAlign.end,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
