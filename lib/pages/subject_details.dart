@@ -74,6 +74,12 @@ class _SubjectDetailsPageState extends State<SubjectDetailsPage> {
             elevation: 0.5,
             leading: CupertinoButton(
               onPressed: (() {
+                // To send the click data the server
+                context.read<ApiCubit>().state.api.sendStat(
+                      "Pushed_back_btn",
+                      extra: "Subject details page",
+                    );
+
                 Navigator.pop(context);
               }),
               child: const Icon(EcampusIcons.icons8_back),
@@ -88,6 +94,13 @@ class _SubjectDetailsPageState extends State<SubjectDetailsPage> {
             ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             bottom: TabBar(
+              onTap: (value) {
+                // To send the click data to the server
+                context.read<ApiCubit>().state.api.sendStat(
+                      "Pushed_tab_btn",
+                      extra: "Subject details page",
+                    );
+              },
               isScrollable: true,
               tabs: widget.lessonTypes
                   .map(

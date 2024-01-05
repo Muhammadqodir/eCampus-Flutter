@@ -52,10 +52,10 @@ void main() async {
           channelKey: 'basic_channel',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
-          defaultColor: Color(0xFF9D50DD),
+          defaultColor: const Color(0xFF9D50DD),
           ledColor: Colors.white)
     ],
-    // Channel groups are only visual and are not required
+    // C`hannel groups are only visual and are not required
     channelGroups: [
       NotificationChannelGroup(
           channelGroupkey: 'basic_channel_group',
@@ -88,7 +88,7 @@ void main() async {
     ],
     onInitializationFinished: (errors) {
       if (errors!.isNotEmpty) {
-        log("AppodealError" + errors.toString());
+        log("AppodealError$errors");
       }
     },
   );

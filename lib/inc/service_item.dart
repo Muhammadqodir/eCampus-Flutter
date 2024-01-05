@@ -56,22 +56,24 @@ class ServiceItem extends StatelessWidget {
                     commingSoon
                         ? Expanded(
                             child: Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: CustomColors.error,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: CustomColors.error,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 1),
+                                  child: Text(
+                                    "Скоро!",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
+                                  ),
                                 ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 4, vertical: 1),
-                                child: Text(
-                                  "Скоро!",
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                ),
-                              ),
-                            ],
-                          ))
+                              ],
+                            ),
+                          )
                         : const SizedBox(),
                   ],
                 ),

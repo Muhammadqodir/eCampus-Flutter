@@ -40,6 +40,9 @@ class _LoginPageState extends State<LoginPage> {
       String pass = value.getString("password") ?? 'undefined';
       context.read<ApiCubit>().setApiData(cookie, login, pass);
       if (value.getBool("isLogin") ?? false) {
+        // To send the click data to the server
+        context.read<ApiCubit>().state.api.sendStat("App_opened");
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -112,8 +115,9 @@ class _LoginPageState extends State<LoginPage> {
               password.text,
               response.userName,
             );
-            print("AuthToken:"+ecampus.getAuthToken());
-            context.read<ApiCubit>().setApiData(ecampus.getAuthToken(), username.text, password.text);
+            print("AuthToken:" + ecampus.getAuthToken());
+            context.read<ApiCubit>().setApiData(
+                ecampus.getAuthToken(), username.text, password.text);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -381,7 +385,19 @@ class _LoginPageState extends State<LoginPage> {
                                                 )
                                               ],
                                             ),
-                                            onPressed: () => login())
+                                            onPressed: () {
+                                              // To send the click data to the server
+                                              context
+                                                  .read<ApiCubit>()
+                                                  .state
+                                                  .api
+                                                  .sendStat(
+                                                    "Pushed_login_btn",
+                                                    extra: "Login page",
+                                                  );
+                                              login();
+                                            },
+                                          )
                                         : const CupertinoActivityIndicator(
                                             radius: 12,
                                             color: Colors.white,

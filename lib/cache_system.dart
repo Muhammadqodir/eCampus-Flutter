@@ -63,7 +63,7 @@ class CacheSystem {
         "${prefix}rating", jsonEncode(cache.ratingModel.toJson()));
   }
 
-  static Future<String> getUserId() async{
+  static Future<String> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString("login") ?? "undefined";
   }
@@ -116,7 +116,7 @@ class CacheSystem {
         '${prefix}AcademicYearsResponse_time', getCurrentDateTime());
   }
 
-  static void invalidateAcademicYearsResponse()async{
+  static void invalidateAcademicYearsResponse() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
         '${prefix}AcademicYearsResponse_time', "2001-08-06 10:45:00");
@@ -172,8 +172,7 @@ class CacheSystem {
     final prefs = await SharedPreferences.getInstance();
     String date = prefs.getString('${prefix}MyTeachersResponse_time') ??
         "2001-08-06 10:45:00";
-    String dataStr =
-        prefs.getString('${prefix}MyTeachersResponse') ?? "empty";
+    String dataStr = prefs.getString('${prefix}MyTeachersResponse') ?? "empty";
     if (dataStr != "empty") {
       Map<String, dynamic> data = jsonDecode(dataStr);
       return CacheResult(date, MyTeachersResponse.fromJson(data));
@@ -186,8 +185,7 @@ class CacheSystem {
     final prefs = await SharedPreferences.getInstance();
     String date = prefs.getString('${prefix}ScheduleResponse_time') ??
         "2001-08-06 10:45:00";
-    String dataStr =
-        prefs.getString('${prefix}ScheduleResponse') ?? "empty";
+    String dataStr = prefs.getString('${prefix}ScheduleResponse') ?? "empty";
     if (dataStr != "empty") {
       Map<String, dynamic> data = jsonDecode(dataStr);
       return CacheResult(date, ScheduleResponse.fromJson(data));
@@ -200,8 +198,7 @@ class CacheSystem {
     final prefs = await SharedPreferences.getInstance();
     String date = prefs.getString('${prefix}CurrentSchedule_time') ??
         "2001-08-06 10:45:00";
-    String dataStr =
-        prefs.getString('${prefix}CurrentSchedule') ?? "empty";
+    String dataStr = prefs.getString('${prefix}CurrentSchedule') ?? "empty";
     if (dataStr != "empty") {
       Map<String, dynamic> data = jsonDecode(dataStr);
       return CacheResult(date, ScheduleResponse.fromJson(data));

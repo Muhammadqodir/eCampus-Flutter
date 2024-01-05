@@ -1,9 +1,13 @@
+// ignore_for_file: dead_code
+
 import 'dart:developer';
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_button.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -135,7 +139,7 @@ class SubjectModel {
                               color: getSubTypeColor(),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(4),
                               child: Text(
                                 subType,
                                 style:
@@ -143,7 +147,7 @@ class SubjectModel {
                               ),
                             ),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                     const SizedBox(
                       height: 5,
                     ),
@@ -154,7 +158,13 @@ class SubjectModel {
                             height: 32,
                             padding: const EdgeInsets.all(4),
                             backgroundColor: Theme.of(context).primaryColor,
-                            onPressed: () {},
+                            onPressed: () {
+                              // To send the click data to the server
+                              context.read<ApiCubit>().state.api.sendStat(
+                                    "Pushed_downloads_btn",
+                                    extra: "undefined",
+                                  );
+                            },
                             child: Row(
                               children: [
                                 Icon(
@@ -578,7 +588,9 @@ class LessonItemModel {
                       style: Theme.of(context).textTheme.bodyMedium,
                       overflow: TextOverflow.fade,
                     ),
-                    const SizedBox(height: 3,),
+                    const SizedBox(
+                      height: 3,
+                    ),
                     Row(
                       children: [
                         getViewFile(context),

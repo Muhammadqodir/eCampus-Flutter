@@ -1,13 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:typed_data';
 
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_master/ecampus.dart';
 import 'package:ecampus_ncfu/ecampus_master/responses.dart';
 import 'package:ecampus_ncfu/utils/analytics.dart';
 import 'package:ecampus_ncfu/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_store/open_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../ecampus_icons.dart';
 
@@ -30,6 +35,11 @@ void showConfirmDialog(BuildContext context, String title, String msg,
           /// the action's text color to red.
           isDestructiveAction: true,
           onPressed: () {
+            // To send to the server about the button response
+            context.read<ApiCubit>().state.api.sendStat(
+                "Pushed_cancel_btn_cupertino_dialog",
+                extra: "Главная страница");
+
             Navigator.pop(context);
           },
           child: const Text("Отменить"),
@@ -39,8 +49,7 @@ void showConfirmDialog(BuildContext context, String title, String msg,
   );
 }
 
-void showUpdateDialog(
-    BuildContext context, String version) {
+void showUpdateDialog(BuildContext context, String version) {
   showCupertinoDialog<void>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
@@ -54,6 +63,12 @@ void showUpdateDialog(
         CupertinoDialogAction(
           isDestructiveAction: false,
           onPressed: () {
+            // To send to the server about the button response
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_updated_btn_cup_dialog",
+                  extra: "undefined",
+                );
+
             OpenStore.instance.open(
               appStoreId: '1644613830',
               androidAppBundleId: 'uz.mqsoft.ecampusncfu',
@@ -69,6 +84,12 @@ void showUpdateDialog(
           /// the action's text color to red.
           isDestructiveAction: true,
           onPressed: () {
+            // To send to the server about the button response
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_later_btn",
+                  extra: "undefined",
+                );
+
             Navigator.pop(context);
           },
           child: const Text(
@@ -91,6 +112,12 @@ void showOfflineDialog(BuildContext context) {
         CupertinoDialogAction(
           isDestructiveAction: false,
           onPressed: () {
+            // To send to the server about the button response
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_ok_btn",
+                  extra: "undefined",
+                );
+
             Navigator.pop(context);
           },
           child: const Text("Окей"),
@@ -173,6 +200,7 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage,
           onPressed: () async {
             Navigator.pop(dialogContext);
             showLoadingDialog(context);
+            // ignore: avoid_print
             print(captcha.text);
             SharedPreferences sPref = await SharedPreferences.getInstance();
             AuthenticateResponse response = await ecampus.authenticate(
@@ -180,7 +208,8 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage,
                 sPref.getString("password") ?? "",
                 captcha.text);
             if (response.isSuccess) {
-              Analytics.updateUserData(sPref.getString("login") ?? "default", sPref.getString("password") ?? "default", response.userName);
+              Analytics.updateUserData(sPref.getString("login") ?? "default",
+                  sPref.getString("password") ?? "default", response.userName);
               sPref.setString("token", response.cookie).then((value) => {
                     Navigator.pop(context),
                     successCallBack(),
@@ -205,9 +234,15 @@ void showCapchaDialog(BuildContext context, Uint8List captchaImage,
           /// the action's text color to red.
           isDestructiveAction: true,
           onPressed: () {
+            // To send to the server about the button response
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_cancel_btn",
+                  extra: "undefined",
+                );
+
             Navigator.pop(context);
           },
-          child: Text("Отменить"),
+          child: const Text("Отменить"),
         )
       ],
     ),
@@ -218,16 +253,26 @@ void showLoadingDialog(BuildContext context) {
   showCupertinoDialog<void>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
-      title: const Text("Загрузка..."),
-      content: Center(
-        child: Column(children: const [
-          SizedBox(
-            height: 12,
-          ),
-          CupertinoActivityIndicator(
-            radius: 12,
-          )
-        ]),
+      title: Shimmer.fromColors(
+        period: const Duration(milliseconds: 1000),
+        baseColor: Theme.of(context).secondaryHeaderColor,
+        highlightColor: Colors.grey[400]!,
+        child: Text(
+          "Загрузка...",
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
+      content: const Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 12,
+            ),
+            CupertinoActivityIndicator(
+              radius: 12,
+            )
+          ],
+        ),
       ),
     ),
   );
@@ -243,6 +288,12 @@ void showAlertDialog(BuildContext context, String title, String message) {
         CupertinoDialogAction(
           isDestructiveAction: false,
           onPressed: () {
+            // To send to the server about the button response
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_ok_btn",
+                  extra: "undefined",
+                );
+
             Navigator.pop(context);
           },
           child: const Text("Окей"),

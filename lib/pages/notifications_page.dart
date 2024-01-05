@@ -71,13 +71,27 @@ class _NotificationsPageState extends State<NotificationsPage> {
       appBar: AppBar(
         leading: CupertinoButton(
           onPressed: (() {
+            // To send to the server about the button response
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_back_btn",
+                  extra: "Notification page",
+                );
+
             Navigator.pop(context);
           }),
           child: const Icon(EcampusIcons.icons8_back),
         ),
         actions: [
           CupertinoButton(
-            onPressed: update,
+            onPressed: () {
+              // To send to the server about the button response
+              context.read<ApiCubit>().state.api.sendStat(
+                    "Pushed_refresh_btn",
+                    extra: "Notification page",
+                  );
+
+              update();
+            },
             child: const Icon(EcampusIcons.icons8_restart),
           )
         ],
@@ -108,10 +122,17 @@ class _NotificationsPageState extends State<NotificationsPage> {
           },
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             slivers: [
               CupertinoSliverRefreshControl(
                 onRefresh: () async {
+                  // To send to the server about the button response
+                  context.read<ApiCubit>().state.api.sendStat(
+                        "Refreshed",
+                        extra: "Notification page",
+                      );
+
                   update();
                 },
               ),

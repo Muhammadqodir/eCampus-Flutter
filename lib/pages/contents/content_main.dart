@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:typed_data';
 import 'package:circular_clip_route/circular_clip_route.dart';
@@ -10,6 +12,7 @@ import 'package:ecampus_ncfu/inc/main_info.dart';
 import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/models/rating_model.dart';
 import 'package:ecampus_ncfu/models/schedule_models.dart';
+import 'package:ecampus_ncfu/models/snow_animation.dart';
 import 'package:ecampus_ncfu/models/story_model.dart';
 import 'package:ecampus_ncfu/pages/story_page.dart';
 import 'package:ecampus_ncfu/themes.dart';
@@ -219,6 +222,12 @@ class _ContentMainState extends State<ContentMain> {
           slivers: [
             CupertinoSliverRefreshControl(
               onRefresh: () async {
+                // To send the refresh data to the server
+                context.read<ApiCubit>().state.api.sendStat(
+                      "Refreshed",
+                      extra: "Main page",
+                    );
+
                 update(isSwipeRefresh: true);
               },
             ),
@@ -228,6 +237,7 @@ class _ContentMainState extends State<ContentMain> {
                   children: <Widget>[
                     Column(
                       children: [
+                        // SnowWidget(totalSnow: 150, speed: 0.5, isRunning: true),
                         isUnActualToken
                             ? Text(
                                 "Данные могут быть неактуальными!",
@@ -242,14 +252,22 @@ class _ContentMainState extends State<ContentMain> {
                         ),
                         OnTapScaleAndFade(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              CircularClipRoute(
-                                expandFrom: key.currentContext!,
-                                builder: (context) =>
-                                    StoryPage(models: stories),
-                              ),
-                            );
+                            if (stories.isNotEmpty) {
+                              // To send the click data to the server
+                              context.read<ApiCubit>().state.api.sendStat(
+                                    "Pushed_avatar",
+                                    extra: "Main page",
+                                  );
+
+                              Navigator.push(
+                                context,
+                                CircularClipRoute(
+                                  expandFrom: key.currentContext!,
+                                  builder: (context) =>
+                                      StoryPage(models: stories),
+                                ),
+                              );
+                            }
                           },
                           child: StoryCircle(
                             key: key,
@@ -293,58 +311,9 @@ class _ContentMainState extends State<ContentMain> {
                       },
                       backgroundColor: primaryColor,
                       child: Text(
-                        "Toggle premium${isPremium}",
+                        "Toggle premium $isPremium",
                       ),
                     ),
-                    // Padding(
-                    //   padding:
-                    //       const EdgeInsets.only(top: 12, left: 12, right: 12),
-                    //   child: SizedBox(
-                    //     width: double.infinity,
-                    //     height: 50,
-                    //     child: CupertinoButton(
-                    //       borderRadius:
-                    //           const BorderRadius.all(Radius.circular(12)),
-                    //       disabledColor: Theme.of(context).dividerColor,
-                    //       color: Theme.of(context).primaryColor,
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                    //         children: [
-                    //           const Icon(EcampusIcons.icons8_doughnut_chart),
-                    //           const SizedBox(
-                    //             width: 12,
-                    //           ),
-                    //           Text(
-                    //             "Статистика",
-                    //             style: Theme.of(context)
-                    //                 .textTheme
-                    //                 .headlineMedium!
-                    //                 .copyWith(fontWeight: FontWeight.bold),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //       onPressed: () async {
-                    //         // if (!isUnActualToken) {
-                    //         //   Navigator.push(
-                    //         //     context,
-                    //         //     CupertinoPageRoute(
-                    //         //       builder: (context) => StatisticsPage(
-                    //         //         context: context,
-                    //         //       ),
-                    //         //     ),
-                    //         //   );
-                    //         // }else{
-                    //         //   update();
-                    //         // }
-
-                    //         // showCapchaDialog(context, await ecampus.getCaptcha(), ecampus, (){});
-
-                    //         // review();
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
                     const SizedBox(
                       height: 8,
                     ),

@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:ecampus_ncfu/cubit/api_cubit.dart';
 import 'package:ecampus_ncfu/ecampus_icons.dart';
 import 'package:ecampus_ncfu/inc/cross_list_element.dart';
 import 'package:ecampus_ncfu/models/map_marker_model.dart';
 import 'package:ecampus_ncfu/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:map_launcher/map_launcher.dart';
 
@@ -264,10 +266,12 @@ class _MapPageState extends State<MapPage> {
                     children: <Widget>[
                       for (var map in availableMaps)
                         CrossListElement(
-                          onPressed: () => map.showMarker(
-                            coords: coords,
-                            title: title,
-                          ),
+                          onPressed: () {
+                            map.showMarker(
+                              coords: coords,
+                              title: title,
+                            );
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Row(
@@ -315,10 +319,9 @@ class _MapPageState extends State<MapPage> {
         elevation: elevation,
         title: Text(
           "Карта корпусов",
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ),
       body: Center(
@@ -342,8 +345,13 @@ class _MapPageState extends State<MapPage> {
             ),
             children: models
                 .map(
-                  (e) => CrossListElement(
+                  (MapMarkerModel e) => CrossListElement(
                     onPressed: () {
+                      // To send the click data to the server
+                      context.read<ApiCubit>().state.api.sendStat(
+                            "map_btn",
+                            extra: e.title,
+                          );
                       openMapsSheet(context, e);
                     },
                     child: e.getView(context),

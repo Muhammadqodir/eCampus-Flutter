@@ -78,6 +78,11 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
       appBar: AppBar(
         leading: CupertinoButton(
           onPressed: (() {
+            // To send the click data to the server
+            context.read<ApiCubit>().state.api.sendStat(
+                  "Pushed_back_btn",
+                  extra: "My teachers page",
+                );
             Navigator.pop(context);
           }),
           child: const Icon(EcampusIcons.icons8_back),
@@ -120,6 +125,12 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
             slivers: [
               CupertinoSliverRefreshControl(
                 onRefresh: () async {
+                  // To send the click data to the server
+                  context
+                      .read<ApiCubit>()
+                      .state
+                      .api
+                      .sendStat("Refeshed", extra: "My teachers page");
                   update();
                 },
               ),
@@ -133,7 +144,17 @@ class _MyTeachersPageState extends State<MyTeachersPage> {
                                 children: models!
                                     .map(
                                       (element) => CrossListElement(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          // To send the click data to the server
+                                          context
+                                              .read<ApiCubit>()
+                                              .state
+                                              .api
+                                              .sendStat(
+                                                "Pushed_teacher_cross_list_elmnt",
+                                                extra: "My techers page",
+                                              );
+                                        },
                                         child: element.getView(
                                           context,
                                           widget.database,

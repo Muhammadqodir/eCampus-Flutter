@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 class ContentSubjects extends StatefulWidget {
@@ -177,9 +178,14 @@ class ContentSubjectsState extends State<ContentSubjects> {
                 const SizedBox(
                   height: 8,
                 ),
-                Text(
-                  "Загрузка...",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                Shimmer.fromColors(
+                  period: const Duration(milliseconds: 1000),
+                  baseColor: Theme.of(context).secondaryHeaderColor,
+                  highlightColor: Colors.grey[400]!,
+                  child: Text(
+                    "Загрузка...",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
                 if (!context.watch<ApiCubit>().state.isPremium)
                   const AppodealBanner(
@@ -211,115 +217,144 @@ class ContentSubjectsState extends State<ContentSubjects> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Column(children: [
-                    Row(
-                      children: academicYears
-                          .map(
-                            (element) => Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: CrossButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      selectedCourseIndex =
-                                          academicYears.indexOf(element);
-                                    });
-                                  },
-                                  backgroundColor: selectedCourseIndex ==
-                                          academicYears.indexOf(element)
-                                      ? Theme.of(context).primaryColor
-                                      : Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                  child: Text(
-                                    "${element.name} ${element.kursTypeName}",
-                                    style: selectedCourseIndex ==
+                  child: Column(
+                    children: [
+                      Row(
+                        children: academicYears
+                            .map(
+                              (element) => Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: CrossButton(
+                                    onPressed: () {
+                                      // To send the click data to the server
+                                      context
+                                          .read<ApiCubit>()
+                                          .state
+                                          .api
+                                          .sendStat(
+                                            "Pushed_courses_btn",
+                                            extra: "Subjects page",
+                                          );
+
+                                      setState(() {
+                                        selectedCourseIndex =
+                                            academicYears.indexOf(element);
+                                      });
+                                    },
+                                    backgroundColor: selectedCourseIndex ==
                                             academicYears.indexOf(element)
-                                        ? Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold)
+                                        ? Theme.of(context).primaryColor
                                         : Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    Row(
-                      children: academicYears[selectedCourseIndex]
-                          .termModels
-                          .map(
-                            (element) => Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: CrossButton(
-                                  onPressed: () {
-                                    if (element.id != selectedTermId) {
-                                      isOnline().then((isOnline) => {
-                                            if (isOnline)
-                                              {
-                                                getsubjects(element.id),
-                                              }
-                                            else
-                                              {
-                                                showOfflineDialog(context),
-                                              }
-                                          });
-                                    }
-                                  },
-                                  backgroundColor: element.id == selectedTermId
-                                      ? Theme.of(context).primaryColor
-                                      : Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                  child: Text(
-                                    "${element.name} ${element.termTypeName}",
-                                    style: element.id == selectedTermId
-                                        ? Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold)
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    Column(
-                      children: subjectModels
-                          .map(
-                            (element) => CrossListElement(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => SubjectDetailsPage(
-                                      context: context,
-                                      subName: element.name,
-                                      studentId: studentId,
-                                      kodCart: kodCart,
-                                      lessonTypes: element.lessonTypes,
+                                            .scaffoldBackgroundColor,
+                                    child: Text(
+                                      "${element.name} ${element.kursTypeName}",
+                                      style: selectedCourseIndex ==
+                                              academicYears.indexOf(element)
+                                          ? Theme.of(context)
+                                              .textTheme
+                                              .headlineMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold)
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
                                     ),
                                   ),
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: element.getView(context),
+                                ),
                               ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ]),
+                            )
+                            .toList(),
+                      ),
+                      Row(
+                        children: academicYears[selectedCourseIndex]
+                            .termModels
+                            .map(
+                              (element) => Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: CrossButton(
+                                    onPressed: () {
+                                      // To send the click data to the server
+                                      context
+                                          .read<ApiCubit>()
+                                          .state
+                                          .api
+                                          .sendStat(
+                                            "Pushed_semester_btn",
+                                            extra: "Subjects page",
+                                          );
+
+                                      if (element.id != selectedTermId) {
+                                        isOnline().then((isOnline) => {
+                                              if (isOnline)
+                                                {
+                                                  getsubjects(element.id),
+                                                }
+                                              else
+                                                {
+                                                  showOfflineDialog(context),
+                                                }
+                                            });
+                                      }
+                                    },
+                                    backgroundColor:
+                                        element.id == selectedTermId
+                                            ? Theme.of(context).primaryColor
+                                            : Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                    child: Text(
+                                      "${element.name} ${element.termTypeName}",
+                                      style: element.id == selectedTermId
+                                          ? Theme.of(context)
+                                              .textTheme
+                                              .headlineMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold)
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                      Column(
+                        children: subjectModels
+                            .map(
+                              (element) => CrossListElement(
+                                onPressed: () {
+                                  // To send the data to the server
+                                  context.read<ApiCubit>().state.api.sendStat(
+                                        "Pushed_subj_deta_btn",
+                                        extra: "Subjects page",
+                                      );
+
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => SubjectDetailsPage(
+                                        context: context,
+                                        subName: element.name,
+                                        studentId: studentId,
+                                        kodCart: kodCart,
+                                        lessonTypes: element.lessonTypes,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: element.getView(context),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

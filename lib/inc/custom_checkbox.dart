@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:ecampus_ncfu/inc/ontap_scale.dart';
 import 'package:ecampus_ncfu/themes.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +27,6 @@ class CustomCheckBox extends StatefulWidget {
 }
 
 class _CustomCheckBoxState extends State<CustomCheckBox> {
-
   @override
   Widget build(BuildContext context) {
     return OnTapScaleAndFade(
@@ -44,9 +45,7 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
       ),
       onTap: () {
         widget.value = !widget.value;
-        setState(() {
-          
-        });
+        setState(() {});
         widget.onChanged(widget.value);
       },
     );

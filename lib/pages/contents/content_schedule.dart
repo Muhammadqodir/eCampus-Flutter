@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -71,8 +72,8 @@ class ContentScheduleState extends State<ContentSchedule> {
     return null;
   }
 
-  void onPageActive(){
-    if(!isDataLoaded){
+  void onPageActive() {
+    if (!isDataLoaded) {
       SharedPreferences.getInstance().then((value) {
         ecampus.setToken(value.getString("token") ?? 'undefined');
         fillData();
@@ -166,7 +167,7 @@ class ContentScheduleState extends State<ContentSchedule> {
                   getWeeks();
                 });
               });
-            }else{
+            } else {
               isDataLoaded = false;
             }
           }
@@ -277,6 +278,12 @@ class ContentScheduleState extends State<ContentSchedule> {
                       ),
                 ),
                 onPressed: () {
+                  // To send click data to the server
+                  context.read<ApiCubit>().state.api.sendStat(
+                        "Pushed_pick_btn_in_schedule_dialog",
+                        extra: "Content schedule page",
+                      );
+
                   setState(() {
                     selectedWeekId = extentScrollController.selectedItem;
                   });
@@ -315,10 +322,15 @@ class ContentScheduleState extends State<ContentSchedule> {
                 const SizedBox(
                   height: 8,
                 ),
-                Text(
-                  "Загрузка...",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
+                Shimmer.fromColors(
+                  period: const Duration(milliseconds: 1000),
+                  baseColor: Theme.of(context).secondaryHeaderColor,
+                  highlightColor: Colors.grey[400]!,
+                  child: Text(
+                    "Загрузка...",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
               ],
             ),
           )
@@ -409,11 +421,23 @@ class ContentScheduleState extends State<ContentSchedule> {
                                             .lessons
                                             .map(
                                               (lesson) => CrossListElement(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  // To send the click data to the server
+                                                  context
+                                                      .read<ApiCubit>()
+                                                      .state
+                                                      .api
+                                                      .sendStat(
+                                                        "Pushed_lesson_btn",
+                                                        extra:
+                                                            "Content schedule page",
+                                                      );
+                                                },
                                                 child: lesson.getView(context),
                                               ),
                                             )
-                                            .toList())
+                                            .toList(),
+                                  )
                                 : ListView(
                                     physics: const BouncingScrollPhysics(
                                       parent: AlwaysScrollableScrollPhysics(),

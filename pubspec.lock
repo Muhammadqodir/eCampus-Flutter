@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.0"
+  animated_text_kit:
+    dependency: "direct main"
+    description:
+      name: animated_text_kit
+      sha256: "37392a5376c9a1a503b02463c38bc0342ef814ddbb8f9977bc90f2a84b22fa92"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.2"
   ansicolor:
     dependency: transitive
     description:
@@ -366,6 +374,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_animate:
+    dependency: "direct main"
+    description:
+      name: flutter_animate
+      sha256: "1dbc1aabfb8ec1e9d9feed2b675c21fb6b0a11f99be53ec3bc0f1901af6a8eb7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -383,7 +399,7 @@ packages:
     source: hosted
     version: "3.3.1"
   flutter_lints:
-    dependency: "direct dev"
+    dependency: "direct overridden"
     description:
       name: flutter_lints
       sha256: "2118df84ef0c3ca93f96123a616ae8540879991b8b57af2f81b76a7ada49b2a4"
@@ -415,7 +431,7 @@ packages:
     source: hosted
     version: "1.1.6"
   flutter_test:
-    dependency: "direct dev"
+    dependency: "direct overridden"
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -560,6 +576,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  lottie:
+    dependency: "direct main"
+    description:
+      name: lottie
+      sha256: a93542cc2d60a7057255405f62252533f8e8956e7e06754955669fd32fb4b216
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.0"
   map_launcher:
     dependency: "direct main"
     description:
@@ -648,6 +672,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  particle_field:
+    dependency: "direct main"
+    description:
+      name: particle_field
+      sha256: "9a5ebdde32751f82aba64198e9bbd46738e789e275bf9e7a88318ed460be560e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  particles_flutter:
+    dependency: "direct main"
+    description:
+      name: particles_flutter
+      sha256: "920b4e2df3281108db546bffb8672a5c18e649c6e90d257409bcc8efb1e846dc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.4"
   path:
     dependency: transitive
     description:
@@ -792,6 +832,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  rainbow_color:
+    dependency: "direct main"
+    description:
+      name: rainbow_color
+      sha256: f207a81ecf6ab9f13f38c8966c8ef81ddadd5e62f0d1d457a4e6c86678f12563
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
+  rainbow_vis:
+    dependency: transitive
+    description:
+      name: rainbow_vis
+      sha256: "4b4873fdfffc5f6d7519215c913478294d44792b9706d212b626e793a9fec171"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  rnd:
+    dependency: "direct main"
+    description:
+      name: rnd
+      sha256: "87799a8c447da2e728096264b2cc13679a11af49f0504331f4d588986a371fcf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   rxdart:
     dependency: "direct main"
     description:
@@ -881,13 +945,13 @@ packages:
     source: hosted
     version: "2.0.0"
   simple_animations:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: simple_animations
-      sha256: cd8b4685de36a1d4bd7082d860415baf3772403402a8a022bd209cf856164386
+      sha256: "1ea7b93fb98e2a611b6865d632de55607b766328d14700143353129ee0559d3a"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
+    version: "5.0.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1238,5 +1302,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.0-185.0.dev <4.0.0"
-  flutter: ">=3.10.0"
+  dart: ">=3.1.0 <4.0.0"
+  flutter: ">=3.13.0"
